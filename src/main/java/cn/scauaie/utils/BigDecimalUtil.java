@@ -1,4 +1,4 @@
-package cn.scauaie.util;
+package cn.scauaie.utils;
 
 import java.math.BigDecimal;
 

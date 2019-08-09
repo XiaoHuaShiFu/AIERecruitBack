@@ -1,11 +1,12 @@
 package cn.scauaie.manager;
 
-import cn.scauaie.util.PropertiesUtil;
+import cn.scauaie.model.dto.Code2SessionDTO;
+import cn.scauaie.utils.ObjectAnalyzer;
+import cn.scauaie.utils.PropertiesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 /**
  * 描述: 微信小程序通用接口
@@ -17,16 +18,27 @@ import java.util.Map;
 @Component("weChatMpManager")
 public class WeChatMpManager {
 
-    public static void main(String[] args) {
-        WeChatMpManager weChatMpManager = new WeChatMpManager();
-    }
-
     @Autowired
-    private RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate;
 
-    private final String APP_URL;
+    /**
+     * 请求code2Session的url
+     */
+    private final String AUTH_CODE2SESSION_URL;
+
+    /**
+     * 小程序 appId
+     */
     private final String APP_ID;
+
+    /**
+     * 小程序 appSecret
+     */
     private final String APP_SECRET;
+
+    /**
+     * 授权类型
+     */
     private final String GRANT_TYPE;
 
     /**
@@ -34,16 +46,30 @@ public class WeChatMpManager {
      */
     public WeChatMpManager() {
         PropertiesUtil propertiesUtil = new PropertiesUtil("weChat.properties");
-        APP_URL = propertiesUtil.getProperty("app.url");
+        AUTH_CODE2SESSION_URL = propertiesUtil.getProperty("auth.code2Session.url");
         APP_ID = propertiesUtil.getProperty("app.id");
         APP_SECRET = propertiesUtil.getProperty("app.secret");
         GRANT_TYPE= propertiesUtil.getProperty("grant.type");
     }
 
-    public void getOpenidByCode(String code) {
-        System.out.println(restTemplate.getForEntity(
-                APP_URL + "?appid=" + APP_ID + "&secret=" + APP_SECRET + "&js_code=" + code + "&grant_type=" + GRANT_TYPE,
-                Map.class));
+    /**
+     * 通过code获取封装过的Code2SessionDTO
+     * @param code String
+     * @return Code2SessionDTO
+     */
+    public Code2SessionDTO getCode2SessionByCode(String code) {
+        ResponseEntity<Code2SessionDTO> responseEntity = restTemplate.getForEntity(
+                AUTH_CODE2SESSION_URL + "?appid=" + APP_ID + "&secret=" + APP_SECRET + "&js_code=" + code + "&grant_type=" + GRANT_TYPE,
+                Code2SessionDTO.class);
+        return responseEntity.getBody();
+    }
+
+    public String getOpenidByCode(String code) {
+        Code2SessionDTO code2SessionDTO = getCode2SessionByCode(code);
+        if (code2SessionDTO.getErrcode() == 0) {
+            return code2SessionDTO.getOpenid();
+        }
+        return null;
     }
 
 }

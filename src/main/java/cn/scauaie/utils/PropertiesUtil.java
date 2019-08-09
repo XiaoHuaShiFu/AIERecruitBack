@@ -1,4 +1,4 @@
-package cn.scauaie.util;
+package cn.scauaie.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

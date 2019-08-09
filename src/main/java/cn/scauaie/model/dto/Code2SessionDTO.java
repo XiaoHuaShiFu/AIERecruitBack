@@ -1,20 +1,18 @@
 package cn.scauaie.model.dto;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 /**
- * 描述:
+ * 描述: 封装Code2Session的各种属性
  *
  * @author xhsf
  * @email 827032783@qq.com
  * @create 2019-02-28 16:46
  */
-@JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
-public class WechatBodyDTO {
+public class Code2SessionDTO {
 
     private String openid;
     private String session_key;
-    private int errcode;
+    private String unionid;
+    private Integer errcode;
     private String errmsg;
 
     public String getOpenid() {
@@ -33,11 +31,19 @@ public class WechatBodyDTO {
         this.session_key = session_key;
     }
 
-    public int getErrcode() {
+    public String getUnionid() {
+        return unionid;
+    }
+
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
+    }
+
+    public Integer getErrcode() {
         return errcode;
     }
 
-    public void setErrcode(int errcode) {
+    public void setErrcode(Integer errcode) {
         this.errcode = errcode;
     }
 

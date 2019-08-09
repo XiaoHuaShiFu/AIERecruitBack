@@ -10,6 +10,4 @@
     <!--redis配置-->
     <import resource="redis.xml"/>
 
-    <!-- 类库bean配置 -->
-    <import resource="utils.xml"/>
 </beans>

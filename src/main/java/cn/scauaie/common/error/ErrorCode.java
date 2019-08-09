@@ -43,7 +43,13 @@ public enum ErrorCode {
      * 参数长度不在规定范围内，String类型
      */
     INVALID_PARAMETER_SIZE(
-            "InvalidParameter.Size", "The size of {Parameter} must be from {Min} to {Max}.");
+            "InvalidParameter.Size", "The size of {Parameter} must be from {Min} to {Max}."),
+
+    /**
+     * 参数长度不在规定范围内，String类型
+     */
+    OPERATION_CONFLICT(
+            "OperationConflict", "Request was denied due to conflict with a previous request.");
 
 
 
