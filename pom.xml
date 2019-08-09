@@ -29,7 +29,7 @@
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-servlet-api</artifactId>
-      <version>7.0.64</version>
+      <version>8.5.43</version>
     </dependency>
     <!-- tomcat end -->
 
@@ -63,13 +63,42 @@
       <artifactId>spring-test</artifactId>
       <version>${org.springframework.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>${org.springframework.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+      <version>${org.springframework.version}</version>
+    </dependency>
+
     <!-- spring end -->
+
+    <!-- java bean validation -->
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.0.17.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+    </dependency>
+    <!-- java bean validation -->
+
 
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
       <version>1.7.3</version>
     </dependency>
+
 
     <!-- mybatis start -->
     <dependency>
@@ -265,8 +294,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>8</source>
+          <target>8</target>
           <encoding>UTF-8</encoding>
           <compilerArguments>
             <extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>

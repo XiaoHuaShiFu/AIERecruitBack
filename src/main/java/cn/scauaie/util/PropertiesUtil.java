@@ -6,41 +6,60 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
- * Created by geely
+ * 描述: 简单封装 Properties 相关方法
+ *
+ * @author XHSF
+ * @email 827032783@qq.com
+ * @create 2019-08-08 21:31
  */
 public class PropertiesUtil {
 
     private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
 
-    private static Properties props;
+    private final String propertiesName;
 
-    public static String getProperty(String key){
-        String value = props.getProperty(key.trim());
-        if(StringUtils.isBlank(value)){
+    /**
+     * 初始化properties的文件名
+     * @param fileName String
+     */
+    public PropertiesUtil(String fileName) {
+        this.propertiesName = fileName;
+    }
+
+    /**
+     * 获取对应key的value
+     * @param key String
+     * @return String
+     */
+    public String getProperty(String key){
+        if (StringUtils.isBlank(key)) {
             return null;
         }
-        return value.trim();
-    }
-
-    public static String getProperty(String key, String defaultValue){
-
-        String value = props.getProperty(key.trim());
-        if(StringUtils.isBlank(value)){
-            value = defaultValue;
-        }
-        return value.trim();
-    }
-
-    public static void setProps(String fileName) {
-        props = new Properties();
-        try {
-            props.load(new InputStreamReader(PropertiesUtil.class.getClassLoader().getResourceAsStream(fileName), "UTF-8"));
+        Properties properties = new Properties();
+        String value = null;
+        try (InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(PropertiesUtil.class.getClassLoader().getResourceAsStream(propertiesName)), StandardCharsets.UTF_8)) {
+            properties.load(inputStreamReader);
+            value = properties.getProperty(key.trim());
         } catch (IOException e) {
-            logger.error("配置文件读取异常",e);
+            logger.error("Get property error.", e);
         }
+        return value;
+    }
+
+    /**
+     * 获取对应key的value，如果value为null，则返回defaultValue
+     * @param key String
+     * @param defaultValue String
+     * @return String
+     */
+    public String getProperty(String key, String defaultValue){
+        String value = getProperty(key);
+        return StringUtils.isBlank(value) ? defaultValue : value;
     }
 
 }

@@ -1,4 +1,4 @@
-package cn.scauaie.pojo;
+package cn.scauaie.model.dto;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -10,7 +10,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * @create 2019-02-28 16:46
  */
 @JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
-public class WechatBody {
+public class WechatBodyDTO {
 
     private String openid;
     private String session_key;

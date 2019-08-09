@@ -48,7 +48,6 @@
     <load-on-startup>1</load-on-startup><!--如果大于0Servlet启动时会调用servlet-class的init方法-->
   </servlet>
 
-
   <!--/的请求都会被SpringMVC拦截-->
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>

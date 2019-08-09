@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
-     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-
-    <!--扫描com.scauaie包下面的文件-->
-    <!--<context:component-scan base-package="cn.scauaie"/>-->
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!--把这个文件的参量分离到classpath:datasource.properties-->
     <bean id="propertyConfigurer"
@@ -79,13 +74,13 @@
 
     </bean>
 
-    <!--扫描dao层（com.scauaie.dao）-->
+    <!--扫描dao层（cn.scauaie.dao）-->
     <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.scauaie.dao"/>
+        <property name="basePackage" value="cn.scauaie.dao"/>
     </bean>
 
     <!-- 使用@Transactional进行声明式事务管理需要声明下面这行 -->
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+    <tx:annotation-driven proxy-target-class="true" />
     <!-- 事务管理 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
