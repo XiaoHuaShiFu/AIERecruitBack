@@ -42,7 +42,7 @@ public class TokenController {
      * @param response HttpServletResponse
      * @return FormVO
      *
-     * Http header里的Authorization带用form-token凭证
+     * Http header里的Authorization带有form-token凭证
      *
      * @success:
      * HttpStatus.CREATED

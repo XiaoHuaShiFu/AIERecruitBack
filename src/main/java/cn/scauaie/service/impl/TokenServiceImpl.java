@@ -1,6 +1,6 @@
 package cn.scauaie.service.impl;
 
-import cn.scauaie.cache.RedisHash;
+import cn.scauaie.cache.RedisString;
 import cn.scauaie.common.error.ErrorCode;
 import cn.scauaie.error.ProcessingException;
 import cn.scauaie.service.TokenService;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class TokenServiceImpl implements TokenService {
 
     @Autowired
-    private RedisHash redisHash;
+    private RedisString redisString;
 
     /**
      * 在缓存里添加from-token
@@ -30,10 +30,11 @@ public class TokenServiceImpl implements TokenService {
      */
     public String createFormToken(Integer id) {
         String token = SHA256.encryption(UUID.randomUUID().toString());
-        Long rowCount = redisHash.set("form:token", token, String.valueOf(id));
-        if (rowCount < 1) {
+        String code = redisString.set(token, String.valueOf(id));
+        if (!code.equals("OK")) {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Failed to create form-token.");
         }
+        redisString.expire(token, 1800);
         return token;
     }
 
