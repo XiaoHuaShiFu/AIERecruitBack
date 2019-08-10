@@ -23,11 +23,13 @@ public class FormDO {
 
     private String secondDep;
 
+    private String introduction;
+
     private Date createTime;
 
     private Date updateTime;
 
-    public FormDO(Integer id, String openid, String name, String avatar, String gender, String college, String major, String phone, String firstDep, String secondDep, Date createTime, Date updateTime) {
+    public FormDO(Integer id, String openid, String name, String avatar, String gender, String college, String major, String phone, String firstDep, String secondDep, String introduction, Date createTime, Date updateTime) {
         this.id = id;
         this.openid = openid;
         this.name = name;
@@ -38,6 +40,7 @@ public class FormDO {
         this.phone = phone;
         this.firstDep = firstDep;
         this.secondDep = secondDep;
+        this.introduction = introduction;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -124,6 +127,14 @@ public class FormDO {
 
     public void setSecondDep(String secondDep) {
         this.secondDep = secondDep == null ? null : secondDep.trim();
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction == null ? null : introduction.trim();
     }
 
     public Date getCreateTime() {

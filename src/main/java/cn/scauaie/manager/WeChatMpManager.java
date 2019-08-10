@@ -64,12 +64,14 @@ public class WeChatMpManager {
         return responseEntity.getBody();
     }
 
+    /**
+     * 通过code获取openid
+     * @param code String
+     * @return String
+     */
     public String getOpenidByCode(String code) {
         Code2SessionDTO code2SessionDTO = getCode2SessionByCode(code);
-        if (code2SessionDTO.getErrcode() == 0) {
-            return code2SessionDTO.getOpenid();
-        }
-        return null;
+        return code2SessionDTO.getOpenid();
     }
 
 }

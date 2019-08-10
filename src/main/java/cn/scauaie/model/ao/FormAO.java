@@ -20,7 +20,7 @@ public class FormAO {
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The name must be not blank.",
             groups = {GroupFormAOPOST.class})
-    @Size(message = "INVALID_PARAMETER_SIZE: The size of name must be from 2 to 20.",
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of name must be from 1 to 20.",
             min = 1, max = 20,
             groups = {GroupFormAO.class})
     private String name;
@@ -71,6 +71,12 @@ public class FormAO {
     @Dep(groups = {GroupFormAO.class})
     private String secondDep;
 
+    @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The introduction must be not blank.",
+            groups = {GroupFormAOPOST.class})
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of introduction must be from 1 to 1000.",
+            min = 1, max = 20,
+            groups = {GroupFormAO.class})
+    private String introduction;
 
 
     public Integer getId() {
@@ -145,4 +151,11 @@ public class FormAO {
         this.secondDep = secondDep;
     }
 
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
 }

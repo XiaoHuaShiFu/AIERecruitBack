@@ -1,8 +1,11 @@
-package cn.scauaie.assemble;
+package cn.scauaie.assembler;
 
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.dao.FormDO;
+import cn.scauaie.model.vo.FormVO;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * 描述:
@@ -12,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @create 2019-08-09 22:26
  */
 @Component("formAssemble")
-public class FormAssemble {
+public class FormAssembler {
 
     public FormDO assembleFormDOByOpenidAndFormAO(String openid, FormAO formAO) {
         FormDO formDO = new FormDO();
@@ -25,7 +28,23 @@ public class FormAssemble {
         formDO.setMajor(formAO.getMajor());
         formDO.setFirstDep(formAO.getFirstDep());
         formDO.setSecondDep(formAO.getSecondDep());
+        formDO.setIntroduction(formAO.getIntroduction());
         return formDO;
+    }
+
+    public FormVO assembleFormVOByFormDO(FormDO formDO) {
+        FormVO formVO = new FormVO();
+        formVO.setId(formDO.getId());
+        formVO.setName(formDO.getName());
+        formVO.setAvatar(formDO.getAvatar());
+        formVO.setGender(formDO.getGender());
+        formVO.setCollege(formDO.getCollege());
+        formVO.setMajor(formDO.getMajor());
+        formVO.setPhone(formDO.getPhone());
+        formVO.setFirstDep(formDO.getFirstDep());
+        formVO.setSecondDep(formDO.getSecondDep());
+        formVO.setIntroduction(formDO.getIntroduction());
+        return formVO;
     }
 
 }

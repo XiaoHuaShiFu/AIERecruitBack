@@ -56,13 +56,13 @@ public class BindingExceptionHandler {
         //没有分隔符，表示只有错误码，直接返回
         if (idx == -1) {
             ErrorCode errorCode = ErrorCode.valueOf(errorMessage);
-            return new ErrorResponse(errorCode.getCode(), errorCode.getMessage());
+            return new ErrorResponse(errorCode.getError(), errorCode.getMessage());
         }
         //有分隔符，获取错误信息进行填充
         String error = errorMessage.substring(0, idx);
         String message = errorMessage.substring(idx + 1);
         ErrorCode errorCode = ErrorCode.valueOf(error);
-        return new ErrorResponse(errorCode.getCode(), message.trim());
+        return new ErrorResponse(errorCode.getError(), message.trim());
     }
 
 }
