@@ -92,4 +92,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByFid" parameterType="integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from work
+    where fid = #{fid, jdbcType=INTEGER}
+  </select>
 </mapper>

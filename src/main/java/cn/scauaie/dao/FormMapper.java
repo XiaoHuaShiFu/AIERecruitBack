@@ -14,4 +14,6 @@ public interface FormMapper {
     int updateByPrimaryKeySelective(FormDO record);
 
     int updateByPrimaryKey(FormDO record);
+
+    FormDO selectByOpenid(String openid);
 }

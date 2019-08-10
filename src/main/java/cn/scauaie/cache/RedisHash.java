@@ -11,12 +11,12 @@ import java.util.Map;
  */
 public interface RedisHash {
 
-    Long set(String hash, String key);
+    Long set(String key, String field, String value);
 
-    String get(String hash, String key);
+    String get(String hash, String field);
 
-    Long del(String hash, String key);
+    Long del(String hash, String field);
 
-    Map<String, String> getAll(String key);
+    Map<String, String> getAll(String field);
 
 }

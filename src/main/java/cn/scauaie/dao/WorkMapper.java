@@ -2,6 +2,8 @@ package cn.scauaie.dao;
 
 import cn.scauaie.model.dao.WorkDO;
 
+import java.util.List;
+
 public interface WorkMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface WorkMapper {
     int updateByPrimaryKeySelective(WorkDO record);
 
     int updateByPrimaryKey(WorkDO record);
+
+    List<WorkDO> selectByFid(Integer fid);
 }

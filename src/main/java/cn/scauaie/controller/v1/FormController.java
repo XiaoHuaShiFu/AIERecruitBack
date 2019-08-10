@@ -62,8 +62,7 @@ public class FormController {
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @Validated(GroupFormAOPOST.class) FormAO formAO) {
         String openid = formService.getOpenid(code);
-        FormDO formDO = formService.createForm(openid, formAO);
-        return formAssembler.assembleFormVOByFormDO(formDO);
+        return formService.createForm(openid, formAO);
     }
 
     @RequestMapping(value="/{id}/avatar", method = RequestMethod.POST)

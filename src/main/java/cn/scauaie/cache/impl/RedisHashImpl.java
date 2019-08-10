@@ -28,10 +28,9 @@ public class RedisHashImpl implements RedisHash {
      * @param field field名
      * @return 成功修改行数
      */
-    public Long set(String key, String field) {
+    public Long set(String key, String field, String value) {
         Jedis jedis = jedisPool.getResource();
-        Long time = new Date().getTime();
-        Long rowCount = jedis.hset(key, field, time.toString());
+        Long rowCount = jedis.hset(key, field, value);
         jedis.close();
         return rowCount;
     }

@@ -48,10 +48,28 @@ public enum ErrorCode {
             "InvalidParameter.Size", "The size of {Parameter} must be from {Min} to {Max}."),
 
     /**
+     * 未知错误
+     */
+    UNKNOWN_ERROR(HttpStatus.BAD_REQUEST,
+            "UnknownError", "The request processing has failed due to some unknown error."),
+
+    /**
+     * 参数长度不在规定范围内，String类型
+     */
+    INVALID_PARAMETER_NOT_FOUND(HttpStatus.NOT_FOUND,
+            "InvalidParameter.NotFound", "{ParameterName}"),
+
+    /**
      * 参数长度不在规定范围内，String类型
      */
     OPERATION_CONFLICT(HttpStatus.CONFLICT,
-            "OperationConflict", "Request was denied due to conflict with a previous request.");
+            "OperationConflict", "Request was denied due to conflict with a previous request."),
+
+    /**
+     * 由于某些未知错误、异常或失败，请求处理失败。
+     */
+    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,
+            "InternalError", "The request processing has failed due to some unknown error, exception or failure.");
 
 
     private final HttpStatus httpStatus;

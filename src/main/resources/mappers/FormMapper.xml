@@ -192,4 +192,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByOpenid" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from form
+    where openid = #{openid, jdbcType=VARCHAR}
+  </select>
 </mapper>
