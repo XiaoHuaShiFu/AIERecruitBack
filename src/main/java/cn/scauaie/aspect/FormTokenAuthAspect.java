@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 /**
  * 描述:
@@ -25,7 +26,6 @@ public class FormTokenAuthAspect {
 
     @Around(value = "@annotation(cn.scauaie.aspect.annotation.FormTokenAuth) && args(request, ..)")
     public Object authToken(ProceedingJoinPoint joinPoint, HttpServletRequest request) throws Throwable {
-        System.out.println("假装认证");
         request.setAttribute("fid", 233);
         System.out.println(redisHash.get("token", "wjx"));
         System.out.println(request.getAttribute("id"));
