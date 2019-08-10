@@ -19,7 +19,7 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, openid, name, avatar, gender, college, major, phone, first_dep, second_dep, introduction,
+      id, openid, name, avatar, gender, college, major, phone, first_dep, second_dep, introduction,
      create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -88,7 +88,8 @@
         update_time,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    SELECT
+    <trim suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
@@ -129,6 +130,9 @@
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
+     FROM DUAL WHERE NOT EXISTS
+    (SELECT 1 FROM form where openid = openid)
+
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.FormDO" >
     update form

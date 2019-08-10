@@ -10,8 +10,6 @@ import javax.validation.constraints.*;
 
 public class FormAO {
 
-    @NotNull(message = "INVALID_PARAMETER_IS_NULL: The id must be not null.",
-            groups = {GroupFormAOPOST.class})
     @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The value of id below, min: 0.",
             value = 0,
             groups = {GroupFormAO.class})

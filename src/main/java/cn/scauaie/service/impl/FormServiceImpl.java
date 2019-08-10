@@ -9,6 +9,7 @@ import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.service.FormService;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,19 +33,6 @@ public class FormServiceImpl implements FormService {
 
     @Autowired
     private FormAssembler formAssembler;
-
-//    /**
-//     * 校验code并创建Form并返回Form
-//     *
-//     * @param code String
-//     * @param formAO FormAO
-//     * @return ResponseEntity
-//     */
-//    public FormVO checkCodeAndCreateFormAndGetForm(String code, FormAO formAO) {
-//        String openid = getOpenid(code);
-//        FormDO formDO = createForm(openid, formAO);
-//        return formAssembler.assembleFormVOByFormDO(formDO);
-//    }
 
     /**
      * 校验code

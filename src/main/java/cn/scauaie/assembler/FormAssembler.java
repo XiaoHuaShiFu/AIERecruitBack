@@ -17,6 +17,15 @@ import java.util.Date;
 @Component("formAssemble")
 public class FormAssembler {
 
+    /**
+     * 把FormAO和Openid装配成FormDO
+     *
+     * 无Id
+     *
+     * @param openid String
+     * @param formAO FormAO
+     * @return FormDO
+     */
     public FormDO assembleFormDOByOpenidAndFormAO(String openid, FormAO formAO) {
         FormDO formDO = new FormDO();
         formDO.setOpenid(openid);
@@ -32,6 +41,15 @@ public class FormAssembler {
         return formDO;
     }
 
+    /**
+     * 把FormDO装配成FormVO
+     *
+     * 无avatar
+     * 无works
+     *
+     * @param formDO FormDO
+     * @return FormVO
+     */
     public FormVO assembleFormVOByFormDO(FormDO formDO) {
         FormVO formVO = new FormVO();
         formVO.setId(formDO.getId());
