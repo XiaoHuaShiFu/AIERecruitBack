@@ -3,7 +3,7 @@ package cn.scauaie.aspect.annotation;
 import java.lang.annotation.*;
 
 /**
- * 描述:
+ * 描述: 进行Form-token身份认证
  *
  * @author xhsf
  * @email 827032783@qq.com

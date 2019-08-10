@@ -9,7 +9,7 @@ import java.util.Map;
  * @email 827032783@qq.com
  * @create 2019-03-12 16:59
  */
-public interface IRedisHash {
+public interface RedisHash {
 
     Long set(String hash, String key);
 

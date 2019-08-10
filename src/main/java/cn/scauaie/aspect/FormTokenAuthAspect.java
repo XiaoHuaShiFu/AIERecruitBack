@@ -1,14 +1,13 @@
 package cn.scauaie.aspect;
 
-import com.google.gson.Gson;
+import cn.scauaie.cache.RedisHash;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 描述:
@@ -21,11 +20,16 @@ import javax.servlet.http.HttpSession;
 @Component
 public class FormTokenAuthAspect {
 
-    @Around(value = "@annotation(cn.scauaie.aspect.annotation.FormTokenAuth) && args(session, ..)")
-    public Object authToken(ProceedingJoinPoint joinPoint, HttpSession session) throws Throwable {
-        if (3 == 3) {
-            return new ResponseEntity<>("dddddddddd", HttpStatus.NOT_FOUND);
-        }
+    @Autowired
+    private RedisHash redisHash;
+
+    @Around(value = "@annotation(cn.scauaie.aspect.annotation.FormTokenAuth) && args(request, ..)")
+    public Object authToken(ProceedingJoinPoint joinPoint, HttpServletRequest request) throws Throwable {
+        System.out.println("假装认证");
+        request.setAttribute("fid", 233);
+        System.out.println(redisHash.get("token", "wjx"));
+        System.out.println(request.getAttribute("id"));
+
         return joinPoint.proceed();
     }
 }

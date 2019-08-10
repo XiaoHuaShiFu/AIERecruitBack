@@ -1,6 +1,6 @@
 package cn.scauaie.cache.impl;
 
-import cn.scauaie.cache.IRedisHash;
+import cn.scauaie.cache.RedisHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
@@ -16,8 +16,8 @@ import java.util.Map;
  * @email 827032783@qq.com
  * @create 2019-03-12 16:57
  */
-@Repository("iRedisHash")
-public class RedisHashImpl implements IRedisHash {
+@Repository("redisHash")
+public class RedisHashImpl implements RedisHash {
 
     @Autowired
     private JedisPool jedisPool;

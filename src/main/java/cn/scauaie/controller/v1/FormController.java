@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -64,6 +65,16 @@ public class FormController {
         FormDO formDO = formService.createForm(openid, formAO);
         return formAssembler.assembleFormVOByFormDO(formDO);
     }
+
+    @RequestMapping(value="/{id}/avatar", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @FormTokenAuth
+    public Object avatarPost(HttpServletRequest request, @PathVariable Integer id) {
+        System.out.println(request.getHeader("authorization"));
+        System.out.println(request.getAttribute("fid") + "lalallalala");
+        return "ddd";
+    }
+
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)

@@ -1,6 +1,7 @@
 package cn.scauaie.config;
 
-import cn.scauaie.manager.WeChatMpManager;
+import cn.scauaie.ftp.FTPClientTemplate;
+import cn.scauaie.utils.PropertiesUtil;
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,6 +48,19 @@ public class SingletonBeansConfig {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(messageConverter);
         return restTemplate;
+    }
+
+    /**
+     * FTPClientTemplate单例
+     * @return FTPClientTemplate
+     */
+    @Bean
+    public FTPClientTemplate ftpClientTemplate() {
+        PropertiesUtil propertiesUtil = new PropertiesUtil("ftp.properties");
+        String host = propertiesUtil.getProperty("ftp.host");
+        String username = propertiesUtil.getProperty("ftp.username");
+        String password = propertiesUtil.getProperty("ftp.password");
+        return new FTPClientTemplate(host, username, password);
     }
 
 }
