@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 
 
 /**
- * 描述: Token Web层
+ * 描述: TokenType Web层
  *
  * @author xhsf
  * @email 827032783@qq.com
@@ -62,10 +62,15 @@ public class TokenController {
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32)
                     String code, HttpServletResponse response) {
+        //用code获取openid
         String openid = formService.getOpenid(code);
+        //用openid获取form
         FormVO formVO = formService.getFormVOByOpenid(openid);
+        //创建token令牌
         String token = tokenService.createFormToken(formVO.getId());
+        //响应头设置token
         response.setHeader("Authorization", token);
+        //FormVO
         return formVO;
     }
 

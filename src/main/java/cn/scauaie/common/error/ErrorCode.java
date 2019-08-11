@@ -54,6 +54,30 @@ public enum ErrorCode {
             "UnknownError", "The request processing has failed due to some unknown error."),
 
     /**
+     * 未通过认证
+     */
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED,
+            "Unauthorized", "User not authorized."),
+
+    /**
+     * 没有附带请求该资源所需的token
+     */
+    UNAUTHORIZED_TOKEN_IS_NULL(HttpStatus.UNAUTHORIZED,
+            "Unauthorized.TokenIsNull", "The request auth token is null."),
+
+    /**
+     * 用户在未认证的情况下操作该资源
+     */
+    FORBIDDEN_UNAUTHORIZED(HttpStatus.FORBIDDEN,
+            "Forbidden.Unauthorized", "User not authorized to operate on the specified resource."),
+
+    /**
+     * 用户在未认证的情况下操作该资源
+     */
+    FORBIDDEN_SUB_USER(HttpStatus.FORBIDDEN,
+            "Forbidden.SubUser", "The specified action is not available for you."),
+
+    /**
      * 参数长度不在规定范围内，String类型
      */
     INVALID_PARAMETER_NOT_FOUND(HttpStatus.NOT_FOUND,

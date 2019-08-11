@@ -1,10 +1,8 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.FormTokenAuth;
-import cn.scauaie.assembler.FormAssembler;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.group.GroupFormAOPOST;
-import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.service.FormService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +29,6 @@ public class FormController {
 
     @Autowired
     private FormService formService;
-
-    @Autowired
-    private FormAssembler formAssembler;
 
     /**
      * 创建Form并返回Form
@@ -69,8 +64,7 @@ public class FormController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @FormTokenAuth
     public Object avatarPost(HttpServletRequest request, @PathVariable Integer id) {
-        System.out.println(request.getHeader("authorization"));
-        System.out.println(request.getAttribute("fid") + "lalallalala");
+        System.out.println(request.getAttribute("fid"));
         return "ddd";
     }
 

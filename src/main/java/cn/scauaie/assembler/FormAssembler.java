@@ -1,7 +1,6 @@
 package cn.scauaie.assembler;
 
 import cn.scauaie.model.ao.FormAO;
-import cn.scauaie.model.dto.FormDTO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.dao.WorkDO;
 import cn.scauaie.model.vo.FormVO;

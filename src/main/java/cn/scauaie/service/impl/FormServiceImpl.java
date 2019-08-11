@@ -6,9 +6,7 @@ import cn.scauaie.dao.FormMapper;
 import cn.scauaie.error.ProcessingException;
 import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.model.ao.FormAO;
-import cn.scauaie.model.dto.FormDTO;
 import cn.scauaie.model.dao.FormDO;
-import cn.scauaie.model.dao.WorkDO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.service.FormService;
@@ -62,6 +60,7 @@ public class FormServiceImpl implements FormService {
      */
     public FormDO getFormDOByOpenid(String openid) {
         FormDO formDO = formMapper.selectByOpenid(openid);
+        //通过openid获取失败将报错
         if (formDO == null) {
             throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND,
                     "The specified openid does not exist.");
@@ -77,6 +76,7 @@ public class FormServiceImpl implements FormService {
      */
     public String getOpenid(String code) {
         String openid = weChatMpManager.getOpenidByCode(code);
+        //通过openid获取失败将报错
         if (openid == null) {
             throw new ProcessingException(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
         }

@@ -1,12 +1,10 @@
-package cn.scauaie.cache.impl;
+package cn.scauaie.cache;
 
-import cn.scauaie.cache.RedisHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -16,8 +14,8 @@ import java.util.Map;
  * @email 827032783@qq.com
  * @create 2019-03-12 16:57
  */
-@Repository("redisHash")
-public class RedisHashImpl implements RedisHash {
+@Repository("redis")
+public class Redis {
 
     @Autowired
     private JedisPool jedisPool;
@@ -28,7 +26,7 @@ public class RedisHashImpl implements RedisHash {
      * @param field field名
      * @return 成功修改行数
      */
-    public Long set(String key, String field, String value) {
+    public Long hset(String key, String field, String value) {
         Jedis jedis = jedisPool.getResource();
         Long rowCount = jedis.hset(key, field, value);
         jedis.close();
@@ -42,7 +40,7 @@ public class RedisHashImpl implements RedisHash {
      * @param field field名
      * @return 获取到的字符串，如果没获取到返回null
      */
-    public String get(String key, String field) {
+    public String hget(String key, String field) {
         Jedis jedis = jedisPool.getResource();
         String value = jedis.hget(key, field);
         jedis.close();
@@ -56,7 +54,7 @@ public class RedisHashImpl implements RedisHash {
      * @param field field名
      * @return 成功修改行数
      */
-    public Long del(String key, String field) {
+    public Long hdel(String key, String field) {
         Jedis jedis = jedisPool.getResource();
         Long rowCount = jedis.hdel(key, field);
         jedis.close();
@@ -70,11 +68,64 @@ public class RedisHashImpl implements RedisHash {
      * @param key key
      * @return 映射列表
      */
-    public Map<String, String> getAll(String key) {
+    public Map<String, String> hgetAll(String key) {
         Jedis jedis = jedisPool.getResource();
         Map<String, String> resultMap = jedis.hgetAll(key);
         jedis.close();
         return resultMap;
     }
 
+
+    /**
+     * 对应redis的set操作
+     * @param key key
+     * @param value value
+     * @return 状态码
+     */
+    public String set(String key, String value) {
+        Jedis jedis = jedisPool.getResource();
+        String code = jedis.set(key, value);
+        jedis.close();
+        return code;
+    }
+
+    /**
+     * 获取对应key的值
+     *
+     * @param key key
+     * @return 获取到的字符串
+     */
+    public String get(String key) {
+        Jedis jedis = jedisPool.getResource();
+        String value = jedis.get(key);
+        jedis.close();
+        return value;
+    }
+
+    /**
+     * 删除对应key的值
+     *
+     * @param key key
+     * @return 成功修改行数
+     */
+    public Long del(String key) {
+        Jedis jedis = jedisPool.getResource();
+        Long rowCount = jedis.del(key);
+        jedis.close();
+        return rowCount;
+    }
+
+    /**
+     * 设置过期时间
+     *
+     * @param key key
+     * @param seconds seconds
+     * @return 影响行数
+     */
+    public Long expire(String key, int seconds) {
+        Jedis jedis = jedisPool.getResource();
+        Long rowCount = jedis.expire(key, seconds);
+        jedis.close();
+        return rowCount;
+    }
 }
