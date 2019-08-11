@@ -1,17 +1,21 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.FormTokenAuth;
+import cn.scauaie.model.vo.AvatarVO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.group.GroupFormAOPOST;
 import cn.scauaie.model.vo.FormVO;
+import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.service.FormService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -60,12 +64,64 @@ public class FormController {
         return formService.createForm(openid, formAO);
     }
 
-    @RequestMapping(value="/{id}/avatar", method = RequestMethod.POST)
+    /**
+     * 创建头像
+     *
+     * @param request HttpServletRequest
+     * @param avatar MultipartFile
+     * @return AvatarVO
+     *
+     * @success:
+     * HttpStatus.CREATED
+     *
+     * @errors:
+     * OPERATION_CONFLICT: The specified avatar already exist.
+     * INTERNAL_ERROR: Upload file failed.
+     * INTERNAL_ERROR: Delete file failed.
+     * INTERNAL_ERROR: Update avatar error.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_IS_NULL
+     */
+    @RequestMapping(value="/avatar", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @FormTokenAuth
-    public Object avatarPost(HttpServletRequest request, @PathVariable Integer id) {
-        System.out.println(request.getAttribute("fid"));
-        return "ddd";
+    public AvatarVO avatarPost(
+            HttpServletRequest request,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
+                    MultipartFile avatar) {
+        Integer fid = (Integer) request.getAttribute("fid");
+        return formService.uploadAvatar(fid, avatar);
+    }
+
+    /**
+     * 创建作品
+     *
+     * @param request HttpServletRequest
+     * @param work MultipartFile
+     * @return WorkVO
+     *
+     * @success:
+     * HttpStatus.CREATED
+     *
+     * @errors:
+     * INTERNAL_ERROR: Upload file failed.
+     * INTERNAL_ERROR: Delete file failed.
+     * INTERNAL_ERROR: Insert work failed.
+     * OPERATION_CONFLICT: The specified work number has reached the upper limit.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_IS_NULL
+     */
+    @RequestMapping(value="/work", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @FormTokenAuth
+    public WorkVO workPost(
+            HttpServletRequest request,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
+                    MultipartFile work) {
+        Integer fid = (Integer) request.getAttribute("fid");
+        return formService.uploadWork(fid, work);
     }
 
 

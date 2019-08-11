@@ -36,6 +36,7 @@ public class TokenServiceImpl implements TokenService {
      * @param id 报名表id
      * @return token
      */
+    @Override
     public String createFormToken(Integer id) {
         //装配成TokenDO
         TokenDO tokenDO = new TokenDO(TokenType.FORM.getType(), id);

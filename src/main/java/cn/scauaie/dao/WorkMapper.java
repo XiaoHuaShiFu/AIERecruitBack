@@ -18,4 +18,6 @@ public interface WorkMapper {
     int updateByPrimaryKey(WorkDO record);
 
     List<WorkDO> selectByFid(Integer fid);
+
+    int selectCountByFormId(Integer fid);
 }

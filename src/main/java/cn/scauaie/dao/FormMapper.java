@@ -16,4 +16,6 @@ public interface FormMapper {
     int updateByPrimaryKey(FormDO record);
 
     FormDO selectByOpenid(String openid);
+
+    String selectAvatarById(Integer id);
 }

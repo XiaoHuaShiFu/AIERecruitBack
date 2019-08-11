@@ -27,7 +27,7 @@ public class FTPClientTemplate {
 
     private FTPClientConfig ftpClientConfig;
 
-    private String server;
+    private String host;
 
     private String username;
 
@@ -36,7 +36,7 @@ public class FTPClientTemplate {
     private int port = 21;
 
     public FTPClientTemplate(String host, String username, String password) {
-        this.server = host;
+        this.host = host;
         this.username = username;
         this.password = password;
     }
@@ -53,10 +53,10 @@ public class FTPClientTemplate {
                 ftp.configure(this.getFtpClientConfig());
             }
 
-            ftp.connect(server, getPort());
+            ftp.connect(host, getPort());
             int reply = ftp.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
-                throw new IOException("failed to connect to the FTP Server:" + server);
+                throw new IOException("failed to connect to the FTP Server:" + host);
             }
 
             boolean isLoginSuc = ftp.login(this.getUsername(), this.getPassword());
@@ -170,12 +170,12 @@ public class FTPClientTemplate {
         this.ftpClientConfig = ftpClientConfig;
     }
 
-    public String getServer() {
-        return server;
+    public String getHost() {
+        return host;
     }
 
-    public void setServer(String server) {
-        this.server = server;
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public String getUsername() {

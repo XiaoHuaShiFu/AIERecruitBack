@@ -29,7 +29,7 @@
     values (#{id,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="cn.scauaie.model.dao.WorkDO" >
+  <insert id="insertSelective" parameterType="cn.scauaie.model.dao.WorkDO" useGeneratedKeys="true" keyProperty="id" >
     insert into work
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -96,6 +96,13 @@
   <select id="selectByFid" parameterType="integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
+    from work
+    where fid = #{fid, jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCountByFormId" parameterType="integer" resultType="int">
+    select
+    count(1)
     from work
     where fid = #{fid, jdbcType=INTEGER}
   </select>

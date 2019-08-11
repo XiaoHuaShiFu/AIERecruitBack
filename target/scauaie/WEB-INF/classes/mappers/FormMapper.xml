@@ -199,4 +199,11 @@
     from form
     where openid = #{openid, jdbcType=VARCHAR}
   </select>
+
+  <select id="selectAvatarById" parameterType="integer" resultType="string">
+    select
+    avatar
+    from form
+    where id = #{id, jdbcType=INTEGER}
+  </select>
 </mapper>
