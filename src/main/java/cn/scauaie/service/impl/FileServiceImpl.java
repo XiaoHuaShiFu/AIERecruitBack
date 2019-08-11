@@ -104,8 +104,10 @@ public class FileServiceImpl implements FileService {
     @Override
     public void delete(String fileUrl) {
         //解析url
-        RemoteDirAndFileName remoteDirAndFileName = FileUtil.parseFileUrl(ftpClientTemplate.getHost(), fileUrl);
+        RemoteDirAndFileName remoteDirAndFileName = FileUtil.parseFileUrl(FtpCommon.HOST, fileUrl);
         //删除文件
+        System.out.println(remoteDirAndFileName.getFileName());
+        System.out.println(remoteDirAndFileName.getRemoteDir());
         delete(remoteDirAndFileName.getFileName(), remoteDirAndFileName.getRemoteDir());
     }
 

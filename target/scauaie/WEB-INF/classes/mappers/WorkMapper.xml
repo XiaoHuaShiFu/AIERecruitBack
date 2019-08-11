@@ -106,4 +106,12 @@
     from work
     where fid = #{fid, jdbcType=INTEGER}
   </select>
+
+  <select id="selectUrlByFormIdAndWorkId" parameterType="map" resultType="string">
+    select
+    url
+    from work
+    where id = #{id,  jdbcType=INTEGER}
+    and fid = #{fid, jdbcType=INTEGER}
+  </select>
 </mapper>

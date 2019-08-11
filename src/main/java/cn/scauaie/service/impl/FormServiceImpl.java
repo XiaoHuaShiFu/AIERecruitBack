@@ -78,6 +78,27 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
+     * 更新作品
+     *
+     * @param workId 作品编号
+     * @param fid 报名表编号
+     * @param work MultipartFile
+     * @return WorkVO
+     */
+    public WorkVO updatedWork(Integer workId, Integer fid, MultipartFile work) {
+        //查找旧作品url
+        String oldWorkUrl = workMapper.selectUrlByFormIdAndWorkId(workId, fid);
+        //旧作品不存在
+        if (oldWorkUrl == null) {
+            throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER,
+                    "The specified action is not available for you.");
+        }
+        //更新作品
+        WorkDO workDO = updatedWorkByOldWorkUrl(workId, oldWorkUrl, work);
+        return workAssembler.assembleWorkVOByWorkDO(workDO);
+    }
+
+    /**
      * 上传作品
      *
      * @param fid 报名表编号
@@ -119,11 +140,14 @@ public class FormServiceImpl implements FormService {
      */
     @Override
     public AvatarVO uploadAvatar(Integer id, MultipartFile avatar) {
+        //获取旧头像
         String oldAvatarUrl = formMapper.selectAvatarById(id);
+        //旧头像已经存在
         if (oldAvatarUrl != null) {
             throw new ProcessingException(ErrorCode.OPERATION_CONFLICT,
                     "The specified avatar already exist.");
         }
+        //创建头像文件并添加到数据库
         String avatarUrl = updatedAvatarByOldAvatarUrl(id, null, avatar);
         return new AvatarVO(avatarUrl);
     }
@@ -131,15 +155,16 @@ public class FormServiceImpl implements FormService {
     /**
      * 更新头像
      *
-     * @param id FormId
+     * @param fid FormId
      * @param avatar MultipartFile
      * @return 新文件url
      */
-    public String updatedAvatar(Integer id, MultipartFile avatar) {
+    public AvatarVO updatedAvatar(Integer fid, MultipartFile avatar) {
         //获取旧文件Url
-        String oldAvatarUrl = formMapper.selectAvatarById(id);
+        String oldAvatarUrl = formMapper.selectAvatarById(fid);
         //更新文件
-        return updatedAvatarByOldAvatarUrl(id, oldAvatarUrl, avatar);
+        String newAvatarUrl = updatedAvatarByOldAvatarUrl(fid, oldAvatarUrl, avatar);
+        return new AvatarVO(newAvatarUrl);
     }
 
     /**

@@ -1,6 +1,7 @@
 package cn.scauaie.dao;
 
 import cn.scauaie.model.dao.WorkDO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface WorkMapper {
     List<WorkDO> selectByFid(Integer fid);
 
     int selectCountByFormId(Integer fid);
+
+    String selectUrlByFormIdAndWorkId(@Param("id") Integer workId, @Param("fid") Integer formId);
 }

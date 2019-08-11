@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -95,6 +96,35 @@ public class FormController {
     }
 
     /**
+     * 修改头像
+     *
+     * @param request HttpServletRequest
+     * @param avatar MultipartFile
+     * @return AvatarVO
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     * @errors:
+     * INTERNAL_ERROR: Upload file failed.
+     * INTERNAL_ERROR: Delete file failed.
+     * INTERNAL_ERROR: Update avatar error.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_IS_NULL
+     */
+    @RequestMapping(value="/avatar", method = RequestMethod.PATCH)
+    @ResponseStatus(value = HttpStatus.OK)
+    @FormTokenAuth
+    public AvatarVO avatarPatch(
+            HttpServletRequest request,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
+                    MultipartFile avatar) {
+        Integer fid = (Integer) request.getAttribute("fid");
+        return formService.updatedAvatar(fid, avatar);
+    }
+
+    /**
      * 创建作品
      *
      * @param request HttpServletRequest
@@ -113,7 +143,7 @@ public class FormController {
      * @bindErrors
      * INVALID_PARAMETER_IS_NULL
      */
-    @RequestMapping(value="/work", method = RequestMethod.POST)
+    @RequestMapping(value="/works", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @FormTokenAuth
     public WorkVO workPost(
@@ -124,11 +154,47 @@ public class FormController {
         return formService.uploadWork(fid, work);
     }
 
-
-    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    /**
+     * 修改作品
+     *
+     * @param request HttpServletRequest
+     * @param work MultipartFile
+     * @return WorkVO
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     * @errors:
+     * INTERNAL_ERROR: Upload file failed.
+     * INTERNAL_ERROR: Delete file failed.
+     * INTERNAL_ERROR: Insert work failed.
+     * FORBIDDEN_SUB_USER: The specified action is not available for you.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_IS_NULL
+     */
+    @RequestMapping(value="/works/{wid}", method = RequestMethod.PATCH)
     @ResponseStatus(value = HttpStatus.OK)
     @FormTokenAuth
-    public Object get(@PathVariable Integer id) {
+    public WorkVO workPatch(
+            HttpServletRequest request,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
+            @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The value of id below, min: 0.", value = 0)
+            @PathVariable Integer wid,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
+                    MultipartFile work) {
+        Integer fid = (Integer) request.getAttribute("fid");
+        return formService.updatedWork(wid, fid, work);
+    }
+
+
+
+    @RequestMapping(value="/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(value = HttpStatus.OK)
+    @FormTokenAuth
+    public Object get(@PathVariable Integer id, MultipartFile work) {
+        System.out.println(work);
+        System.out.println("ddddddddd");
         return "ddd";
     }
 

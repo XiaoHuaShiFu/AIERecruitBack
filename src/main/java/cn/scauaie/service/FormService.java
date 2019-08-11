@@ -27,5 +27,9 @@ public interface FormService {
 
     AvatarVO uploadAvatar(Integer id, MultipartFile avatar);
 
+    AvatarVO updatedAvatar(Integer fid, MultipartFile avatar);
+
     WorkVO uploadWork(Integer fid, MultipartFile work);
+
+    WorkVO updatedWork(Integer workId, Integer fid, MultipartFile work);
 }
