@@ -65,6 +65,16 @@ public class FormController {
         return formService.createForm(openid, formAO);
     }
 
+
+    @RequestMapping(value="/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(value = HttpStatus.OK)
+    @FormTokenAuth
+    public Object get(@PathVariable Integer id, MultipartFile work) {
+        System.out.println(work);
+        System.out.println("ddddddddd");
+        return "ddd";
+    }
+
     /**
      * 创建头像
      *
@@ -189,13 +199,5 @@ public class FormController {
 
 
 
-    @RequestMapping(value="/{id}", method = RequestMethod.PUT)
-    @ResponseStatus(value = HttpStatus.OK)
-    @FormTokenAuth
-    public Object get(@PathVariable Integer id, MultipartFile work) {
-        System.out.println(work);
-        System.out.println("ddddddddd");
-        return "ddd";
-    }
 
 }
