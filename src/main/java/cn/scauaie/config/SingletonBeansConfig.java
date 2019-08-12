@@ -1,7 +1,7 @@
 package cn.scauaie.config;
 
-import cn.scauaie.ftp.FTPClientTemplate;
-import cn.scauaie.utils.PropertiesUtil;
+import cn.scauaie.util.ftp.FTPClientTemplate;
+import cn.scauaie.util.PropertiesUtils;
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,10 +56,10 @@ public class SingletonBeansConfig {
      */
     @Bean
     public FTPClientTemplate ftpClientTemplate() {
-        PropertiesUtil propertiesUtil = new PropertiesUtil("ftp.properties");
-        String host = propertiesUtil.getProperty("ftp.host");
-        String username = propertiesUtil.getProperty("ftp.username");
-        String password = propertiesUtil.getProperty("ftp.password");
+        PropertiesUtils propertiesUtils = new PropertiesUtils("ftp.properties");
+        String host = propertiesUtils.getProperty("ftp.host");
+        String username = propertiesUtils.getProperty("ftp.username");
+        String password = propertiesUtils.getProperty("ftp.password");
         return new FTPClientTemplate(host, username, password);
     }
 

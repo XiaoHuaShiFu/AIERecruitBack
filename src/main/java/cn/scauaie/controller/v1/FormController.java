@@ -1,9 +1,12 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.FormTokenAuth;
-import cn.scauaie.model.vo.AvatarVO;
+import cn.scauaie.assembler.FormAssembler;
+import cn.scauaie.assembler.WorkAssembler;
 import cn.scauaie.model.ao.FormAO;
+import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.ao.group.GroupFormAOPOST;
+import cn.scauaie.model.vo.AvatarVO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.service.FormService;
@@ -35,6 +38,12 @@ public class FormController {
     @Autowired
     private FormService formService;
 
+    @Autowired
+    private FormAssembler formAssembler;
+
+    @Autowired
+    private WorkAssembler workAssembler;
+
     /**
      * 创建Form并返回Form
      * @param code 微信小程序的wx.login()接口返回值
@@ -61,16 +70,15 @@ public class FormController {
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @Validated(GroupFormAOPOST.class) FormAO formAO) {
-        String openid = formService.getOpenid(code);
-        return formService.createForm(openid, formAO);
+        FormAO newFormAO = formService.saveForm(code, formAO);
+        return formAssembler.assembleFormVOByFormAO(newFormAO);
     }
 
 
-    @RequestMapping(value="/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @FormTokenAuth
-    public Object get(@PathVariable Integer id, MultipartFile work) {
-        System.out.println(work);
+    public Object get(@PathVariable Integer id) {
         System.out.println("ddddddddd");
         return "ddd";
     }
@@ -97,12 +105,13 @@ public class FormController {
     @RequestMapping(value="/avatar", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @FormTokenAuth
-    public AvatarVO avatarPost(
+    public AvatarVO postAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
         Integer fid = (Integer) request.getAttribute("fid");
-        return formService.uploadAvatar(fid, avatar);
+        String avatarUrl = formService.saveAvatar(fid, avatar);
+        return new AvatarVO(avatarUrl);
     }
 
     /**
@@ -126,12 +135,13 @@ public class FormController {
     @RequestMapping(value="/avatar", method = RequestMethod.PATCH)
     @ResponseStatus(value = HttpStatus.OK)
     @FormTokenAuth
-    public AvatarVO avatarPatch(
+    public AvatarVO patchAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
         Integer fid = (Integer) request.getAttribute("fid");
-        return formService.updatedAvatar(fid, avatar);
+        String newAvatarUrl = formService.updateAvatar(fid, avatar);
+        return new AvatarVO(newAvatarUrl);
     }
 
     /**
@@ -156,12 +166,13 @@ public class FormController {
     @RequestMapping(value="/works", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @FormTokenAuth
-    public WorkVO workPost(
+    public WorkVO postWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
                     MultipartFile work) {
         Integer fid = (Integer) request.getAttribute("fid");
-        return formService.uploadWork(fid, work);
+        WorkAO workAO = formService.saveWork(fid, work);
+        return workAssembler.assembleWorkVOByWorkAO(workAO);
     }
 
     /**
@@ -186,7 +197,7 @@ public class FormController {
     @RequestMapping(value="/works/{wid}", method = RequestMethod.PATCH)
     @ResponseStatus(value = HttpStatus.OK)
     @FormTokenAuth
-    public WorkVO workPatch(
+    public WorkVO patchWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
             @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The value of id below, min: 0.", value = 0)
@@ -194,10 +205,8 @@ public class FormController {
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
                     MultipartFile work) {
         Integer fid = (Integer) request.getAttribute("fid");
-        return formService.updatedWork(wid, fid, work);
+        WorkAO workAO = formService.updateWork(wid, fid, work);
+        return workAssembler.assembleWorkVOByWorkAO(workAO);
     }
-
-
-
 
 }

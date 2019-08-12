@@ -54,4 +54,15 @@ public class Code2SessionDTO {
     public void setErrmsg(String errmsg) {
         this.errmsg = errmsg;
     }
+
+    @Override
+    public String toString() {
+        return "Code2SessionDTO{" +
+                "openid='" + openid + '\'' +
+                ", session_key='" + session_key + '\'' +
+                ", unionid='" + unionid + '\'' +
+                ", errcode=" + errcode +
+                ", errmsg='" + errmsg + '\'' +
+                '}';
+    }
 }

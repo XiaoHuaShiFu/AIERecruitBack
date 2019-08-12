@@ -75,4 +75,16 @@ public class InterviewerDO {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "InterviewerDO{" +
+                "id=" + id +
+                ", openid='" + openid + '\'' +
+                ", name='" + name + '\'' +
+                ", dep='" + dep + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

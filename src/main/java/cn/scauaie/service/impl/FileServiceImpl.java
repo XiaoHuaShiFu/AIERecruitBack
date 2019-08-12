@@ -1,12 +1,12 @@
 package cn.scauaie.service.impl;
 
 import cn.scauaie.common.error.ErrorCode;
-import cn.scauaie.common.ftp.FtpCommon;
 import cn.scauaie.error.ProcessingException;
-import cn.scauaie.ftp.FTPClientTemplate;
-import cn.scauaie.model.po.RemoteDirAndFileName;
+import cn.scauaie.util.ftp.FTPClientTemplate;
+import cn.scauaie.manager.ftp.FtpConst;
+import cn.scauaie.util.file.FileUrl;
 import cn.scauaie.service.FileService;
-import cn.scauaie.utils.FileUtil;
+import cn.scauaie.util.file.FileNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
-@Service("iFileService")
+@Service("fileService")
 public class FileServiceImpl implements FileService {
 
     @Autowired
@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String upload(MultipartFile file, String dirPath) {
         //随机生成文件名
-        String fileName = FileUtil.randomFileNameByOriginalFileName(file.getOriginalFilename());
+        String fileName = FileNameUtils.getRandomFileNameByOriginalFileName(file.getOriginalFilename());
         //上传文件
         boolean success = upload(file, fileName, dirPath);
         //上传失败
@@ -78,7 +78,7 @@ public class FileServiceImpl implements FileService {
     public String uploadAndGetUrl(MultipartFile file, String dirPath) {
         String fileName = upload(file, dirPath);
         //文件url
-        return FtpCommon.HOST + dirPath + fileName;
+        return FtpConst.HOST + dirPath + fileName;
     }
 
     /**
@@ -104,11 +104,11 @@ public class FileServiceImpl implements FileService {
     @Override
     public void delete(String fileUrl) {
         //解析url
-        RemoteDirAndFileName remoteDirAndFileName = FileUtil.parseFileUrl(FtpCommon.HOST, fileUrl);
+        FileUrl remoteDirAndFileName = FileNameUtils.parseFileUrl(fileUrl);
         //删除文件
         System.out.println(remoteDirAndFileName.getFileName());
-        System.out.println(remoteDirAndFileName.getRemoteDir());
-        delete(remoteDirAndFileName.getFileName(), remoteDirAndFileName.getRemoteDir());
+        System.out.println(remoteDirAndFileName.getDirectoryPath());
+        delete(remoteDirAndFileName.getFileName(), remoteDirAndFileName.getDirectoryPath());
     }
 
     /**
@@ -154,7 +154,7 @@ public class FileServiceImpl implements FileService {
      */
     private File bufferFileOnLocal(MultipartFile file, String fileName) {
         //将文件缓存到本地文件夹
-        File bufFile = new File(FtpCommon.BUF_PATH, fileName);
+        File bufFile = new File(FtpConst.BUF_PATH, fileName);
         try {
             //保存文件
             file.transferTo(bufFile);

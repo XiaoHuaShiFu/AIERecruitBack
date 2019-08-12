@@ -1,4 +1,4 @@
-package cn.scauaie.utils;
+package cn.scauaie.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;

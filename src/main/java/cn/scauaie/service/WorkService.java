@@ -1,5 +1,6 @@
 package cn.scauaie.service;
 
+import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.dao.WorkDO;
 import cn.scauaie.model.vo.WorkVO;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface WorkService {
 
-    List<WorkVO> getWorkVOsByFormId(Integer fid);
+    List<WorkAO> listWorkAOsByFormId(Integer formId);
 
-    List<WorkDO> getWorkDOsByFormId(Integer fid);
+    List<WorkDO> listWorkDOsByFormId(Integer formId);
 }

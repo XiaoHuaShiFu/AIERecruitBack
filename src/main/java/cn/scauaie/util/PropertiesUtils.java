@@ -1,4 +1,4 @@
-package cn.scauaie.utils;
+package cn.scauaie.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,9 +17,9 @@ import java.util.Properties;
  * @email 827032783@qq.com
  * @create 2019-08-08 21:31
  */
-public class PropertiesUtil {
+public class PropertiesUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(PropertiesUtils.class);
 
     private final String propertiesName;
 
@@ -27,7 +27,7 @@ public class PropertiesUtil {
      * 初始化properties的文件名
      * @param fileName String
      */
-    public PropertiesUtil(String fileName) {
+    public PropertiesUtils(String fileName) {
         this.propertiesName = fileName;
     }
 
@@ -42,7 +42,7 @@ public class PropertiesUtil {
         }
         Properties properties = new Properties();
         String value = null;
-        try (InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(PropertiesUtil.class.getClassLoader().getResourceAsStream(propertiesName)), StandardCharsets.UTF_8)) {
+        try (InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(PropertiesUtils.class.getClassLoader().getResourceAsStream(propertiesName)), StandardCharsets.UTF_8)) {
             properties.load(inputStreamReader);
             value = properties.getProperty(key.trim());
         } catch (IOException e) {

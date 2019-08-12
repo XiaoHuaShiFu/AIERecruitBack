@@ -1,5 +1,7 @@
 package cn.scauaie.controller.v1;
 
+import cn.scauaie.assembler.FormAssembler;
+import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.TokenService;
@@ -29,11 +31,13 @@ import javax.validation.constraints.Size;
 public class TokenController {
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private FormService formService;
 
     @Autowired
-    private TokenService tokenService;
-
+    private FormAssembler formAssembler;
 
     /**
      * 创建form-token凭证
@@ -62,16 +66,15 @@ public class TokenController {
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32)
                     String code, HttpServletResponse response) {
-        //用code获取openid
-        String openid = formService.getOpenid(code);
-        //用openid获取form
-        FormVO formVO = formService.getFormVOByOpenid(openid);
+        FormAO formAO = formService.getFormAOByCode(code);
+
         //创建token令牌
-        String token = tokenService.createFormToken(formVO.getId());
+        String token = tokenService.createAndSaveFormToken(code, formAO.getId());
+
         //响应头设置token
         response.setHeader("Authorization", token);
-        //FormVO
-        return formVO;
+
+        return formAssembler.assembleFormVOByFormAO(formAO);
     }
 
 }

@@ -1,4 +1,4 @@
-package cn.scauaie.utils;
+package cn.scauaie.util;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Array;

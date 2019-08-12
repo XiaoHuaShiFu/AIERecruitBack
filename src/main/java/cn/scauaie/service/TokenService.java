@@ -1,5 +1,7 @@
 package cn.scauaie.service;
 
+import cn.scauaie.model.ao.TokenAO;
+
 /**
  * 描述:
  *
@@ -8,7 +10,7 @@ package cn.scauaie.service;
  * @create 2019-08-06 21:30
  */
 public interface TokenService {
+    TokenAO authFormToken(String token);
 
-    String createFormToken(Integer id);
-
+    String createAndSaveFormToken(String code, Integer formId);
 }

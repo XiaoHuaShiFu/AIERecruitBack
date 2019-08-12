@@ -1,8 +1,7 @@
-package cn.scauaie.manager;
+package cn.scauaie.manager.wechat;
 
 import cn.scauaie.model.dto.Code2SessionDTO;
-import cn.scauaie.utils.ObjectAnalyzer;
-import cn.scauaie.utils.PropertiesUtil;
+import cn.scauaie.util.PropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -45,11 +44,11 @@ public class WeChatMpManager {
      * 初始化微信小程序相关常量
      */
     public WeChatMpManager() {
-        PropertiesUtil propertiesUtil = new PropertiesUtil("weChat.properties");
-        AUTH_CODE2SESSION_URL = propertiesUtil.getProperty("auth.code2Session.url");
-        APP_ID = propertiesUtil.getProperty("app.id");
-        APP_SECRET = propertiesUtil.getProperty("app.secret");
-        GRANT_TYPE= propertiesUtil.getProperty("grant.type");
+        PropertiesUtils propertiesUtils = new PropertiesUtils("weChat.properties");
+        AUTH_CODE2SESSION_URL = propertiesUtils.getProperty("auth.code2Session.url");
+        APP_ID = propertiesUtils.getProperty("app.id");
+        APP_SECRET = propertiesUtils.getProperty("app.secret");
+        GRANT_TYPE= propertiesUtils.getProperty("grant.type");
     }
 
     /**
@@ -57,7 +56,7 @@ public class WeChatMpManager {
      * @param code String
      * @return Code2SessionDTO
      */
-    public Code2SessionDTO getCode2SessionByCode(String code) {
+    public Code2SessionDTO getCode2Session(String code) {
         ResponseEntity<Code2SessionDTO> responseEntity = restTemplate.getForEntity(
                 AUTH_CODE2SESSION_URL + "?appid=" + APP_ID + "&secret=" + APP_SECRET + "&js_code=" + code + "&grant_type=" + GRANT_TYPE,
                 Code2SessionDTO.class);
@@ -69,8 +68,8 @@ public class WeChatMpManager {
      * @param code String
      * @return String
      */
-    public String getOpenidByCode(String code) {
-        Code2SessionDTO code2SessionDTO = getCode2SessionByCode(code);
+    public String getOpenid(String code) {
+        Code2SessionDTO code2SessionDTO = getCode2Session(code);
         return code2SessionDTO.getOpenid();
     }
 

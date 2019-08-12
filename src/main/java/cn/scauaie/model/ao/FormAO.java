@@ -2,11 +2,13 @@ package cn.scauaie.model.ao;
 
 import cn.scauaie.model.ao.group.GroupFormAO;
 import cn.scauaie.model.ao.group.GroupFormAOPOST;
+import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.validator.annotation.Dep;
 import cn.scauaie.validator.annotation.Gender;
 import cn.scauaie.validator.annotation.Phone;
 
 import javax.validation.constraints.*;
+import java.util.List;
 
 public class FormAO {
 
@@ -76,6 +78,7 @@ public class FormAO {
             groups = {GroupFormAO.class})
     private String introduction;
 
+    private List<WorkAO> works;
 
     public Integer getId() {
         return id;
@@ -155,5 +158,30 @@ public class FormAO {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public List<WorkAO> getWorks() {
+        return works;
+    }
+
+    public void setWorks(List<WorkAO> works) {
+        this.works = works;
+    }
+
+    @Override
+    public String toString() {
+        return "FormAO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", gender='" + gender + '\'' +
+                ", college='" + college + '\'' +
+                ", major='" + major + '\'' +
+                ", phone='" + phone + '\'' +
+                ", firstDep='" + firstDep + '\'' +
+                ", secondDep='" + secondDep + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", works=" + works +
+                '}';
     }
 }

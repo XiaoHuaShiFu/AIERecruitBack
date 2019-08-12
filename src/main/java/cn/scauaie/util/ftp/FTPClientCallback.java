@@ -1,4 +1,4 @@
-package cn.scauaie.ftp;
+package cn.scauaie.util.ftp;
 
 import org.apache.commons.net.ftp.FTPClient;
 

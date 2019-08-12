@@ -152,4 +152,23 @@ public class FormDO {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "FormDO{" +
+                "id=" + id +
+                ", openid='" + openid + '\'' +
+                ", name='" + name + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", gender='" + gender + '\'' +
+                ", college='" + college + '\'' +
+                ", major='" + major + '\'' +
+                ", phone='" + phone + '\'' +
+                ", firstDep='" + firstDep + '\'' +
+                ", secondDep='" + secondDep + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

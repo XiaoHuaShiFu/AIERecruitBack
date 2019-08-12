@@ -75,4 +75,16 @@ public class QueueDO {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "QueueDO{" +
+                "id=" + id +
+                ", fid=" + fid +
+                ", dep='" + dep + '\'' +
+                ", state='" + state + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

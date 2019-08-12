@@ -1,6 +1,7 @@
 package cn.scauaie.service;
 
 import cn.scauaie.model.ao.FormAO;
+import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.vo.AvatarVO;
 import cn.scauaie.model.vo.FormVO;
@@ -15,21 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
  * @create 2019-08-06 21:30
  */
 public interface FormService {
-    String getOpenid(String code);
 
-    FormVO createForm(String openid, FormAO formAO);
+    FormAO saveForm(String code, FormAO formAO);
 
-    FormDO createForm(FormDO formDO);
+    FormAO getFormAOByCode(String code);
 
-    FormVO getFormVOByOpenid(String openid);
+    String saveAvatar(Integer formId, MultipartFile avatar);
 
-    FormDO getFormDOByOpenid(String openid);
+    String updateAvatar(Integer formId, MultipartFile avatar);
 
-    AvatarVO uploadAvatar(Integer id, MultipartFile avatar);
+    WorkAO saveWork(Integer formId, MultipartFile work);
 
-    AvatarVO updatedAvatar(Integer fid, MultipartFile avatar);
-
-    WorkVO uploadWork(Integer fid, MultipartFile work);
-
-    WorkVO updatedWork(Integer workId, Integer fid, MultipartFile work);
+    WorkAO updateWork(Integer workId, Integer formId, MultipartFile work);
 }

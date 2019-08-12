@@ -1,6 +1,6 @@
-package cn.scauaie.model.vo;
+package cn.scauaie.model.ao;
 
-public class WorkVO {
+public class WorkAO {
     private Integer id;
 
     private String url;
@@ -23,7 +23,7 @@ public class WorkVO {
 
     @Override
     public String toString() {
-        return "WorkVO{" +
+        return "WorkAO{" +
                 "id=" + id +
                 ", url='" + url + '\'' +
                 '}';

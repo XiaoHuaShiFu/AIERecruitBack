@@ -25,4 +25,11 @@ public class AvatarVO {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    @Override
+    public String toString() {
+        return "AvatarVO{" +
+                "avatar='" + avatar + '\'' +
+                '}';
+    }
 }

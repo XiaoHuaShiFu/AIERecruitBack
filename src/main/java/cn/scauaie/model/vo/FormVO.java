@@ -119,4 +119,21 @@ public class FormVO {
     public void setWorks(List<WorkVO> works) {
         this.works = works;
     }
+
+    @Override
+    public String toString() {
+        return "FormVO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", college='" + college + '\'' +
+                ", major='" + major + '\'' +
+                ", phone='" + phone + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", firstDep='" + firstDep + '\'' +
+                ", secondDep='" + secondDep + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", works=" + works +
+                '}';
+    }
 }

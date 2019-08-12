@@ -1,4 +1,4 @@
-package cn.scauaie.utils;
+package cn.scauaie.util;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

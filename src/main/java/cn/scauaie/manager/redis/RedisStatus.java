@@ -1,4 +1,4 @@
-package cn.scauaie.common.redis;
+package cn.scauaie.manager.redis;
 
 /**
  * 描述:

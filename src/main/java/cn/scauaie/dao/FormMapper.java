@@ -7,7 +7,7 @@ public interface FormMapper {
 
     int insert(FormDO record);
 
-    int insertSelective(FormDO record);
+    int insertIfOpenidNotExist(FormDO record);
 
     FormDO selectByPrimaryKey(Integer id);
 

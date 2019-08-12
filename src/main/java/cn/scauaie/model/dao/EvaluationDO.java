@@ -86,4 +86,17 @@ public class EvaluationDO {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "EvaluationDO{" +
+                "id=" + id +
+                ", fid=" + fid +
+                ", name='" + name + '\'' +
+                ", evaluation='" + evaluation + '\'' +
+                ", pass=" + pass +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

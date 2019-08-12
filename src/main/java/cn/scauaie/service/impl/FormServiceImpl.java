@@ -6,12 +6,11 @@ import cn.scauaie.common.error.ErrorCode;
 import cn.scauaie.dao.FormMapper;
 import cn.scauaie.dao.WorkMapper;
 import cn.scauaie.error.ProcessingException;
-import cn.scauaie.manager.WeChatMpManager;
+import cn.scauaie.manager.wechat.WeChatMpManager;
 import cn.scauaie.model.ao.FormAO;
+import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.dao.WorkDO;
-import cn.scauaie.model.vo.AvatarVO;
-import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.FormService;
@@ -54,40 +53,40 @@ public class FormServiceImpl implements FormService {
     private FileService fileService;
 
     /**
-     * 更新作品
-     *
-     * @param workId 作品编号
-     * @param oldWorkUrl String
-     * @param work MultipartFile
-     * @return WorkVO
+     * 保存Form
+     * @param code String
+     * @param formAO FormAO
+     * @return FormVO
      */
-    public WorkDO updatedWorkByOldWorkUrl(Integer workId, String oldWorkUrl, MultipartFile work) {
-        //更新作品文件
-        String newWorkUrl = fileService.updateFile(work, oldWorkUrl, "/recruit/form/work/");
-
-        //更改数据库里的work
-        WorkDO workDO = new WorkDO();
-        workDO.setId(workId);
-        workDO.setUrl(newWorkUrl);
-        int count = workMapper.updateByPrimaryKeySelective(workDO);
-        if (count < 1) {
-            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update work error.");
+    @Override
+    public FormAO saveForm(String code, FormAO formAO) {
+        String openid = weChatMpManager.getOpenid(code);
+        if (openid == null) {
+            throw new ProcessingException(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
         }
 
-        return workDO;
+        FormDO formDO = formAssembler.assembleFormDOByOpenidAndFormAO(openid, formAO);
+        int count = formMapper.insertIfOpenidNotExist(formDO);
+        //没有插入成功，由于openid冲突
+        if (count < 1) {
+            throw new ProcessingException(ErrorCode.OPERATION_CONFLICT,
+                    "Request was denied due to conflict, the openid already exists.");
+        }
+        return formAssembler.assembleFormAOByFormDO(formDO);
     }
 
     /**
      * 更新作品
      *
      * @param workId 作品编号
-     * @param fid 报名表编号
+     * @param formId 报名表编号
      * @param work MultipartFile
      * @return WorkVO
      */
-    public WorkVO updatedWork(Integer workId, Integer fid, MultipartFile work) {
+    @Override
+    public WorkAO updateWork(Integer workId, Integer formId, MultipartFile work) {
         //查找旧作品url
-        String oldWorkUrl = workMapper.selectUrlByFormIdAndWorkId(workId, fid);
+        String oldWorkUrl = workMapper.selectUrlByFormIdAndWorkId(workId, formId);
         //旧作品不存在
         if (oldWorkUrl == null) {
             throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER,
@@ -95,20 +94,20 @@ public class FormServiceImpl implements FormService {
         }
         //更新作品
         WorkDO workDO = updatedWorkByOldWorkUrl(workId, oldWorkUrl, work);
-        return workAssembler.assembleWorkVOByWorkDO(workDO);
+        return workAssembler.assembleWorkAOByWorkDO(workDO);
     }
 
     /**
      * 上传作品
      *
-     * @param fid 报名表编号
+     * @param formId 报名表编号
      * @param work MultipartFile
      * @return WorkVO
      */
     @Override
-    public WorkVO uploadWork(Integer fid, MultipartFile work) {
+    public WorkAO saveWork(Integer formId, MultipartFile work) {
         //查询作品数量
-        int count = workMapper.selectCountByFormId(fid);
+        int count = workMapper.selectCountByFormId(formId);
         //作品数量已经到达上限
         if (count >= 6) {
             throw new ProcessingException(ErrorCode.OPERATION_CONFLICT,
@@ -119,7 +118,7 @@ public class FormServiceImpl implements FormService {
         String workUrl = fileService.uploadAndGetUrl(work, "/recruit/form/work/");
         WorkDO workDO = new WorkDO();
         workDO.setUrl(workUrl);
-        workDO.setFid(fid);
+        workDO.setFid(formId);
 
         //添加作品到数据库
         count = workMapper.insertSelective(workDO);
@@ -128,43 +127,55 @@ public class FormServiceImpl implements FormService {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Insert work failed.");
         }
 
-        return workAssembler.assembleWorkVOByWorkDO(workDO);
+        return workAssembler.assembleWorkAOByWorkDO(workDO);
     }
 
     /**
      * 上传头像
      *
-     * @param id 报名表编号
+     * @param formId 报名表编号
      * @param avatar MultipartFile
      * @return 头像url
      */
     @Override
-    public AvatarVO uploadAvatar(Integer id, MultipartFile avatar) {
-        //获取旧头像
-        String oldAvatarUrl = formMapper.selectAvatarById(id);
+    public String saveAvatar(Integer formId, MultipartFile avatar) {
+        String oldAvatarUrl = formMapper.selectAvatarById(formId);
+
         //旧头像已经存在
         if (oldAvatarUrl != null) {
             throw new ProcessingException(ErrorCode.OPERATION_CONFLICT,
                     "The specified avatar already exist.");
         }
+
         //创建头像文件并添加到数据库
-        String avatarUrl = updatedAvatarByOldAvatarUrl(id, null, avatar);
-        return new AvatarVO(avatarUrl);
+        return updateAvatarByOldAvatarUrl(formId, null, avatar);
     }
 
     /**
      * 更新头像
      *
-     * @param fid FormId
+     * @param formId FormId
      * @param avatar MultipartFile
      * @return 新文件url
      */
-    public AvatarVO updatedAvatar(Integer fid, MultipartFile avatar) {
+    @Override
+    public String updateAvatar(Integer formId, MultipartFile avatar) {
         //获取旧文件Url
-        String oldAvatarUrl = formMapper.selectAvatarById(fid);
+        String oldAvatarUrl = formMapper.selectAvatarById(formId);
         //更新文件
-        String newAvatarUrl = updatedAvatarByOldAvatarUrl(fid, oldAvatarUrl, avatar);
-        return new AvatarVO(newAvatarUrl);
+        return updateAvatarByOldAvatarUrl(formId, oldAvatarUrl, avatar);
+    }
+
+    /**
+     * 获取FormAO通过code
+     *
+     * @param code wx.login()接口的返回值
+     * @return FormAO
+     */
+    @Override
+    public FormAO getFormAOByCode(String code) {
+        String openid = weChatMpManager.getOpenid(code);
+        return getFormAOByOpenid(openid);
     }
 
     /**
@@ -175,7 +186,7 @@ public class FormServiceImpl implements FormService {
      * @param avatar MultipartFile
      * @return 新文件url
      */
-    public String updatedAvatarByOldAvatarUrl(Integer id, String oldAvatarUrl, MultipartFile avatar) {
+    private String updateAvatarByOldAvatarUrl(Integer id, String oldAvatarUrl, MultipartFile avatar) {
         //更新头像文件
         String newAvatarUrl = fileService.updateFile(avatar, oldAvatarUrl, "/recruit/form/avatar/");
 
@@ -192,18 +203,17 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
-     * 获取FormVO通过openid
+     * 获取FormAO通过openid
      *
      * @param openid 微信用户唯一标识符
-     * @return FormVO
+     * @return FormAO
      */
-    @Override
-    public FormVO getFormVOByOpenid(String openid) {
+    private FormAO getFormAOByOpenid(String openid) {
         FormDO formDO = getFormDOByOpenid(openid);
-        FormVO formVO = formAssembler.assembleFormVOByFormDO(formDO);
-        List<WorkVO> workVOs = workService.getWorkVOsByFormId(formDO.getId());
-        formVO.setWorks(workVOs);
-        return formVO;
+        FormAO formAO = formAssembler.assembleFormAOByFormDO(formDO);
+        List<WorkAO> workAOList = workService.listWorkAOsByFormId(formDO.getId());
+        formAO.setWorks(workAOList);
+        return formAO;
     }
 
     /**
@@ -212,8 +222,7 @@ public class FormServiceImpl implements FormService {
      * @param openid 微信用户唯一标识符
      * @return FormDO
      */
-    @Override
-    public FormDO getFormDOByOpenid(String openid) {
+    private FormDO getFormDOByOpenid(String openid) {
         FormDO formDO = formMapper.selectByOpenid(openid);
         //通过openid获取失败将报错
         if (formDO == null) {
@@ -224,46 +233,27 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
-     * 校验code
+     * 更新作品
      *
-     * @param code String
-     * @return String
+     * @param workId 作品编号
+     * @param oldWorkUrl String
+     * @param work MultipartFile
+     * @return WorkVO
      */
-    @Override
-    public String getOpenid(String code) {
-        String openid = weChatMpManager.getOpenidByCode(code);
-        //通过openid获取失败将报错
-        if (openid == null) {
-            throw new ProcessingException(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
-        }
-        return openid;
-    }
+    private WorkDO updatedWorkByOldWorkUrl(Integer workId, String oldWorkUrl, MultipartFile work) {
+        //更新作品文件
+        String newWorkUrl = fileService.updateFile(work, oldWorkUrl, "/recruit/form/work/");
 
-    /**
-     * 直接保存Form，不进行参数校验
-     * @param openid String
-     * @param formAO FormAO
-     * @return FormVO
-     */
-    @Override
-    public FormVO createForm(String openid, FormAO formAO) {
-        FormDO formDO = formAssembler.assembleFormDOByOpenidAndFormAO(openid, formAO);
-        return formAssembler.assembleFormVOByFormDO(createForm(formDO));
-    }
-
-    /**
-     * 直接保存Form，不进行参数校验
-     * @param formDO FormDO
-     * @return FormDO
-     */
-    @Override
-    public FormDO createForm(FormDO formDO) {
-        //没有成功创建
-        if (formMapper.insertSelective(formDO) < 1) {
-            throw new ProcessingException(ErrorCode.OPERATION_CONFLICT,
-                    "Request was denied due to conflict, the openid already exists.");
+        //更改数据库里的work
+        WorkDO workDO = new WorkDO();
+        workDO.setId(workId);
+        workDO.setUrl(newWorkUrl);
+        int count = workMapper.updateByPrimaryKeySelective(workDO);
+        if (count < 1) {
+            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update work error.");
         }
-        return formDO;
+
+        return workDO;
     }
 
 }

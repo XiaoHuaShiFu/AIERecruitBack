@@ -64,4 +64,15 @@ public class ResultDO {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "ResultDO{" +
+                "id=" + id +
+                ", fid=" + fid +
+                ", result='" + result + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

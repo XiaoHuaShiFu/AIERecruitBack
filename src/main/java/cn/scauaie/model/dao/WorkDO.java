@@ -64,4 +64,15 @@ public class WorkDO {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    @Override
+    public String toString() {
+        return "WorkDO{" +
+                "id=" + id +
+                ", fid=" + fid +
+                ", url='" + url + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

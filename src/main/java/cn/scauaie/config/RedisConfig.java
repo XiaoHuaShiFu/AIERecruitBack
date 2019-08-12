@@ -1,6 +1,6 @@
 package cn.scauaie.config;
 
-import cn.scauaie.utils.PropertiesUtil;
+import cn.scauaie.util.PropertiesUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
@@ -22,15 +22,15 @@ public class RedisConfig {
      */
     @Bean
     public JedisPool jedisPool() {
-        PropertiesUtil propertiesUtil = new PropertiesUtil("redis.properties");
+        PropertiesUtils propertiesUtils = new PropertiesUtils("redis.properties");
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(Integer.parseInt(propertiesUtil.getProperty("redis.maxIdle")));
-        jedisPoolConfig.setMaxTotal(Integer.parseInt(propertiesUtil.getProperty("redis.maxTotal")));
+        jedisPoolConfig.setMaxIdle(Integer.parseInt(propertiesUtils.getProperty("redis.maxIdle")));
+        jedisPoolConfig.setMaxTotal(Integer.parseInt(propertiesUtils.getProperty("redis.maxTotal")));
         return new JedisPool(jedisPoolConfig,
-                propertiesUtil.getProperty("redis.url"),
-                Integer.parseInt(propertiesUtil.getProperty("redis.port")),
-                Integer.parseInt(propertiesUtil.getProperty("redis.timeout")),
-                propertiesUtil.getProperty("redis.password"));
+                propertiesUtils.getProperty("redis.url"),
+                Integer.parseInt(propertiesUtils.getProperty("redis.port")),
+                Integer.parseInt(propertiesUtils.getProperty("redis.timeout")),
+                propertiesUtils.getProperty("redis.password"));
     }
 
 }
