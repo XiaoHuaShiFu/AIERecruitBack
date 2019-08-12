@@ -11,7 +11,6 @@ import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.dao.WorkDO;
-import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.WorkService;
@@ -115,7 +114,7 @@ public class FormServiceImpl implements FormService {
         }
 
         //上传作品文件
-        String workUrl = fileService.uploadAndGetUrl(work, "/recruit/form/work/");
+        String workUrl = fileService.saveAndGetUrl(work, "/recruit/form/work/");
         WorkDO workDO = new WorkDO();
         workDO.setUrl(workUrl);
         workDO.setFid(formId);

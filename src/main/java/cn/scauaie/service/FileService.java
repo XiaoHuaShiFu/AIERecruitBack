@@ -3,11 +3,11 @@ package cn.scauaie.service;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileService {
-    boolean upload(MultipartFile file, String fileName, String path);
+    boolean save(MultipartFile file, String fileName, String path);
 
-    String upload(MultipartFile file, String dirPath);
+    String save(MultipartFile file, String dirPath);
 
-    String uploadAndGetUrl(MultipartFile file, String dirPath);
+    String saveAndGetUrl(MultipartFile file, String dirPath);
 
     void delete(String fileName, String path);
 

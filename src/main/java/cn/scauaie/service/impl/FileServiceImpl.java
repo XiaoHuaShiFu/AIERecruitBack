@@ -29,7 +29,7 @@ public class FileServiceImpl implements FileService {
      * @return boolean
      */
     @Override
-    public boolean upload(MultipartFile file, String fileName, String path) {
+    public boolean save(MultipartFile file, String fileName, String path) {
         //将文件缓存到本地文件夹
         File bufFile = bufferFileOnLocal(file, fileName);
         //上传是否成功
@@ -55,11 +55,11 @@ public class FileServiceImpl implements FileService {
      * @return 文件名
      */
     @Override
-    public String upload(MultipartFile file, String dirPath) {
+    public String save(MultipartFile file, String dirPath) {
         //随机生成文件名
         String fileName = FileNameUtils.getRandomFileNameByOriginalFileName(file.getOriginalFilename());
         //上传文件
-        boolean success = upload(file, fileName, dirPath);
+        boolean success = save(file, fileName, dirPath);
         //上传失败
         if (!success) {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Upload file failed.");
@@ -75,8 +75,8 @@ public class FileServiceImpl implements FileService {
      * @return 文件名
      */
     @Override
-    public String uploadAndGetUrl(MultipartFile file, String dirPath) {
-        String fileName = upload(file, dirPath);
+    public String saveAndGetUrl(MultipartFile file, String dirPath) {
+        String fileName = save(file, dirPath);
         //文件url
         return FtpConst.HOST + dirPath + fileName;
     }
@@ -120,7 +120,7 @@ public class FileServiceImpl implements FileService {
      */
     public String updateFile(MultipartFile file, String oldUrl, String dirPath) {
         //上传文件
-        String newUrl = uploadAndGetUrl(file, dirPath);
+        String newUrl = saveAndGetUrl(file, dirPath);
         //删除旧文件
         if (oldUrl != null) {
             delete(oldUrl);
