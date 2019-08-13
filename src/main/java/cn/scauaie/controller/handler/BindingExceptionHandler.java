@@ -1,7 +1,7 @@
 package cn.scauaie.controller.handler;
 
-import cn.scauaie.common.error.ErrorCode;
-import cn.scauaie.common.error.ErrorResponse;
+import cn.scauaie.error.ErrorCode;
+import cn.scauaie.error.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

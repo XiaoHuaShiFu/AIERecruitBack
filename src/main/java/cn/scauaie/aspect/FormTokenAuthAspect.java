@@ -1,9 +1,9 @@
 package cn.scauaie.aspect;
 
+import cn.scauaie.error.ErrorCode;
+import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.TokenAO;
-import cn.scauaie.service.CacheService;
 import cn.scauaie.service.TokenService;
-import com.google.gson.Gson;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -45,6 +45,10 @@ public class FormTokenAuthAspect {
     @Around(value = "@annotation(cn.scauaie.aspect.annotation.FormTokenAuth) && args(request, ..)")
     public Object authToken(ProceedingJoinPoint joinPoint, HttpServletRequest request) throws Throwable {
         String token = request.getHeader("authorization");
+        //token不存在
+        if (token == null) {
+            throw new ProcessingException(ErrorCode.UNAUTHORIZED_TOKEN_IS_NULL);
+        }
         TokenAO tokenAO = tokenService.authFormToken(token);
 
         //把此用户的fid传递给控制器

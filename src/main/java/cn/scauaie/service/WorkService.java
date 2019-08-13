@@ -17,5 +17,4 @@ public interface WorkService {
 
     List<WorkAO> listWorkAOsByFormId(Integer formId);
 
-    List<WorkDO> listWorkDOsByFormId(Integer formId);
 }

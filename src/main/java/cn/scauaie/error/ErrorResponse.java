@@ -1,4 +1,4 @@
-package cn.scauaie.common.error;
+package cn.scauaie.error;
 
 /**
  * 描述: 错误响应对象

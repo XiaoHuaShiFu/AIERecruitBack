@@ -1,4 +1,4 @@
-package cn.scauaie.common.token;
+package cn.scauaie.service.constant;
 
 /**
  * 描述: token的类型

@@ -44,11 +44,10 @@ public class WeChatMpManager {
      * 初始化微信小程序相关常量
      */
     public WeChatMpManager() {
-        PropertiesUtils propertiesUtils = new PropertiesUtils("weChat.properties");
-        AUTH_CODE2SESSION_URL = propertiesUtils.getProperty("auth.code2Session.url");
-        APP_ID = propertiesUtils.getProperty("app.id");
-        APP_SECRET = propertiesUtils.getProperty("app.secret");
-        GRANT_TYPE= propertiesUtils.getProperty("grant.type");
+        AUTH_CODE2SESSION_URL = PropertiesUtils.getProperty("auth.code2Session.url", "weChat.properties");
+        APP_ID = PropertiesUtils.getProperty("app.id", "weChat.properties");
+        APP_SECRET = PropertiesUtils.getProperty("app.secret", "weChat.properties");
+        GRANT_TYPE= PropertiesUtils.getProperty("grant.type", "weChat.properties");
     }
 
     /**

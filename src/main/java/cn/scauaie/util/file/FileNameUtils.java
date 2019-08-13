@@ -9,7 +9,9 @@ import java.util.UUID;
  * @email 827032783@qq.com
  * @create 2019-08-11 14:09
  */
-public class FileNameUtils {
+public final class FileNameUtils {
+
+    private FileNameUtils() {}
 
     /**
      * 获取文件的扩展名

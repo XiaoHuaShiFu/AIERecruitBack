@@ -1,11 +1,9 @@
 package cn.scauaie.service.impl;
 
-import cn.scauaie.assembler.FormAssembler;
-import cn.scauaie.assembler.WorkAssembler;
-import cn.scauaie.common.error.ErrorCode;
 import cn.scauaie.dao.FormMapper;
 import cn.scauaie.dao.WorkMapper;
-import cn.scauaie.error.ProcessingException;
+import cn.scauaie.error.ErrorCode;
+import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.manager.wechat.WeChatMpManager;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
@@ -14,6 +12,7 @@ import cn.scauaie.model.dao.WorkDO;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.WorkService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,12 +39,6 @@ public class FormServiceImpl implements FormService {
     private WeChatMpManager weChatMpManager;
 
     @Autowired
-    private FormAssembler formAssembler;
-
-    @Autowired
-    private WorkAssembler workAssembler;
-
-    @Autowired
     private WorkService workService;
 
     @Autowired
@@ -64,14 +57,18 @@ public class FormServiceImpl implements FormService {
             throw new ProcessingException(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
         }
 
-        FormDO formDO = formAssembler.assembleFormDOByOpenidAndFormAO(openid, formAO);
+        FormDO formDO = new FormDO();
+        BeanUtils.copyProperties(formAO, formDO);
+        formDO.setOpenid(openid);
         int count = formMapper.insertIfOpenidNotExist(formDO);
         //没有插入成功，由于openid冲突
         if (count < 1) {
             throw new ProcessingException(ErrorCode.OPERATION_CONFLICT,
                     "Request was denied due to conflict, the openid already exists.");
         }
-        return formAssembler.assembleFormAOByFormDO(formDO);
+
+        formAO.setId(formDO.getId());
+        return formAO;
     }
 
     /**
@@ -93,7 +90,9 @@ public class FormServiceImpl implements FormService {
         }
         //更新作品
         WorkDO workDO = updatedWorkByOldWorkUrl(workId, oldWorkUrl, work);
-        return workAssembler.assembleWorkAOByWorkDO(workDO);
+        WorkAO workAO = new WorkAO();
+        BeanUtils.copyProperties(workDO, workAO);
+        return workAO;
     }
 
     /**
@@ -126,7 +125,9 @@ public class FormServiceImpl implements FormService {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Insert work failed.");
         }
 
-        return workAssembler.assembleWorkAOByWorkDO(workDO);
+        WorkAO workAO = new WorkAO();
+        BeanUtils.copyProperties(workDO, workAO);
+        return workAO;
     }
 
     /**
@@ -195,7 +196,7 @@ public class FormServiceImpl implements FormService {
         formDO.setAvatar(newAvatarUrl);
         int count = formMapper.updateByPrimaryKeySelective(formDO);
         if (count < 1) {
-            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update avatar error.");
+            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update avatar exception.");
         }
 
         return newAvatarUrl;
@@ -209,7 +210,9 @@ public class FormServiceImpl implements FormService {
      */
     private FormAO getFormAOByOpenid(String openid) {
         FormDO formDO = getFormDOByOpenid(openid);
-        FormAO formAO = formAssembler.assembleFormAOByFormDO(formDO);
+        FormAO formAO = new FormAO();
+        BeanUtils.copyProperties(formDO, formAO);
+
         List<WorkAO> workAOList = workService.listWorkAOsByFormId(formDO.getId());
         formAO.setWorks(workAOList);
         return formAO;
@@ -249,7 +252,7 @@ public class FormServiceImpl implements FormService {
         workDO.setUrl(newWorkUrl);
         int count = workMapper.updateByPrimaryKeySelective(workDO);
         if (count < 1) {
-            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update work error.");
+            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update work exception.");
         }
 
         return workDO;

@@ -1,12 +1,12 @@
 package cn.scauaie.service.impl;
 
-import cn.scauaie.common.error.ErrorCode;
-import cn.scauaie.error.ProcessingException;
-import cn.scauaie.util.ftp.FTPClientTemplate;
-import cn.scauaie.manager.ftp.FtpConst;
-import cn.scauaie.util.file.FileUrl;
+import cn.scauaie.error.ErrorCode;
+import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.service.FileService;
+import cn.scauaie.service.constant.FileConsts;
 import cn.scauaie.util.file.FileNameUtils;
+import cn.scauaie.util.file.FileUrl;
+import cn.scauaie.util.ftp.FTPClientTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,20 +23,20 @@ public class FileServiceImpl implements FileService {
     /**
      * 上传文件到ftp服务器
      *
-     * @param file MultipartFile
-     * @param fileName String
-     * @param path String
-     * @return boolean
+     * @param file 文件
+     * @param fileName 文件名
+     * @param directoryPath 文件目录路径
+     * @return boolean 是否上传成功
      */
     @Override
-    public boolean save(MultipartFile file, String fileName, String path) {
+    public boolean save(MultipartFile file, String fileName, String directoryPath) {
         //将文件缓存到本地文件夹
         File bufFile = bufferFileOnLocal(file, fileName);
         //上传是否成功
         boolean success;
         try {
             //将file上传到ftp服务器
-            success = ftpClientTemplate.uploadFile(path, bufFile);
+            success = ftpClientTemplate.uploadFile(directoryPath, bufFile);
         } catch (IOException e) {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Upload file failed.");
         }
@@ -51,15 +51,15 @@ public class FileServiceImpl implements FileService {
      * 上传文件，会随机生成文件名
      *
      * @param file 文件
-     * @param dirPath 文件目录路径
+     * @param directoryPath 文件目录路径
      * @return 文件名
      */
     @Override
-    public String save(MultipartFile file, String dirPath) {
+    public String save(MultipartFile file, String directoryPath) {
         //随机生成文件名
         String fileName = FileNameUtils.getRandomFileNameByOriginalFileName(file.getOriginalFilename());
         //上传文件
-        boolean success = save(file, fileName, dirPath);
+        boolean success = save(file, fileName, directoryPath);
         //上传失败
         if (!success) {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Upload file failed.");
@@ -71,26 +71,26 @@ public class FileServiceImpl implements FileService {
      * 上传文件，并获得文件的Url
      *
      * @param file 文件
-     * @param dirPath 文件目录路径
+     * @param directoryPath 文件目录路径
      * @return 文件名
      */
     @Override
-    public String saveAndGetUrl(MultipartFile file, String dirPath) {
-        String fileName = save(file, dirPath);
+    public String saveAndGetUrl(MultipartFile file, String directoryPath) {
+        String fileName = save(file, directoryPath);
         //文件url
-        return FtpConst.HOST + dirPath + fileName;
+        return FileConsts.HOST + directoryPath + fileName;
     }
 
     /**
-     * 删除文件，通过路径和文件名
+     * 删除文件，通过文件目录路径和文件名
      *
-     * @param fileName String
-     * @param remoteDir String
+     * @param fileName 文件名
+     * @param directoryPath 文件目录路径
      */
     @Override
-    public void delete(String fileName, String remoteDir) {
+    public void delete(String fileName, String directoryPath) {
         try {
-            ftpClientTemplate.deleteFile(remoteDir, fileName);
+            ftpClientTemplate.deleteFile(directoryPath, fileName);
         } catch (IOException e) {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Delete file failed.");
         }
@@ -114,13 +114,14 @@ public class FileServiceImpl implements FileService {
     /**
      * 更新文件，需要MultipartFile和原文件Url
      *
-     * @param file
-     * @param oldUrl
-     * @return
+     * @param file 文件
+     * @param oldUrl 原文件Url
+     * @param directoryPath 文件目录路径
+     * @return 新url
      */
-    public String updateFile(MultipartFile file, String oldUrl, String dirPath) {
+    public String updateFile(MultipartFile file, String oldUrl, String directoryPath) {
         //上传文件
-        String newUrl = saveAndGetUrl(file, dirPath);
+        String newUrl = saveAndGetUrl(file, directoryPath);
         //删除旧文件
         if (oldUrl != null) {
             delete(oldUrl);
@@ -154,7 +155,7 @@ public class FileServiceImpl implements FileService {
      */
     private File bufferFileOnLocal(MultipartFile file, String fileName) {
         //将文件缓存到本地文件夹
-        File bufFile = new File(FtpConst.BUF_PATH, fileName);
+        File bufFile = new File(FileConsts.BUF_PATH, fileName);
         try {
             //保存文件
             file.transferTo(bufFile);

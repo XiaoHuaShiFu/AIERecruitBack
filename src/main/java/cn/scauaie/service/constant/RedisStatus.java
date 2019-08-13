@@ -1,4 +1,4 @@
-package cn.scauaie.manager.redis;
+package cn.scauaie.service.constant;
 
 /**
  * 描述:
@@ -12,6 +12,6 @@ public enum RedisStatus {
     /**
      * redi操作成功
      */
-    OK;
+    OK
 
 }

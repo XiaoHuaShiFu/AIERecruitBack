@@ -1,13 +1,13 @@
 package cn.scauaie.service.impl;
 
-import cn.scauaie.common.error.ErrorCode;
-import cn.scauaie.common.token.TokenExpire;
-import cn.scauaie.common.token.TokenType;
-import cn.scauaie.error.ProcessingException;
-import cn.scauaie.manager.redis.RedisStatus;
+import cn.scauaie.error.ErrorCode;
+import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.service.CacheService;
 import cn.scauaie.service.TokenService;
+import cn.scauaie.service.constant.RedisStatus;
+import cn.scauaie.service.constant.TokenExpire;
+import cn.scauaie.service.constant.TokenType;
 import cn.scauaie.util.SHA256;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +39,6 @@ public class TokenServiceImpl implements TokenService {
      */
     @Override
     public TokenAO authFormToken(String token) {
-        //token不存在
-        if (token == null) {
-            throw new ProcessingException(ErrorCode.UNAUTHORIZED_TOKEN_IS_NULL);
-        }
-
         String jsonToken = cacheService.get(token);
         //token不存在
         if (jsonToken == null) {

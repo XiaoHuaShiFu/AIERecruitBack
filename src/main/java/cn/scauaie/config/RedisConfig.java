@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.util.Objects;
+
 /**
  * 描述:配置Redis
  *
@@ -22,15 +24,14 @@ public class RedisConfig {
      */
     @Bean
     public JedisPool jedisPool() {
-        PropertiesUtils propertiesUtils = new PropertiesUtils("redis.properties");
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(Integer.parseInt(propertiesUtils.getProperty("redis.maxIdle")));
-        jedisPoolConfig.setMaxTotal(Integer.parseInt(propertiesUtils.getProperty("redis.maxTotal")));
+        jedisPoolConfig.setMaxIdle(Integer.parseInt(Objects.requireNonNull(PropertiesUtils.getProperty("redis.maxIdle", "redis.properties"))));
+        jedisPoolConfig.setMaxTotal(Integer.parseInt(Objects.requireNonNull(PropertiesUtils.getProperty("redis.maxTotal", "redis.properties"))));
         return new JedisPool(jedisPoolConfig,
-                propertiesUtils.getProperty("redis.url"),
-                Integer.parseInt(propertiesUtils.getProperty("redis.port")),
-                Integer.parseInt(propertiesUtils.getProperty("redis.timeout")),
-                propertiesUtils.getProperty("redis.password"));
+                PropertiesUtils.getProperty("redis.url", "redis.properties"),
+                Integer.parseInt(Objects.requireNonNull(PropertiesUtils.getProperty("redis.port", "redis.properties"))),
+                Integer.parseInt(Objects.requireNonNull(PropertiesUtils.getProperty("redis.timeout", "redis.properties"))),
+                PropertiesUtils.getProperty("redis.password", "redis.properties"));
     }
 
 }

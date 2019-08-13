@@ -1,10 +1,10 @@
 package cn.scauaie.controller.v1;
 
-import cn.scauaie.assembler.FormAssembler;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.TokenService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -35,9 +35,6 @@ public class TokenController {
 
     @Autowired
     private FormService formService;
-
-    @Autowired
-    private FormAssembler formAssembler;
 
     /**
      * 创建form-token凭证
@@ -74,7 +71,9 @@ public class TokenController {
         //响应头设置token
         response.setHeader("Authorization", token);
 
-        return formAssembler.assembleFormVOByFormAO(formAO);
+        FormVO formVO = new FormVO();
+        BeanUtils.copyProperties(formAO, formVO);
+        return formVO;
     }
 
 }

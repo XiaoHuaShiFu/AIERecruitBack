@@ -1,8 +1,6 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.FormTokenAuth;
-import cn.scauaie.assembler.FormAssembler;
-import cn.scauaie.assembler.WorkAssembler;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.ao.group.GroupFormAOPOST;
@@ -10,6 +8,7 @@ import cn.scauaie.model.vo.AvatarVO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.service.FormService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -38,12 +37,6 @@ public class FormController {
     @Autowired
     private FormService formService;
 
-    @Autowired
-    private FormAssembler formAssembler;
-
-    @Autowired
-    private WorkAssembler workAssembler;
-
     /**
      * 创建Form并返回Form
      * @param code 微信小程序的wx.login()接口返回值
@@ -70,8 +63,10 @@ public class FormController {
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @Validated(GroupFormAOPOST.class) FormAO formAO) {
-        FormAO newFormAO = formService.saveForm(code, formAO);
-        return formAssembler.assembleFormVOByFormAO(newFormAO);
+        formAO = formService.saveForm(code, formAO);
+        FormVO formVO = new FormVO();
+        BeanUtils.copyProperties(formAO, formVO);
+        return formVO;
     }
 
 
@@ -97,7 +92,7 @@ public class FormController {
      * OPERATION_CONFLICT: The specified avatar already exist.
      * INTERNAL_ERROR: Upload file failed.
      * INTERNAL_ERROR: Delete file failed.
-     * INTERNAL_ERROR: Update avatar error.
+     * INTERNAL_ERROR: Update avatar exception.
      *
      * @bindErrors
      * INVALID_PARAMETER_IS_NULL
@@ -127,7 +122,7 @@ public class FormController {
      * @errors:
      * INTERNAL_ERROR: Upload file failed.
      * INTERNAL_ERROR: Delete file failed.
-     * INTERNAL_ERROR: Update avatar error.
+     * INTERNAL_ERROR: Update avatar exception.
      *
      * @bindErrors
      * INVALID_PARAMETER_IS_NULL
@@ -172,7 +167,9 @@ public class FormController {
                     MultipartFile work) {
         Integer fid = (Integer) request.getAttribute("fid");
         WorkAO workAO = formService.saveWork(fid, work);
-        return workAssembler.assembleWorkVOByWorkAO(workAO);
+        WorkVO workVO = new WorkVO();
+        BeanUtils.copyProperties(workAO, workVO);
+        return workVO;
     }
 
     /**
@@ -206,7 +203,9 @@ public class FormController {
                     MultipartFile work) {
         Integer fid = (Integer) request.getAttribute("fid");
         WorkAO workAO = formService.updateWork(wid, fid, work);
-        return workAssembler.assembleWorkVOByWorkAO(workAO);
+        WorkVO workVO = new WorkVO();
+        BeanUtils.copyProperties(workAO, workVO);
+        return workVO;
     }
 
 }

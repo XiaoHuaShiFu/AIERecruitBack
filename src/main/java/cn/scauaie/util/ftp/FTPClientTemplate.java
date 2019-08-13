@@ -73,15 +73,15 @@ public class FTPClientTemplate {
 
     /**
      * 上传文件
-     * @param remoteDirectory 目录
+     * @param directoryPath 目录
      * @param file 文件
      * @return 是否成功
      * @throws IOException .
      */
-    public boolean uploadFile(final String remoteDirectory, final File file) throws IOException {
+    public boolean uploadFile(final String directoryPath, final File file) throws IOException {
         final boolean[] success = {false};
         execute((ftp) -> {
-            changeWorkingDirectory(ftp, remoteDirectory);
+            changeWorkingDirectory(ftp, directoryPath);
             ftp.enterLocalPassiveMode();
             ftp.setBufferSize(1024);
             ftp.setControlEncoding("UTF-8");
@@ -96,16 +96,16 @@ public class FTPClientTemplate {
 
     /**
      * 删除文件
-     * @param remoteDirectory 目录
+     * @param directoryPath 目录
      * @param fileName 文件名
      * @return 是否成功
      * @throws IOException .
      */
-    public boolean deleteFile(final String remoteDirectory, final String fileName) throws IOException {
+    public boolean deleteFile(final String directoryPath, final String fileName) throws IOException {
         final boolean[] success = {false};
         execute((ftp) -> {
             ftp.enterLocalPassiveMode();
-            changeWorkingDirectory(ftp, remoteDirectory);
+            changeWorkingDirectory(ftp, directoryPath);
             success[0] = ftp.deleteFile(fileName);
         });
         return success[0];
@@ -113,16 +113,16 @@ public class FTPClientTemplate {
 
     /**
      * 修改文件名称
-     * @param remoteDirectory 目录
+     * @param directoryPath 目录
      * @param from 原文件名
      * @param to 新文件名
      * @throws IOException .
      */
-    public boolean rename(final String remoteDirectory, String from, String to) throws IOException {
+    public boolean rename(final String directoryPath, String from, String to) throws IOException {
         final boolean[] success = {false};
         execute((ftp) -> {
             ftp.enterLocalPassiveMode();
-            changeWorkingDirectory(ftp, remoteDirectory);
+            changeWorkingDirectory(ftp, directoryPath);
             success[0] = ftp.rename(from, to);
         });
         return success[0];
@@ -130,20 +130,20 @@ public class FTPClientTemplate {
 
     /**
      * 列出所有文件的名字
-     * @param remoteDirectory 目录
+     * @param directoryPath 目录
      * @param fileNamePattern 文件名匹配模式
      * @return 文件名列表
      * @throws IOException .
      */
-    public List<String> listFileNames(final String remoteDirectory, final String fileNamePattern) throws IOException{
+    public String[] listFileNames(final String directoryPath, final String fileNamePattern) throws IOException{
         final List<String[]> namesList = new ArrayList<>();
         execute((ftp) -> {
             ftp.enterLocalPassiveMode();
-            changeWorkingDirectory(ftp, remoteDirectory);
+            changeWorkingDirectory(ftp, directoryPath);
             namesList.add(ftp.listNames());
         });
         if (namesList.size() > 0) {
-            return Arrays.asList(namesList.get(0));
+            return namesList.get(0);
         }
         return null;
     }
@@ -151,12 +151,12 @@ public class FTPClientTemplate {
     /**
      * 改变工作目录
      * @param ftp FTPClient
-     * @param remoteDirectory 目录名
+     * @param directoryPath 目录名
      * @throws IOException .
      */
-    protected void changeWorkingDirectory(FTPClient ftp, String remoteDirectory) throws IOException {
-        Validate.notEmpty(remoteDirectory);
-        ftp.changeWorkingDirectory(remoteDirectory);
+    protected void changeWorkingDirectory(FTPClient ftp, String directoryPath) throws IOException {
+        Validate.notEmpty(directoryPath);
+        ftp.changeWorkingDirectory(directoryPath);
         if (logger.isDebugEnabled()) {
             logger.debug("working directory:" + ftp.printWorkingDirectory());
         }

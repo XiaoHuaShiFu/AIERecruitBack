@@ -2,10 +2,6 @@ package cn.scauaie.service;
 
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
-import cn.scauaie.model.dao.FormDO;
-import cn.scauaie.model.vo.AvatarVO;
-import cn.scauaie.model.vo.FormVO;
-import cn.scauaie.model.vo.WorkVO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

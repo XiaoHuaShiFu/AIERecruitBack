@@ -1,4 +1,4 @@
-package cn.scauaie.common.error;
+package cn.scauaie.error;
 
 import org.springframework.http.HttpStatus;
 
@@ -51,7 +51,7 @@ public enum ErrorCode {
      * 未知错误
      */
     UNKNOWN_ERROR(HttpStatus.BAD_REQUEST,
-            "UnknownError", "The request processing has failed due to some unknown error."),
+            "UnknownError", "The request processing has failed due to some unknown exception."),
 
     /**
      * 未通过认证
@@ -93,7 +93,7 @@ public enum ErrorCode {
      * 由于某些未知错误、异常或失败，请求处理失败。
      */
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,
-            "InternalError", "The request processing has failed due to some unknown error, exception or failure.");
+            "InternalError", "The request processing has failed due to some unknown exception, exception or failure.");
 
 
     private final HttpStatus httpStatus;

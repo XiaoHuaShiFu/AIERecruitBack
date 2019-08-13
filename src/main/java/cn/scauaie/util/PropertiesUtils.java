@@ -17,49 +17,72 @@ import java.util.Properties;
  * @email 827032783@qq.com
  * @create 2019-08-08 21:31
  */
-public class PropertiesUtils {
+public final class PropertiesUtils {
 
     private static Logger logger = LoggerFactory.getLogger(PropertiesUtils.class);
 
-    private final String propertiesName;
-
-    /**
-     * 初始化properties的文件名
-     * @param fileName String
-     */
-    public PropertiesUtils(String fileName) {
-        this.propertiesName = fileName;
-    }
+    private PropertiesUtils() {}
 
     /**
      * 获取对应key的value
-     * @param key String
-     * @return String
+     * @param key 键
+     * @param fileName properties文件名
+     * @return 值
      */
-    public String getProperty(String key){
+    public static String getProperty(String key, String fileName) {
         if (StringUtils.isBlank(key)) {
             return null;
         }
         Properties properties = new Properties();
         String value = null;
-        try (InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(PropertiesUtils.class.getClassLoader().getResourceAsStream(propertiesName)), StandardCharsets.UTF_8)) {
+        try (InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(PropertiesUtils.class.getClassLoader().getResourceAsStream(fileName)), StandardCharsets.UTF_8)) {
             properties.load(inputStreamReader);
             value = properties.getProperty(key.trim());
         } catch (IOException e) {
-            logger.error("Get property error.", e);
+            logger.error("Get property exception.", e);
         }
         return value;
     }
 
     /**
      * 获取对应key的value，如果value为null，则返回defaultValue
-     * @param key String
-     * @param defaultValue String
-     * @return String
+     * @param key 键
+     * @param defaultValue 默认值
+     * @param fileName properties文件名
+     * @return 值
      */
-    public String getProperty(String key, String defaultValue){
-        String value = getProperty(key);
+    public static String getProperty(String key, String defaultValue, String fileName){
+        String value = getProperty(key, fileName);
         return StringUtils.isBlank(value) ? defaultValue : value;
+    }
+
+    /**
+     * 获取对应key的value，如果value为null，则返回defaultValue
+     * @param key 键
+     * @param fileName properties文件名
+     * @return 值
+     */
+    public static Integer getIntProperty(String key, String fileName){
+        String value = getProperty(key, fileName);
+        if (value == null) {
+            return null;
+        }
+        return Integer.valueOf(value);
+    }
+
+    /**
+     * 获取对应key的value，如果value为null，则返回defaultValue
+     * @param key 键
+     * @param defaultValue 默认值
+     * @param fileName properties文件名
+     * @return 值
+     */
+    public static int getIntProperty(String key, int defaultValue, String fileName){
+        Integer value = getIntProperty(key, fileName);
+        if (value == null) {
+            return defaultValue;
+        }
+        return value;
     }
 
 }

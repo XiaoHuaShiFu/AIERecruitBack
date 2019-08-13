@@ -11,7 +11,9 @@ import java.security.NoSuchAlgorithmException;
  * @email 827032783@qq.com
  * @create 2019-08-10 21:47
  */
-public class SHA256 {
+public final class SHA256 {
+
+    private SHA256() {}
 
     /**
      * 进行加密
