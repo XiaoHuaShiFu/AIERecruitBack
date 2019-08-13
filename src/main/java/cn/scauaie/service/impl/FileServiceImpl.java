@@ -106,8 +106,6 @@ public class FileServiceImpl implements FileService {
         //解析url
         FileUrl remoteDirAndFileName = FileNameUtils.parseFileUrl(fileUrl);
         //删除文件
-        System.out.println(remoteDirAndFileName.getFileName());
-        System.out.println(remoteDirAndFileName.getDirectoryPath());
         delete(remoteDirAndFileName.getFileName(), remoteDirAndFileName.getDirectoryPath());
     }
 

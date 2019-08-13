@@ -1,5 +1,6 @@
 package cn.scauaie.validator;
 
+import cn.scauaie.constant.DepEnum;
 import cn.scauaie.validator.annotation.Dep;
 
 import javax.validation.ConstraintValidator;
@@ -7,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 
 /**
  * 描述: 部门校验器
- *  必须符合是 [bgs, chb, cwb, jsb, skb, wlb, xcb, xmb, xwb, yyb, zkb] 中的一个
+ *  必须符合是 [BGS, CHB, CWB, JSB, SKB, XCB, XMB, XWB, YYB, ZKB] 中的一个
  *
  * @author xhsf
  * @email 827032783@qq.com
@@ -15,16 +16,13 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class DepValidator implements ConstraintValidator<Dep, String> {
 
-    /**
-     * 部门代号列表
-     */
-    private static final String[] ARRAY_DEP =
-            {"bgs", "chb", "cwb", "jsb", "skb", "wlb", "xcb", "xmb", "xwb", "yyb", "zkb"};
-
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        for (String dep : ARRAY_DEP) {
-            if (dep.equals(s)) {
+        if (s == null) {
+            return true;
+        }
+        for (DepEnum dep : DepEnum.values()) {
+            if (s.equals(dep.name())) {
                 return true;
             }
         }

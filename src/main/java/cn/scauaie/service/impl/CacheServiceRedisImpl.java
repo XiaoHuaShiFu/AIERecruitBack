@@ -37,21 +37,6 @@ public class CacheServiceRedisImpl implements CacheService {
     }
 
     /**
-     * 获取对应key的对应field的值
-     *
-     * @param key   key
-     * @param field field名
-     * @return 获取到的字符串，如果没获取到返回null
-     */
-    @Override
-    public String hget(String key, String field) {
-        Jedis jedis = jedisPool.getResource();
-        String value = jedis.hget(key, field);
-        jedis.close();
-        return value;
-    }
-
-    /**
      * 删除对应key的对应field的值
      *
      * @param key   key
@@ -66,6 +51,20 @@ public class CacheServiceRedisImpl implements CacheService {
         return rowCount;
     }
 
+    /**
+     * 获取对应key的对应field的值
+     *
+     * @param key   key
+     * @param field field名
+     * @return 获取到的字符串，如果没获取到返回null
+     */
+    @Override
+    public String hget(String key, String field) {
+        Jedis jedis = jedisPool.getResource();
+        String value = jedis.hget(key, field);
+        jedis.close();
+        return value;
+    }
 
     /**
      * 获得对应key的hash列表的映射列表
@@ -86,7 +85,7 @@ public class CacheServiceRedisImpl implements CacheService {
      * 对应redis的set操作
      *
      * @param key   key
-     * @param value value
+     * @param value name
      * @return 状态码
      */
     @Override
@@ -95,6 +94,20 @@ public class CacheServiceRedisImpl implements CacheService {
         String code = jedis.set(key, value);
         jedis.close();
         return code;
+    }
+
+    /**
+     * 删除对应key的值
+     *
+     * @param key key
+     * @return 成功修改行数
+     */
+    @Override
+    public Long del(String key) {
+        Jedis jedis = jedisPool.getResource();
+        Long rowCount = jedis.del(key);
+        jedis.close();
+        return rowCount;
     }
 
     /**
@@ -112,18 +125,77 @@ public class CacheServiceRedisImpl implements CacheService {
     }
 
     /**
-     * 删除对应key的值
+     * 在队列左边插入值
      *
      * @param key key
-     * @return 成功修改行数
+     * @param values 值
+     * @return length 插入后链表中元素的数量。
      */
     @Override
-    public Long del(String key) {
+    public Long lpush(String key, String... values) {
         Jedis jedis = jedisPool.getResource();
-        Long rowCount = jedis.del(key);
+        Long length = jedis.lpush(key, values);
         jedis.close();
-        return rowCount;
+        return length;
     }
+
+    /**
+     * 在队列右边插入值
+     *
+     * @param key key
+     * @param values 值
+     * @return length 插入后链表中元素的数量。
+     */
+    @Override
+    public Long rpush(String key, String... values) {
+        Jedis jedis = jedisPool.getResource();
+        Long length = jedis.rpush(key, values);
+        jedis.close();
+        return length;
+    }
+
+    /**
+     * 弹出队列最左边的元素
+     *
+     * @param key key
+     * @return value 链表头部的元素
+     */
+    @Override
+    public String lpop(String key) {
+        Jedis jedis = jedisPool.getResource();
+        String value = jedis.lpop(key);
+        jedis.close();
+        return value;
+    }
+
+    /**
+     * 弹出队列最右边的元素
+     *
+     * @param key key
+     * @return value 链表尾部的元素
+     */
+    @Override
+    public String rpop(String key) {
+        Jedis jedis = jedisPool.getResource();
+        String value = jedis.rpop(key);
+        jedis.close();
+        return value;
+    }
+
+    /**
+     * 获取链表中元素的数量
+     *
+     * @param key key
+     * @return length 链表中元素数量
+     */
+    @Override
+    public Long llen(String key) {
+        Jedis jedis = jedisPool.getResource();
+        Long length = jedis.llen(key);
+        jedis.close();
+        return length;
+    }
+
 
     /**
      * 设置过期时间

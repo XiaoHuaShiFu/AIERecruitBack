@@ -16,6 +16,9 @@ import javax.validation.ConstraintValidatorContext;
 public class GenderValidator implements ConstraintValidator<Gender, String> {
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+        if (s == null) {
+            return true;
+        }
         return s.equals("N") || s.equals("M") || s.equals("W");
     }
 }

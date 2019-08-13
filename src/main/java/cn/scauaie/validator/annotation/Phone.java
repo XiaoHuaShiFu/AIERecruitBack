@@ -21,7 +21,7 @@ import java.lang.annotation.*;
 @Repeatable(Phone.List.class)
 public @interface Phone {
 
-    String message() default "INVALID_PARAMETER: The value of phone must be valid.";
+    String message() default "INVALID_PARAMETER: The name of phone must be valid.";
 
     Class<?>[] groups() default {};
 

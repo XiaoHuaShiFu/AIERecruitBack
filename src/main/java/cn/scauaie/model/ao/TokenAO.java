@@ -1,5 +1,7 @@
 package cn.scauaie.model.ao;
 
+import cn.scauaie.service.constant.TokenType;
+
 /**
  * 描述:
  *
@@ -10,14 +12,18 @@ package cn.scauaie.model.ao;
 public class TokenAO {
 
     private String token;
-    private Value value;
+    private TokenType type;
+    private Integer id;
+    private String dep;
 
     public TokenAO() {
     }
 
-    public TokenAO(String token, String type, Integer id) {
+    public TokenAO(String token, TokenType type, Integer id, String dep) {
         this.token = token;
-        value = new Value(type, id);
+        this.type = type;
+        this.id = id;
+        this.dep = dep;
     }
 
     public String getToken() {
@@ -28,60 +34,37 @@ public class TokenAO {
         this.token = token;
     }
 
-    public Value getValue() {
-        return value;
+    public TokenType getType() {
+        return type;
     }
 
-    public void setValue(Value value) {
-        this.value = value;
+    public void setType(TokenType type) {
+        this.type = type;
     }
 
-    /**
-     * TokenAO的值对象
-     */
-    public static class Value {
-        private String type;
-        private Integer id;
+    public Integer getId() {
+        return id;
+    }
 
-        public Value() {
-        }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-        public Value(String type, Integer id) {
-            this.type = type;
-            this.id = id;
-        }
+    public String getDep() {
+        return dep;
+    }
 
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        @Override
-        public String toString() {
-            return "Value{" +
-                    "type='" + type + '\'' +
-                    ", id=" + id +
-                    '}';
-        }
-
+    public void setDep(String dep) {
+        this.dep = dep;
     }
 
     @Override
     public String toString() {
         return "TokenAO{" +
                 "token='" + token + '\'' +
-                ", value=" + value +
+                ", type=" + type +
+                ", id=" + id +
+                ", dep='" + dep + '\'' +
                 '}';
     }
 }

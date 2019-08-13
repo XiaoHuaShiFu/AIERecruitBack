@@ -59,9 +59,9 @@
                #{secondDep,jdbcType=CHAR},
                #{introduction,jdbcType=CHAR}
         from DUAL
-        where not exists(select 1
+        where not exists (select *
                          from form
-                         where openid = openid)
+                         where openid = #{openid, jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.FormDO">
         update form

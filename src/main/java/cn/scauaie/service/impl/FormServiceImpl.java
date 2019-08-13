@@ -1,10 +1,11 @@
 package cn.scauaie.service.impl;
 
+import cn.scauaie.manager.constant.WeChatMp;
 import cn.scauaie.dao.FormMapper;
 import cn.scauaie.dao.WorkMapper;
 import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
-import cn.scauaie.manager.wechat.WeChatMpManager;
+import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.dao.FormDO;
@@ -52,7 +53,7 @@ public class FormServiceImpl implements FormService {
      */
     @Override
     public FormAO saveForm(String code, FormAO formAO) {
-        String openid = weChatMpManager.getOpenid(code);
+        String openid = weChatMpManager.getOpenid(code, WeChatMp.AIE_RECRUIT.name());
         if (openid == null) {
             throw new ProcessingException(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
         }
@@ -69,6 +70,31 @@ public class FormServiceImpl implements FormService {
 
         formAO.setId(formDO.getId());
         return formAO;
+    }
+
+    /**
+     * 获取FormAO通过id
+     *
+     * @param id 报名表编号
+     * @return FormAO
+     */
+    @Override
+    public FormAO getFormAOById(Integer id) {
+        FormDO formDO = formMapper.selectByPrimaryKey(id);
+        FormAO formAO = new FormAO();
+        BeanUtils.copyProperties(formDO, formAO);
+        return formAO;
+    }
+
+    @Override
+    public FormAO updateForm(FormAO formAO) {
+        FormDO formDO = new FormDO();
+        BeanUtils.copyProperties(formAO, formDO);
+        int count = formMapper.updateByPrimaryKeySelective(formDO);
+        if (count < 1) {
+            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update avatar failed.");
+        }
+        return getFormAOById(formAO.getId());
     }
 
     /**
@@ -174,7 +200,7 @@ public class FormServiceImpl implements FormService {
      */
     @Override
     public FormAO getFormAOByCode(String code) {
-        String openid = weChatMpManager.getOpenid(code);
+        String openid = weChatMpManager.getOpenid(code, WeChatMp.AIE_RECRUIT.name());
         return getFormAOByOpenid(openid);
     }
 
@@ -196,7 +222,7 @@ public class FormServiceImpl implements FormService {
         formDO.setAvatar(newAvatarUrl);
         int count = formMapper.updateByPrimaryKeySelective(formDO);
         if (count < 1) {
-            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update avatar exception.");
+            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update avatar failed.");
         }
 
         return newAvatarUrl;
@@ -252,7 +278,7 @@ public class FormServiceImpl implements FormService {
         workDO.setUrl(newWorkUrl);
         int count = workMapper.updateByPrimaryKeySelective(workDO);
         if (count < 1) {
-            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update work exception.");
+            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update work failed.");
         }
 
         return workDO;

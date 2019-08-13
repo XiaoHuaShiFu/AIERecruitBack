@@ -21,7 +21,7 @@ import java.lang.annotation.*;
 @Repeatable(Dep.List.class)
 public @interface Dep {
 
-    String message() default "INVALID_PARAMETER: The value of dep must be [bgs|chb|cwb|jsb|skb|wlb|xcb|xmb|xwb|yyb|zkb].";
+    String message() default "INVALID_PARAMETER: The name of dep must be [BGS | CHB | CWB | JSB | SKB | XCB | XMB | XWB | YYB | ZKB].";
 
     Class<?>[] groups() default {};
 

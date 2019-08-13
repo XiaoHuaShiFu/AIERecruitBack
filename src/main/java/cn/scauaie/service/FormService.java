@@ -15,7 +15,11 @@ public interface FormService {
 
     FormAO saveForm(String code, FormAO formAO);
 
+    FormAO getFormAOById(Integer id);
+
     FormAO getFormAOByCode(String code);
+
+    FormAO updateForm(FormAO formAO);
 
     String saveAvatar(Integer formId, MultipartFile avatar);
 
@@ -24,4 +28,6 @@ public interface FormService {
     WorkAO saveWork(Integer formId, MultipartFile work);
 
     WorkAO updateWork(Integer workId, Integer formId, MultipartFile work);
+
+
 }

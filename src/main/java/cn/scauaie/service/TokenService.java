@@ -2,6 +2,8 @@ package cn.scauaie.service;
 
 import cn.scauaie.model.ao.TokenAO;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 描述:
  *
@@ -10,7 +12,11 @@ import cn.scauaie.model.ao.TokenAO;
  * @create 2019-08-06 21:30
  */
 public interface TokenService {
-    TokenAO authFormToken(String token);
 
-    String createAndSaveFormToken(String code, Integer formId);
+    String createAndSaveFormToken(String code, Integer formId, String dep);
+
+    TokenAO authTokenAndSetExpire(HttpServletRequest request);
+
+    TokenAO authFormTokenAndSetExpire(HttpServletRequest request);
+
 }

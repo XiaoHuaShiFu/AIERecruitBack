@@ -12,7 +12,7 @@ public enum TokenExpire {
     /**
      * 正常token过期时间
      */
-    NORMAL(1800);
+    NORMAL(86400);
 
     private final int expire;
 

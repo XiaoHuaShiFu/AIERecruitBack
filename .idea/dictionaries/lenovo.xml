@@ -1,0 +1,16 @@
+<component name="ProjectDictionaryState">
+  <dictionary name="lenovo">
+    <words>
+      <w>consts</w>
+      <w>hdel</w>
+      <w>hget</w>
+      <w>hset</w>
+      <w>llen</w>
+      <w>lpop</w>
+      <w>lpush</w>
+      <w>rpop</w>
+      <w>rpush</w>
+      <w>scau</w>
+    </words>
+  </dictionary>
+</component>

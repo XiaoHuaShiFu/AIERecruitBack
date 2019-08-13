@@ -33,13 +33,13 @@ public enum ErrorCode {
      * 参数值超过限定范围，Number类型
      */
     INVALID_PARAMETER_VALUE_EXCEEDED(HttpStatus.BAD_REQUEST,
-            "InvalidParameter.ValueExceeded", "The value of {Parameter} exceeded, max: {Value}."),
+            "InvalidParameter.ValueExceeded", "The name of {Parameter} exceeded, max: {Value}."),
 
     /**
      * 参数值小于限定范围，Number类型
      */
     INVALID_PARAMETER_VALUE_BELOW(HttpStatus.BAD_REQUEST,
-            "InvalidParameter.ValueBelow", "The value of {Parameter} below, min: {Value}."),
+            "InvalidParameter.ValueBelow", "The name of {Parameter} below, min: {Value}."),
 
     /**
      * 参数长度不在规定范围内，String类型
@@ -72,7 +72,7 @@ public enum ErrorCode {
             "Forbidden.Unauthorized", "User not authorized to operate on the specified resource."),
 
     /**
-     * 用户在未认证的情况下操作该资源
+     * 用户在无权操作该资源
      */
     FORBIDDEN_SUB_USER(HttpStatus.FORBIDDEN,
             "Forbidden.SubUser", "The specified action is not available for you."),

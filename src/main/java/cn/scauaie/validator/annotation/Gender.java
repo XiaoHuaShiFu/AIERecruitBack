@@ -21,7 +21,7 @@ import java.lang.annotation.*;
 @Repeatable(Gender.List.class)
 public @interface Gender {
 
-    String message() default "INVALID_PARAMETER: The value of gender must be [N|M|W].";
+    String message() default "INVALID_PARAMETER: The name of gender must be [N|M|W].";
 
     Class<?>[] groups() default {};
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class FormAO {
 
-    @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The value of id below, min: 0.",
+    @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.",
             value = 0,
             groups = {GroupFormAO.class})
     private Integer id;

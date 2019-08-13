@@ -1,13 +1,19 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.FormTokenAuth;
+import cn.scauaie.aspect.annotation.TokenAuth;
+import cn.scauaie.error.ErrorCode;
+import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.FormAO;
+import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.model.ao.WorkAO;
+import cn.scauaie.model.ao.group.GroupFormAO;
 import cn.scauaie.model.ao.group.GroupFormAOPOST;
 import cn.scauaie.model.vo.AvatarVO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.service.FormService;
+import cn.scauaie.service.constant.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,13 +75,79 @@ public class FormController {
         return formVO;
     }
 
-
+    /**
+     * 获取form
+     * @param id 报名表编号
+     * @return FormVO
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     * @errors:
+     * FORBIDDEN_SUB_USER
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.
+     */
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
+    @TokenAuth
+    public FormVO get(HttpServletRequest request,
+                      @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
+                      @PathVariable Integer id) {
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+        TokenType type = tokenAO.getType();
+
+        if (type == TokenType.INTERVIEWER) {
+            FormAO formAO = formService.getFormAOById(id);
+            FormVO formVO = new FormVO();
+            BeanUtils.copyProperties(formAO, formVO);
+            return formVO;
+        }
+
+        if (type == TokenType.FORM) {
+            Integer tid = tokenAO.getId();
+            if (!tid.equals(id)) {
+                throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER);
+            }
+            FormAO formAO = formService.getFormAOById(id);
+            FormVO formVO = new FormVO();
+            BeanUtils.copyProperties(formAO, formVO);
+            return formVO;
+        }
+
+        //非form-token或interviewer-token
+        throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER);
+    }
+
+    /**
+     * 更新Form并返回Form
+     * @param formAO Form信息
+     * @return FormVO
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     * @errors:
+     * INTERNAL_ERROR: Update avatar failed.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER
+     * INVALID_PARAMETER_IS_NULL
+     * INVALID_PARAMETER_IS_BLANK
+     * INVALID_PARAMETER_SIZE
+     * INVALID_PARAMETER_VALUE_BELOW
+     */
+    @RequestMapping(method = RequestMethod.PATCH)
+    @ResponseStatus(value = HttpStatus.OK)
     @FormTokenAuth
-    public Object get(@PathVariable Integer id) {
-        System.out.println("ddddddddd");
-        return "ddd";
+    public FormVO patch(HttpServletRequest request, @Validated(GroupFormAO.class) FormAO formAO) {
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+        formAO.setId(tokenAO.getId());
+        formAO = formService.updateForm(formAO);
+        FormVO formVO = new FormVO();
+        BeanUtils.copyProperties(formAO, formVO);
+        return formVO;
     }
 
     /**
@@ -104,8 +176,9 @@ public class FormController {
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
-        Integer fid = (Integer) request.getAttribute("fid");
-        String avatarUrl = formService.saveAvatar(fid, avatar);
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+        Integer id = tokenAO.getId();
+        String avatarUrl = formService.saveAvatar(id, avatar);
         return new AvatarVO(avatarUrl);
     }
 
@@ -134,8 +207,9 @@ public class FormController {
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
-        Integer fid = (Integer) request.getAttribute("fid");
-        String newAvatarUrl = formService.updateAvatar(fid, avatar);
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+        Integer id = tokenAO.getId();
+        String newAvatarUrl = formService.updateAvatar(id, avatar);
         return new AvatarVO(newAvatarUrl);
     }
 
@@ -165,7 +239,9 @@ public class FormController {
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
                     MultipartFile work) {
-        Integer fid = (Integer) request.getAttribute("fid");
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+        Integer fid = tokenAO.getId();
+
         WorkAO workAO = formService.saveWork(fid, work);
         WorkVO workVO = new WorkVO();
         BeanUtils.copyProperties(workAO, workVO);
@@ -197,11 +273,13 @@ public class FormController {
     public WorkVO patchWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
-            @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The value of id below, min: 0.", value = 0)
+            @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
             @PathVariable Integer wid,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
                     MultipartFile work) {
-        Integer fid = (Integer) request.getAttribute("fid");
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+        Integer fid = tokenAO.getId();
+
         WorkAO workAO = formService.updateWork(wid, fid, work);
         WorkVO workVO = new WorkVO();
         BeanUtils.copyProperties(workAO, workVO);
