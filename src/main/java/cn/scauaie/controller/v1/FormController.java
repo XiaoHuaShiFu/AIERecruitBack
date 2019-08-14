@@ -1,7 +1,6 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.FormTokenAuth;
-import cn.scauaie.aspect.annotation.InterviewerTokenAuth;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
@@ -29,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -150,8 +150,6 @@ public class FormController {
         return formVOList;
     }
 
-
-
     /**
      * 更新Form并返回Form
      * @param formAO Form信息
@@ -180,6 +178,22 @@ public class FormController {
         FormVO formVO = new FormVO();
         BeanUtils.copyProperties(formAO, formVO);
         return formVO;
+    }
+
+    /**
+     * 获取报名表数
+     * @param includeSecondDep 是否包含第二志愿部门
+     * @return Map<String, Integer> 部门人数列表
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     */
+    @RequestMapping(value="/number", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+//    @InterviewerTokenAuth
+    public Map<String, Integer> getDepNumber(HttpServletRequest request, @RequestParam(defaultValue = "false") Boolean includeSecondDep) {
+        return formService.listDepNumbers(includeSecondDep);
     }
 
     /**

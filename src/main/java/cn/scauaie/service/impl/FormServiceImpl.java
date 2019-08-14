@@ -7,6 +7,7 @@ import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.manager.constant.WeChatMp;
+import cn.scauaie.model.ao.DepNumberDO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.dao.FormDO;
@@ -22,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述:
@@ -225,6 +228,40 @@ public class FormServiceImpl implements FormService {
         formQuery.setPageNum(pageNum);
         formQuery.setPageSize(pageSize);
         return listFormAOs(formQuery);
+    }
+
+    /**
+     * 查询各个部门的报名表人数
+     *
+     * @param includeSecondDep 是否包含第二志愿部门
+     * @return 各个部门的报名表人数
+     */
+    @Override
+    public Map<String, Integer> listDepNumbers(Boolean includeSecondDep) {
+        List<DepNumberDO> firstDepNumberDOList = formMapper.listFirstDepNumbers();
+        Map<String, Integer> depNumberMap = new HashMap<>(16);
+        for (DepNumberDO depNumberDO : firstDepNumberDOList) {
+            depNumberMap.merge(depNumberDO.getDep(), depNumberDO.getNumber(),
+                    (oldNumber, newNumber) -> oldNumber + newNumber);
+        }
+        if (!includeSecondDep) {
+            return depNumberMap;
+        }
+
+        List<DepNumberDO> secondDepNumberDOList = formMapper.listSecondDepNumbers();
+        for (DepNumberDO depNumberDO : secondDepNumberDOList) {
+            depNumberMap.merge(depNumberDO.getDep(), depNumberDO.getNumber(),
+                    (oldNumber, newNumber) -> oldNumber + newNumber);
+        }
+
+        //减去第一第二志愿部门都一样的人数
+        List<DepNumberDO> firstDepSameAsSecondDepDepNumberDOList = formMapper.listDepNumbersIfFirstDepSameAsSecondDep();
+        for (DepNumberDO depNumberDO : firstDepSameAsSecondDepDepNumberDOList) {
+            depNumberMap.merge(depNumberDO.getDep(), depNumberDO.getNumber(),
+                    (oldNumber, newNumber) -> oldNumber - newNumber);
+        }
+
+        return depNumberMap;
     }
 
     /**

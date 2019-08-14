@@ -5,6 +5,7 @@ import cn.scauaie.model.ao.WorkAO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述:
@@ -33,4 +34,5 @@ public interface FormService {
 
     WorkAO updateWork(Integer workId, Integer formId, MultipartFile work);
 
+    Map<String, Integer> listDepNumbers(Boolean includeSecondDep);
 }
