@@ -1,6 +1,9 @@
 package cn.scauaie.dao;
 
 import cn.scauaie.model.dao.FormDO;
+import cn.scauaie.model.query.FormQuery;
+
+import java.util.List;
 
 public interface FormMapper {
     int deleteByPrimaryKey(Integer id);
@@ -18,4 +21,6 @@ public interface FormMapper {
     FormDO selectByOpenid(String openid);
 
     String selectAvatarById(Integer id);
+
+    List<FormDO> listByFormQuery(FormQuery formQuery);
 }

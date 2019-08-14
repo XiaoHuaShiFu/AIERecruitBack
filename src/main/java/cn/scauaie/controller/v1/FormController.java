@@ -1,6 +1,7 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.FormTokenAuth;
+import cn.scauaie.aspect.annotation.InterviewerTokenAuth;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
@@ -26,6 +27,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -121,6 +124,35 @@ public class FormController {
     }
 
     /**
+     * 查询form
+     * @param request HttpServletRequest
+     * @param pageNum 页码
+     * @param pageSize 页条数
+     * @param q 查询参数
+     * @return FormVOList
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+//    @InterviewerTokenAuth
+    public List<FormVO> get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
+                    @RequestParam(defaultValue = "10") Integer pageSize, String q) {
+        List<FormAO> formAOList = formService.listFormAOs(pageNum, pageSize, q);
+        List<FormVO> formVOList = new ArrayList<>(formAOList.size());
+        for (FormAO formAO : formAOList) {
+            FormVO formVO = new FormVO();
+            BeanUtils.copyProperties(formAO, formVO);
+            formVOList.add(formVO);
+        }
+        return formVOList;
+    }
+
+
+
+    /**
      * 更新Form并返回Form
      * @param formAO Form信息
      * @return FormVO
@@ -138,10 +170,10 @@ public class FormController {
      * INVALID_PARAMETER_SIZE
      * INVALID_PARAMETER_VALUE_BELOW
      */
-    @RequestMapping(method = RequestMethod.PATCH)
+    @RequestMapping(method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @FormTokenAuth
-    public FormVO patch(HttpServletRequest request, @Validated(GroupFormAO.class) FormAO formAO) {
+    public FormVO put(HttpServletRequest request, @Validated(GroupFormAO.class) FormAO formAO) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         formAO.setId(tokenAO.getId());
         formAO = formService.updateForm(formAO);
@@ -200,10 +232,10 @@ public class FormController {
      * @bindErrors
      * INVALID_PARAMETER_IS_NULL
      */
-    @RequestMapping(value="/avatar", method = RequestMethod.PATCH)
+    @RequestMapping(value="/avatar", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @FormTokenAuth
-    public AvatarVO patchAvatar(
+    public AvatarVO putAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
@@ -267,10 +299,10 @@ public class FormController {
      * @bindErrors
      * INVALID_PARAMETER_IS_NULL
      */
-    @RequestMapping(value="/works/{wid}", method = RequestMethod.PATCH)
+    @RequestMapping(value="/works/{wid}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @FormTokenAuth
-    public WorkVO patchWork(
+    public WorkVO putWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
             @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)

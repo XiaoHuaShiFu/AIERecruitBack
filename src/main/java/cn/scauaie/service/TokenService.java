@@ -1,6 +1,7 @@
 package cn.scauaie.service;
 
 import cn.scauaie.model.ao.TokenAO;
+import cn.scauaie.service.constant.TokenType;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +18,6 @@ public interface TokenService {
 
     TokenAO authTokenAndSetExpire(HttpServletRequest request);
 
-    TokenAO authFormTokenAndSetExpire(HttpServletRequest request);
+    TokenAO authTokenAndSetExpire(HttpServletRequest request, TokenType tokenType);
 
 }

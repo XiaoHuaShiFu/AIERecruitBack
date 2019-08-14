@@ -1,23 +1,27 @@
 package cn.scauaie.service.impl;
 
-import cn.scauaie.manager.constant.WeChatMp;
+import cn.scauaie.converter.FormQueryConverter;
 import cn.scauaie.dao.FormMapper;
 import cn.scauaie.dao.WorkMapper;
 import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.manager.WeChatMpManager;
+import cn.scauaie.manager.constant.WeChatMp;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.dao.WorkDO;
+import cn.scauaie.model.query.FormQuery;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.WorkService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,6 +48,9 @@ public class FormServiceImpl implements FormService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private FormQueryConverter queryConverter;
 
     /**
      * 保存Form
@@ -205,6 +212,22 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
+     * 获取FormAOList通过查询参数q
+     *
+     * @param pageNum 页码
+     * @param pageSize 页条数
+     * @param q 查询参数
+     * @return FormAOList
+     */
+    @Override
+    public List<FormAO> listFormAOs(Integer pageNum, Integer pageSize, String q) {
+        FormQuery formQuery = queryConverter.convert(q);
+        formQuery.setPageNum(pageNum);
+        formQuery.setPageSize(pageSize);
+        return listFormAOs(formQuery);
+    }
+
+    /**
      * 更新头像
      *
      * @param id 报名表编号
@@ -258,6 +281,27 @@ public class FormServiceImpl implements FormService {
                     "The specified openid does not exist.");
         }
         return formDO;
+    }
+
+    /**
+     * 查询FormAOList通过FormQuery
+     *
+     * @param formQuery FormQuery
+     * @return FormAOList
+     */
+    private List<FormAO> listFormAOs(FormQuery formQuery) {
+        PageHelper.startPage(formQuery.getPageNum(), formQuery.getPageSize());
+        List<FormDO> formDOList = formMapper.listByFormQuery(formQuery);
+        List<FormAO> formAOList = new ArrayList<>(formDOList.size());
+        for (FormDO formDO : formDOList) {
+            System.out.println(formDO);
+            List<WorkAO> workAOList = workService.listWorkAOsByFormId(formDO.getId());
+            FormAO formAO = new FormAO();
+            BeanUtils.copyProperties(formDO, formAO);
+            formAO.setWorks(workAOList);
+            formAOList.add(formAO);
+        }
+        return formAOList;
     }
 
     /**

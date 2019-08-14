@@ -66,16 +66,17 @@ public class TokenServiceImpl implements TokenService {
     }
 
     /**
-     * 认证form-token并设置过期时间
+     * 认证token并设置过期时间
      *
      * @param request HttpServletRequest
+     * @param tokenType TokenType
      * @return TokenAO
      */
     @Override
-    public TokenAO authFormTokenAndSetExpire(HttpServletRequest request) {
+    public TokenAO authTokenAndSetExpire(HttpServletRequest request, TokenType tokenType) {
         TokenAO tokenAO = authToken(request);
-        //如果token的类型不是form-token
-        if (tokenAO.getType() != TokenType.FORM) {
+        //如果token的类型不是tokenType
+        if (tokenAO.getType() != tokenType) {
             throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER);
         }
 

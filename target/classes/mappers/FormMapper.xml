@@ -59,7 +59,7 @@
                #{secondDep,jdbcType=CHAR},
                #{introduction,jdbcType=CHAR}
         from DUAL
-        where not exists (select *
+        where not exists(select *
                          from form
                          where openid = #{openid, jdbcType=VARCHAR})
     </insert>
@@ -133,5 +133,25 @@
         select avatar
         from form
         where id = #{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="listByFormQuery" parameterType="cn.scauaie.model.query.FormQuery" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from form
+        <where>
+            <if test="id != null">
+                and id = #{id, jdbcType=INTEGER}
+            </if>
+            <if test="dep != null">
+                and first_dep = #{dep, jdbcType=VARCHAR}
+            </if>
+            <if test="gender != null">
+                and gender = #{gender, jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                and name = #{name, jdbcType=VARCHAR}
+            </if>
+        </where>
     </select>
 </mapper>
