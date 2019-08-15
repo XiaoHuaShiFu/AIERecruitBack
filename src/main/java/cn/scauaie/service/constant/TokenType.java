@@ -19,7 +19,6 @@ public enum TokenType {
      */
     INTERVIEWER("interviewer");
 
-
     private final String type;
 
     TokenType(String type) {
