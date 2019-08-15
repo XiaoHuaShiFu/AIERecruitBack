@@ -2,6 +2,8 @@ package cn.scauaie.service;
 
 import cn.scauaie.model.ao.EvaluationAO;
 
+import java.util.List;
+
 /**
  * 描述:
  *
@@ -15,4 +17,5 @@ public interface EvaluationService {
 
     EvaluationAO getEvaluation(Integer id);
 
+    List<EvaluationAO> listEvaluations(Integer pageNum, Integer pageSize, String q);
 }

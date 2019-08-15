@@ -32,4 +32,5 @@ public interface FormMapper {
     List<DepNumberDO> listDepNumbersIfFirstDepSameAsSecondDep();
 
     int getCountById(Integer id);
+
 }

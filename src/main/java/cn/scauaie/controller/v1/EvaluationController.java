@@ -1,6 +1,9 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.InterviewerTokenAuth;
+import cn.scauaie.aspect.annotation.TokenAuth;
+import cn.scauaie.error.ErrorCode;
+import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.EvaluationAO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
@@ -11,18 +14,19 @@ import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.InterviewerVO;
 import cn.scauaie.service.EvaluationService;
 import cn.scauaie.service.InterviewerService;
+import cn.scauaie.service.constant.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 描述: Evaluation Web层
@@ -68,6 +72,85 @@ public class EvaluationController {
         EvaluationVO evaluationVO = new EvaluationVO();
         BeanUtils.copyProperties(newEvaluationAO, evaluationVO);
 
+        FormVO formVO = new FormVO();
+        BeanUtils.copyProperties(newEvaluationAO.getForm(), formVO);
+        evaluationVO.setForm(formVO);
+
+        InterviewerVO interviewerVO = new InterviewerVO();
+        BeanUtils.copyProperties(newEvaluationAO.getInterviewer(), interviewerVO);
+        evaluationVO.setInterviewer(interviewerVO);
+
         return evaluationVO;
     }
+
+    /**
+     * 获取Evaluation
+     * @param id 评价表编号
+     * @return EvaluationVO
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     * @errors:
+     * FORBIDDEN_SUB_USER
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.
+     */
+    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+//    @InterviewerTokenAuth
+    public EvaluationVO get(HttpServletRequest request,
+                      @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
+                      @PathVariable Integer id) {
+        EvaluationAO newEvaluationAO = evaluationService.getEvaluation(id);
+
+        EvaluationVO evaluationVO = new EvaluationVO();
+        BeanUtils.copyProperties(newEvaluationAO, evaluationVO);
+        FormVO formVO = new FormVO();
+        BeanUtils.copyProperties(newEvaluationAO.getForm(), formVO);
+        evaluationVO.setForm(formVO);
+        InterviewerVO interviewerVO = new InterviewerVO();
+
+        BeanUtils.copyProperties(newEvaluationAO.getInterviewer(), interviewerVO);
+        evaluationVO.setInterviewer(interviewerVO);
+
+        return evaluationVO;
+    }
+
+    /**
+     * 查询Evaluation
+     * @param request HttpServletRequest
+     * @param pageNum 页码
+     * @param pageSize 页条数
+     * @param q 查询参数
+     * @return EvaluationVOList
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+//    @InterviewerTokenAuth
+    public List<EvaluationVO> get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
+                            @RequestParam(defaultValue = "10") Integer pageSize, String q) {
+        List<EvaluationAO> evaluationAOList = evaluationService.listEvaluations(pageNum, pageSize, q);
+        List<EvaluationVO> evaluationVOList = new ArrayList<>(evaluationAOList.size());
+        for (EvaluationAO evaluationAO : evaluationAOList) {
+            EvaluationVO evaluationVO = new EvaluationVO();
+            BeanUtils.copyProperties(evaluationAO, evaluationVO);
+            FormVO formVO = new FormVO();
+            BeanUtils.copyProperties(evaluationAO.getForm(), formVO);
+            evaluationVO.setForm(formVO);
+            InterviewerVO interviewerVO = new InterviewerVO();
+
+            BeanUtils.copyProperties(evaluationAO.getInterviewer(), interviewerVO);
+            evaluationVO.setInterviewer(interviewerVO);
+
+            evaluationVOList.add(evaluationVO);
+        }
+        return evaluationVOList;
+    }
+
 }

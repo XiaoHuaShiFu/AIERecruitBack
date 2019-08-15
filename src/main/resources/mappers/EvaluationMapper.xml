@@ -116,4 +116,18 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="listEvaluationsByQuery" parameterType="cn.scauaie.model.query.EvaluationQuery" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from evaluation
+    <where>
+      <if test="fid != null">
+        and fid = #{fid, jdbcType=INTEGER}
+      </if>
+      <if test="pass != null">
+        and pass = #{pass, jdbcType=BIT}
+      </if>
+    </where>
+  </select>
 </mapper>

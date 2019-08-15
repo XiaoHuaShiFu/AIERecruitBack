@@ -2,6 +2,8 @@ package cn.scauaie.dao;
 
 import cn.scauaie.model.dao.ResultDO;
 
+import java.util.List;
+
 public interface ResultMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface ResultMapper {
     int updateByPrimaryKeySelective(ResultDO record);
 
     int updateByPrimaryKey(ResultDO record);
+
+    List<ResultDO> listByFormId(Integer formId);
 }

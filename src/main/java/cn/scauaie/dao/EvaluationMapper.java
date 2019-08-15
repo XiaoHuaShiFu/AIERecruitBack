@@ -1,6 +1,9 @@
 package cn.scauaie.dao;
 
 import cn.scauaie.model.dao.EvaluationDO;
+import cn.scauaie.model.query.EvaluationQuery;
+
+import java.util.List;
 
 public interface EvaluationMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,6 @@ public interface EvaluationMapper {
     int updateByPrimaryKeySelective(EvaluationDO record);
 
     int updateByPrimaryKey(EvaluationDO record);
+
+    List<EvaluationDO> listEvaluationsByQuery(EvaluationQuery query);
 }
