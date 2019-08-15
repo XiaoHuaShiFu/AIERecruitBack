@@ -78,7 +78,7 @@ public enum ErrorCode {
             "Forbidden.SubUser", "The specified action is not available for you."),
 
     /**
-     * 参数长度不在规定范围内，String类型
+     * 为找到该参数
      */
     INVALID_PARAMETER_NOT_FOUND(HttpStatus.NOT_FOUND,
             "InvalidParameter.NotFound", "{ParameterName}"),

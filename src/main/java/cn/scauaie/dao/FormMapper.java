@@ -1,6 +1,6 @@
 package cn.scauaie.dao;
 
-import cn.scauaie.model.ao.DepNumberDO;
+import cn.scauaie.model.dao.DepNumberDO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.query.FormQuery;
 
@@ -30,4 +30,6 @@ public interface FormMapper {
     List<DepNumberDO> listSecondDepNumbers();
 
     List<DepNumberDO> listDepNumbersIfFirstDepSameAsSecondDep();
+
+    int getCountById(Integer id);
 }

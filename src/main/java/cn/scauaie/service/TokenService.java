@@ -16,6 +16,8 @@ public interface TokenService {
 
     String createAndSaveFormToken(String code, Integer formId, String dep);
 
+    String createAndSaveInterviewerToken(String code, Integer interviewerId, String dep);
+
     TokenAO authTokenAndSetExpire(HttpServletRequest request);
 
     TokenAO authTokenAndSetExpire(HttpServletRequest request, TokenType tokenType);

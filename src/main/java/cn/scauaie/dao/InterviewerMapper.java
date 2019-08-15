@@ -14,4 +14,8 @@ public interface InterviewerMapper {
     int updateByPrimaryKeySelective(InterviewerDO record);
 
     int updateByPrimaryKey(InterviewerDO record);
+
+    int countByOpenid(String openid);
+
+    InterviewerDO getInterviewerByOpenid(String openid);
 }

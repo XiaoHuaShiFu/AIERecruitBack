@@ -7,7 +7,7 @@ public class EvaluationDO {
 
     private Integer fid;
 
-    private String name;
+    private Integer iid;
 
     private String evaluation;
 
@@ -17,18 +17,17 @@ public class EvaluationDO {
 
     private Date updateTime;
 
-    public EvaluationDO(Integer id, Integer fid, String name, String evaluation, Boolean pass, Date createTime, Date updateTime) {
+    public EvaluationDO() {
+    }
+
+    public EvaluationDO(Integer id, Integer fid, Integer iid, String evaluation, Boolean pass, Date createTime, Date updateTime) {
         this.id = id;
         this.fid = fid;
-        this.name = name;
+        this.iid = iid;
         this.evaluation = evaluation;
         this.pass = pass;
         this.createTime = createTime;
         this.updateTime = updateTime;
-    }
-
-    public EvaluationDO() {
-        super();
     }
 
     public Integer getId() {
@@ -47,12 +46,12 @@ public class EvaluationDO {
         this.fid = fid;
     }
 
-    public String getName() {
-        return name;
+    public Integer getIid() {
+        return iid;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setIid(Integer iid) {
+        this.iid = iid;
     }
 
     public String getEvaluation() {
@@ -60,7 +59,7 @@ public class EvaluationDO {
     }
 
     public void setEvaluation(String evaluation) {
-        this.evaluation = evaluation == null ? null : evaluation.trim();
+        this.evaluation = evaluation;
     }
 
     public Boolean getPass() {
@@ -92,7 +91,7 @@ public class EvaluationDO {
         return "EvaluationDO{" +
                 "id=" + id +
                 ", fid=" + fid +
-                ", name='" + name + '\'' +
+                ", iid=" + iid +
                 ", evaluation='" + evaluation + '\'' +
                 ", pass=" + pass +
                 ", createTime=" + createTime +

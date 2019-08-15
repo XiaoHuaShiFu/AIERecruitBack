@@ -155,26 +155,33 @@
         </where>
     </select>
 
-    <select id="listFirstDepNumbers" resultType="cn.scauaie.model.ao.DepNumberDO">
+    <select id="listFirstDepNumbers" resultType="cn.scauaie.model.dao.DepNumberDO">
         select
         first_dep as dep, count(first_dep) as number
         from form
         group by first_dep
     </select>
 
-    <select id="listSecondDepNumbers" resultType="cn.scauaie.model.ao.DepNumberDO">
+    <select id="listSecondDepNumbers" resultType="cn.scauaie.model.dao.DepNumberDO">
         select
             second_dep as dep, count(second_dep) as number
         from form
         group by second_dep
     </select>
 
-    <select id="listDepNumbersIfFirstDepSameAsSecondDep" resultType="cn.scauaie.model.ao.DepNumberDO">
+    <select id="listDepNumbersIfFirstDepSameAsSecondDep" resultType="cn.scauaie.model.dao.DepNumberDO">
         select
             first_dep as dep, count(first_dep) as number
         from form
         where first_dep = second_dep
         group by first_dep
+    </select>
+
+    <select id="getCountById" parameterType="int" resultType="int">
+        select
+        count(1)
+        from form
+        where id = #{id, jdbcType=INTEGER}
     </select>
 
 </mapper>

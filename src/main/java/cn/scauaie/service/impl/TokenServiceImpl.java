@@ -53,6 +53,26 @@ public class TokenServiceImpl implements TokenService {
     }
 
     /**
+     * 创建并保存Interviewer-token
+     *
+     * @param code wx.login()接口获取的返回值
+     * @param interviewerId 面试官编号
+     * @param dep 部门
+     * @return token
+     */
+    @Override
+    public String createAndSaveInterviewerToken(String code, Integer interviewerId, String dep) {
+        String token = createToken();
+        //装配成TokenAO
+        TokenAO tokenAO = new TokenAO(token, TokenType.INTERVIEWER, interviewerId, dep);
+
+        //保存form-token
+        saveFormToken(tokenAO);
+
+        return token;
+    }
+
+    /**
      * 认证token并设置过期时间
      *
      * @param request HttpServletRequest

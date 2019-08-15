@@ -24,11 +24,10 @@ public class WeChatMpManager {
     /**
      * 通过code获取封装过的Code2SessionDTO
      * @param code String
-     * @param mpName 小程序名
+     * @param weChatMp 小程序类别
      * @return Code2SessionDTO
      */
-    public Code2SessionDTO getCode2Session(String code, String mpName) {
-        WeChatMp weChatMp = WeChatMp.valueOf(mpName);
+    public Code2SessionDTO getCode2Session(String code, WeChatMp weChatMp) {
         String url = WeChatMpConsts.APP_URL + "?appid=" + weChatMp.getAppId() + "&secret=" + weChatMp.getSecret()
                 + "&js_code=" + code + "&grant_type=" + WeChatMpConsts.GRANT_TYPE;
         ResponseEntity<Code2SessionDTO> responseEntity = restTemplate.getForEntity(url, Code2SessionDTO.class);
@@ -42,7 +41,18 @@ public class WeChatMpManager {
      * @return String
      */
     public String getOpenid(String code, String mpName) {
-        Code2SessionDTO code2SessionDTO = getCode2Session(code, mpName);
+        WeChatMp weChatMp = WeChatMp.valueOf(mpName);
+        return getOpenid(code, weChatMp);
+    }
+
+    /**
+     * 通过code获取openid
+     * @param code String
+     * @param weChatMp 小程序类别
+     * @return String
+     */
+    public String getOpenid(String code, WeChatMp weChatMp) {
+        Code2SessionDTO code2SessionDTO = getCode2Session(code, weChatMp);
         return code2SessionDTO.getOpenid();
     }
 

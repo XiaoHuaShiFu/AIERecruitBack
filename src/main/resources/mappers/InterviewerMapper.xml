@@ -24,13 +24,10 @@
     delete from interviewer
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="cn.scauaie.model.dao.InterviewerDO" >
-    insert into interviewer (id, openid, name, 
-      dep, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{dep,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="cn.scauaie.model.dao.InterviewerDO" useGeneratedKeys="true" keyProperty="id" >
+    insert into interviewer (
+    openid, name, dep)
+    values (#{openid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{dep,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.scauaie.model.dao.InterviewerDO" >
     insert into interviewer
@@ -105,4 +102,18 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="countByOpenid" parameterType="string" resultType="int">
+    select
+    count(1)
+    from interviewer
+    where openid = #{openid, jdbcType=VARCHAR}
+  </select>
+
+  <select id="getInterviewerByOpenid" resultType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from interviewer
+    where openid = #{openid, jdbcType=VARCHAR}
+  </select>
 </mapper>

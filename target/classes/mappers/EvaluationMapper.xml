@@ -5,7 +5,7 @@
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="fid" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="iid" jdbcType="VARCHAR" javaType="java.lang.Integer" />
       <arg column="evaluation" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="pass" jdbcType="BIT" javaType="java.lang.Boolean" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
@@ -13,7 +13,7 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, fid, name, evaluation, pass, create_time, update_time
+    id, fid, iid, evaluation, pass, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -26,14 +26,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="cn.scauaie.model.dao.EvaluationDO" >
-    insert into evaluation (id, fid, name, 
+    insert into evaluation (id, fid, iid,
       evaluation, pass, create_time, 
       update_time)
-    values (#{id,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{iid,jdbcType=INTEGER},
       #{evaluation,jdbcType=VARCHAR}, #{pass,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="cn.scauaie.model.dao.EvaluationDO" >
+  <insert id="insertSelective" parameterType="cn.scauaie.model.dao.EvaluationDO" useGeneratedKeys="true" keyProperty="id" >
     insert into evaluation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -42,8 +42,8 @@
       <if test="fid != null" >
         fid,
       </if>
-      <if test="name != null" >
-        name,
+      <if test="iid != null" >
+        iid,
       </if>
       <if test="evaluation != null" >
         evaluation,
@@ -65,8 +65,8 @@
       <if test="fid != null" >
         #{fid,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
+      <if test="iid != null" >
+        #{iid,jdbcType=INTEGER},
       </if>
       <if test="evaluation != null" >
         #{evaluation,jdbcType=VARCHAR},
@@ -88,8 +88,8 @@
       <if test="fid != null" >
         fid = #{fid,jdbcType=INTEGER},
       </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+      <if test="iid != null" >
+        iid = #{iid,jdbcType=INTEGER},
       </if>
       <if test="evaluation != null" >
         evaluation = #{evaluation,jdbcType=VARCHAR},
@@ -109,7 +109,7 @@
   <update id="updateByPrimaryKey" parameterType="cn.scauaie.model.dao.EvaluationDO" >
     update evaluation
     set fid = #{fid,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
+      iid = #{iid,jdbcType=INTEGER},
       evaluation = #{evaluation,jdbcType=VARCHAR},
       pass = #{pass,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},

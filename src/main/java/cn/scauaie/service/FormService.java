@@ -20,6 +20,8 @@ public interface FormService {
 
     FormAO getFormAOById(Integer id);
 
+    int getCountById(Integer id);
+
     FormAO getFormAOByCode(String code);
 
     List<FormAO> listFormAOs(Integer pageNum, Integer pageSize, String q);

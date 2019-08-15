@@ -7,7 +7,7 @@ import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.manager.constant.WeChatMp;
-import cn.scauaie.model.ao.DepNumberDO;
+import cn.scauaie.model.dao.DepNumberDO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
 import cn.scauaie.model.dao.FormDO;
@@ -94,6 +94,16 @@ public class FormServiceImpl implements FormService {
         FormAO formAO = new FormAO();
         BeanUtils.copyProperties(formDO, formAO);
         return formAO;
+    }
+
+    /**
+     * 通过id获取数量
+     *
+     * @param id 报名表编号
+     * @return 数量
+     */
+    public int getCountById(Integer id) {
+        return formMapper.getCountById(id);
     }
 
     @Override
@@ -227,7 +237,11 @@ public class FormServiceImpl implements FormService {
         FormQuery formQuery = queryConverter.convert(q);
         formQuery.setPageNum(pageNum);
         formQuery.setPageSize(pageSize);
-        return listFormAOs(formQuery);
+        List<FormAO> formAOList = listFormAOs(formQuery);
+        if (formAOList == null) {
+            throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+        return formAOList;
     }
 
     /**
@@ -329,6 +343,9 @@ public class FormServiceImpl implements FormService {
     private List<FormAO> listFormAOs(FormQuery formQuery) {
         PageHelper.startPage(formQuery.getPageNum(), formQuery.getPageSize());
         List<FormDO> formDOList = formMapper.listByFormQuery(formQuery);
+        if (formDOList.size() < 1) {
+            return null;
+        }
         List<FormAO> formAOList = new ArrayList<>(formDOList.size());
         for (FormDO formDO : formDOList) {
             System.out.println(formDO);

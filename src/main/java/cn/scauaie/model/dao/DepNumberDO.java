@@ -1,4 +1,4 @@
-package cn.scauaie.model.ao;
+package cn.scauaie.model.dao;
 
 /**
  * 描述:
