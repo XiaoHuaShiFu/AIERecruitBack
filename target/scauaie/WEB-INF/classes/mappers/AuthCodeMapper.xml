@@ -3,7 +3,7 @@
 <mapper namespace="cn.scauaie.dao.AuthCodeMapper" >
   <resultMap id="BaseResultMap" type="cn.scauaie.model.dao.AuthCodeDO" >
     <constructor >
-      <idArg column="code" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <idArg column="code" jdbcType="CHAR" javaType="java.lang.String" />
       <arg column="dep" jdbcType="CHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
@@ -15,10 +15,10 @@
     select
     <include refid="Base_Column_List"/>
     from auth_code
-    where code = #{code, jdbcType=VARCHAR}
+    where code = #{code, jdbcType=CHAR}
   </select>
 
   <delete id="deleteAuthCodeByCode" parameterType="string">
-    delete from auth_code where code = #{code, jdbcType=VARCHAR}
+    delete from auth_code where code = #{code, jdbcType=CHAR}
   </delete>
 </mapper>

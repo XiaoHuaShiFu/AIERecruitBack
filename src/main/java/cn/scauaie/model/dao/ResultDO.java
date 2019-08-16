@@ -13,12 +13,10 @@ public class ResultDO {
 
     private Date updateTime;
 
-    public ResultDO(Integer id, Integer fid, String result, Date createTime, Date updateTime) {
+    public ResultDO(Integer id, Integer fid, String result) {
         this.id = id;
         this.fid = fid;
         this.result = result;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public ResultDO() {

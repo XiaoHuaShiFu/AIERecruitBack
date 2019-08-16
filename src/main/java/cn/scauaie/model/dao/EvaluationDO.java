@@ -20,14 +20,12 @@ public class EvaluationDO {
     public EvaluationDO() {
     }
 
-    public EvaluationDO(Integer id, Integer fid, Integer iid, String evaluation, Boolean pass, Date createTime, Date updateTime) {
+    public EvaluationDO(Integer id, Integer fid, Integer iid, String evaluation, Boolean pass) {
         this.id = id;
         this.fid = fid;
         this.iid = iid;
         this.evaluation = evaluation;
         this.pass = pass;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public Integer getId() {
@@ -98,4 +96,5 @@ public class EvaluationDO {
                 ", updateTime=" + updateTime +
                 '}';
     }
+
 }

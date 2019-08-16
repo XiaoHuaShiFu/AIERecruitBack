@@ -13,12 +13,10 @@ public class WorkDO {
 
     private Date updateTime;
 
-    public WorkDO(Integer id, Integer fid, String url, Date createTime, Date updateTime) {
+    public WorkDO(Integer id, Integer fid, String url) {
         this.id = id;
         this.fid = fid;
         this.url = url;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public WorkDO() {

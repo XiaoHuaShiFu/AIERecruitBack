@@ -23,8 +23,8 @@ public class ResultAO {
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The result must be not blank.",
             groups = {GroupPOST.class})
-    @Size(message = "INVALID_PARAMETER_SIZE: The size of result must be from 1 to 20.",
-            min = 1, max = 500,
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of result must be from 1 to 200.",
+            min = 1, max = 200,
             groups = {Group.class})
     private String result;
 

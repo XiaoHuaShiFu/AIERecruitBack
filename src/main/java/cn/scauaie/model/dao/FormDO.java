@@ -29,7 +29,7 @@ public class FormDO {
 
     private Date updateTime;
 
-    public FormDO(Integer id, String openid, String name, String avatar, String gender, String college, String major, String phone, String firstDep, String secondDep, String introduction, Date createTime, Date updateTime) {
+    public FormDO(Integer id, String openid, String name, String avatar, String gender, String college, String major, String phone, String firstDep, String secondDep, String introduction) {
         this.id = id;
         this.openid = openid;
         this.name = name;
@@ -41,8 +41,6 @@ public class FormDO {
         this.firstDep = firstDep;
         this.secondDep = secondDep;
         this.introduction = introduction;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public FormDO() {

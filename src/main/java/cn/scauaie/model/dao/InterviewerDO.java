@@ -15,13 +15,11 @@ public class InterviewerDO {
 
     private Date updateTime;
 
-    public InterviewerDO(Integer id, String openid, String name, String dep, Date createTime, Date updateTime) {
+    public InterviewerDO(Integer id, String openid, String name, String dep) {
         this.id = id;
         this.openid = openid;
         this.name = name;
         this.dep = dep;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public InterviewerDO() {

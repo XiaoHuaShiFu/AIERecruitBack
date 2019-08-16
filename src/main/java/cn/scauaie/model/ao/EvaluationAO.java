@@ -27,8 +27,8 @@ public class EvaluationAO {
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The evaluation must be not blank.",
             groups = {GroupEvaluationAOPOST.class})
-    @Size(message = "INVALID_PARAMETER_SIZE: The size of evaluation must be from 1 to 500.",
-            min = 1, max = 500,
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of evaluation must be from 1 to 200.",
+            min = 1, max = 200,
             groups = {GroupEvaluationAO.class})
     private String evaluation;
 

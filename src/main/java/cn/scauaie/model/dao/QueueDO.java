@@ -15,13 +15,11 @@ public class QueueDO {
 
     private Date updateTime;
 
-    public QueueDO(Integer id, Integer fid, String dep, String state, Date createTime, Date updateTime) {
+    public QueueDO(Integer id, Integer fid, String dep, String state) {
         this.id = id;
         this.fid = fid;
         this.dep = dep;
         this.state = state;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public QueueDO() {

@@ -60,7 +60,7 @@ public class InterviewerController {
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The authCode must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of authCode must be 36.", min = 36, max = 36) String authCode,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The name must be not blank.")
-            @Size(message = "INVALID_PARAMETER_SIZE: The size of name must be from 1 to 20.", min = 1, max = 20) String name) {
+            @Size(message = "INVALID_PARAMETER_SIZE: The size of name must be from 1 to 10.", min = 1, max = 10) String name) {
         InterviewerAO interviewerAO = interviewerService.saveInterviewer(wxCode, authCode, name);
         InterviewerVO interviewerVO = new InterviewerVO();
         BeanUtils.copyProperties(interviewerAO, interviewerVO);

@@ -4,15 +4,13 @@
   <resultMap id="BaseResultMap" type="cn.scauaie.model.dao.InterviewerDO" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="openid" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="openid" jdbcType="CHAR" javaType="java.lang.String" />
       <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="dep" jdbcType="CHAR" javaType="java.lang.String" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, openid, name, dep, create_time, update_time
+    id, openid, name, dep
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -27,7 +25,7 @@
   <insert id="insert" parameterType="cn.scauaie.model.dao.InterviewerDO" useGeneratedKeys="true" keyProperty="id" >
     insert into interviewer (
     openid, name, dep)
-    values (#{openid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{dep,jdbcType=CHAR})
+    values (#{openid,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{dep,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.scauaie.model.dao.InterviewerDO" >
     insert into interviewer
@@ -44,19 +42,13 @@
       <if test="dep != null" >
         dep,
       </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
       <if test="openid != null" >
-        #{openid,jdbcType=VARCHAR},
+        #{openid,jdbcType=CHAR},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -64,19 +56,13 @@
       <if test="dep != null" >
         #{dep,jdbcType=CHAR},
       </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.InterviewerDO" >
     update interviewer
     <set >
       <if test="openid != null" >
-        openid = #{openid,jdbcType=VARCHAR},
+        openid = #{openid,jdbcType=CHAR},
       </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -84,22 +70,14 @@
       <if test="dep != null" >
         dep = #{dep,jdbcType=CHAR},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.scauaie.model.dao.InterviewerDO" >
     update interviewer
-    set openid = #{openid,jdbcType=VARCHAR},
+    set openid = #{openid,jdbcType=CHAR},
       name = #{name,jdbcType=VARCHAR},
-      dep = #{dep,jdbcType=CHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      dep = #{dep,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -107,13 +85,13 @@
     select
     count(1)
     from interviewer
-    where openid = #{openid, jdbcType=VARCHAR}
+    where openid = #{openid, jdbcType=CHAR}
   </select>
 
   <select id="getInterviewerByOpenid" resultType="string" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from interviewer
-    where openid = #{openid, jdbcType=VARCHAR}
+    where openid = #{openid, jdbcType=CHAR}
   </select>
 </mapper>

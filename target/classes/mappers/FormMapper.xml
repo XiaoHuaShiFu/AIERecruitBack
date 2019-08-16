@@ -4,23 +4,20 @@
     <resultMap id="BaseResultMap" type="cn.scauaie.model.dao.FormDO">
         <constructor>
             <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="openid" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="openid" jdbcType="CHAR" javaType="java.lang.String"/>
             <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="avatar" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="gender" jdbcType="CHAR" javaType="java.lang.String"/>
             <arg column="college" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="major" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="phone" jdbcType="CHAR" javaType="java.lang.String"/>
             <arg column="first_dep" jdbcType="CHAR" javaType="java.lang.String"/>
             <arg column="second_dep" jdbcType="CHAR" javaType="java.lang.String"/>
             <arg column="introduction" jdbcType="CHAR" javaType="java.lang.String"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-                id, openid, name, avatar, gender, college, major, phone, first_dep, second_dep, introduction,
-                create_time, update_time
+                id, openid, name, avatar, gender, college, major, phone, first_dep, second_dep, introduction
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -37,70 +34,67 @@
         insert into form (id, openid, name,
                           avatar, gender, college,
                           major, phone, first_dep,
-                          second_dep, introduction, create_time, update_time)
-        values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                          second_dep, introduction)
+        values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=CHAR}, #{name,jdbcType=VARCHAR},
                 #{avatar,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, #{college,jdbcType=VARCHAR},
-                #{major,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{firstDep,jdbcType=CHAR},
-                #{secondDep,jdbcType=CHAR}, #{introduction,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
-                #{updateTime,jdbcType=TIMESTAMP})
+                #{major,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, #{firstDep,jdbcType=CHAR},
+                #{secondDep,jdbcType=CHAR}, #{introduction,jdbcType=CHAR})
     </insert>
     <insert id="insertIfOpenidNotExist" parameterType="cn.scauaie.model.dao.FormDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into form (openid, name, gender,
                           college, major, phone,
                           first_dep, second_dep, introduction)
-        select #{openid,jdbcType=VARCHAR},
+        select #{openid,jdbcType=CHAR},
                #{name,jdbcType=VARCHAR},
                #{gender,jdbcType=CHAR},
                #{college,jdbcType=VARCHAR},
                #{major,jdbcType=VARCHAR},
-               #{phone,jdbcType=VARCHAR},
+               #{phone,jdbcType=CHAR},
                #{firstDep,jdbcType=CHAR},
                #{secondDep,jdbcType=CHAR},
                #{introduction,jdbcType=CHAR}
         from DUAL
         where not exists(select *
                          from form
-                         where openid = #{openid, jdbcType=VARCHAR})
+                         where openid = #{openid, jdbcType=CHAR})
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.FormDO">
         update form
         <set>
             <if test="name != null">
-                name = #{name,jdbcType=VARCHAR},
+                name = #{name},
             </if>
             <if test="gender != null">
-                gender = #{gender,jdbcType=CHAR},
+                gender = #{gender},
             </if>
             <if test="college != null">
-                college = #{college,jdbcType=VARCHAR},
+                college = #{college},
             </if>
             <if test="major != null">
-                major = #{major,jdbcType=VARCHAR},
+                major = #{major},
             </if>
             <if test="phone != null">
-                phone = #{phone,jdbcType=VARCHAR},
+                phone = #{phone},
             </if>
             <if test="introduction != null">
-                introduction = #{introduction,jdbcType=CHAR}
+                introduction = #{introduction}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.scauaie.model.dao.FormDO">
         update form
-        set openid       = #{openid,jdbcType=VARCHAR},
+        set openid       = #{openid,jdbcType=CHAR},
             name         = #{name,jdbcType=VARCHAR},
             avatar       = #{avatar,jdbcType=VARCHAR},
             gender       = #{gender,jdbcType=CHAR},
             college      = #{college,jdbcType=VARCHAR},
             major        = #{major,jdbcType=VARCHAR},
-            phone        = #{phone,jdbcType=VARCHAR},
+            phone        = #{phone,jdbcType=CHAR},
             first_dep    = #{firstDep,jdbcType=CHAR},
             second_dep   = #{secondDep,jdbcType=CHAR},
-            introduction = #{introduction,jdbcType=CHAR},
-            create_time  = #{createTime,jdbcType=TIMESTAMP},
-            update_time  = #{updateTime,jdbcType=TIMESTAMP}
+            introduction = #{introduction,jdbcType=CHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -108,7 +102,7 @@
         select
         <include refid="Base_Column_List"/>
         from form
-        where openid = #{openid, jdbcType=VARCHAR}
+        where openid = #{openid, jdbcType=CHAR}
     </select>
 
     <select id="selectAvatarById" parameterType="integer" resultType="string">
@@ -135,6 +129,7 @@
                 and name = #{name, jdbcType=VARCHAR}
             </if>
         </where>
+        order by update_time desc
     </select>
 
     <select id="listFirstDepNumbers" resultType="cn.scauaie.model.dao.DepNumberDO">

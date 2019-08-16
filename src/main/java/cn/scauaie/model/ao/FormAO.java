@@ -20,8 +20,8 @@ public class FormAO {
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The name must be not blank.",
             groups = {GroupFormAOPOST.class})
-    @Size(message = "INVALID_PARAMETER_SIZE: The size of name must be from 1 to 20.",
-            min = 1, max = 20,
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of name must be from 1 to 10.",
+            min = 1, max = 10,
             groups = {GroupFormAO.class})
     private String name;
 
@@ -40,16 +40,16 @@ public class FormAO {
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The college must be not blank.",
             groups = {GroupFormAOPOST.class})
-    @Size(message = "INVALID_PARAMETER_SIZE: The size of college must be from 0 to 50.",
-            min = 1, max = 50,
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of college must be from 0 to 20.",
+            min = 1, max = 20,
             groups = {GroupFormAO.class})
     private String college;
 
 
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The major must be not blank.",
             groups = {GroupFormAOPOST.class})
-    @Size(message = "INVALID_PARAMETER_SIZE: The size of major must be from 0 to 50.",
-            min = 1, max = 50,
+    @Size(message = "INVALID_PARAMETER_SIZE: The size of major must be from 0 to 20.",
+            min = 1, max = 20,
             groups = {GroupFormAO.class})
     private String major;
 
@@ -74,7 +74,7 @@ public class FormAO {
     @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The introduction must be not blank.",
             groups = {GroupFormAOPOST.class})
     @Size(message = "INVALID_PARAMETER_SIZE: The size of introduction must be from 1 to 1000.",
-            min = 1, max = 20,
+            min = 1, max = 1000,
             groups = {GroupFormAO.class})
     private String introduction;
 
