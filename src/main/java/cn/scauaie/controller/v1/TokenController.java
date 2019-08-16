@@ -7,6 +7,7 @@ import cn.scauaie.model.vo.InterviewerVO;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.InterviewerService;
 import cn.scauaie.service.TokenService;
+import cn.scauaie.validator.annotation.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,8 +69,9 @@ public class TokenController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public FormVO postFormToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
-            @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32)
-                    String code, HttpServletResponse response) {
+            @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
+            @TokenType String tokenType,
+            HttpServletResponse response) {
         FormAO formAO = formService.getFormAOByCode(code);
 
         //创建token令牌
@@ -108,8 +110,9 @@ public class TokenController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public InterviewerVO postInterviewerToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
-            @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32)
-                    String code, HttpServletResponse response) {
+            @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
+            @TokenType String tokenType,
+            HttpServletResponse response) {
         InterviewerAO interviewerAO = interviewerService.getInterviewerByCode(code);
 
         //创建token令牌

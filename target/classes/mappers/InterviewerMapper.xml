@@ -83,7 +83,7 @@
 
   <select id="countByOpenid" parameterType="string" resultType="int">
     select
-    count(1)
+    count(*)
     from interviewer
     where openid = #{openid, jdbcType=CHAR}
   </select>

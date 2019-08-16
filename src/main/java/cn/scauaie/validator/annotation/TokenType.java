@@ -1,7 +1,7 @@
 package cn.scauaie.validator.annotation;
 
 
-import cn.scauaie.validator.DepValidator;
+import cn.scauaie.validator.TokenTypeValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,13 +15,13 @@ import java.lang.annotation.*;
  * @create 2019-08-09 15:12
  */
 @Documented
-@Constraint(validatedBy = {DepValidator.class})
+@Constraint(validatedBy = {TokenTypeValidator.class})
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(Dep.List.class)
-public @interface Dep {
+@Repeatable(TokenType.List.class)
+public @interface TokenType {
 
-    String message() default "INVALID_PARAMETER: The name of dep must be [BGS | CHB | CWB | JSB | SKB | WLB | XCB | XMB | XWB | YYB | ZKB].";
+    String message() default "INVALID_PARAMETER: The name of tokenType must be [FORM | INTERVIEWER].";
 
     Class<?>[] groups() default {};
 
@@ -31,8 +31,7 @@ public @interface Dep {
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @interface List {
-        Dep[] value();
+        TokenType[] value();
     }
-
 
 }

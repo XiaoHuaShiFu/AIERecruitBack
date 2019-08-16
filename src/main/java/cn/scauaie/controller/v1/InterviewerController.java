@@ -55,8 +55,8 @@ public class InterviewerController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public InterviewerVO post(
-            @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
-            @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String wxCode,
+            @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The wxCode must be not blank.")
+            @Size(message = "INVALID_PARAMETER_SIZE: The size of wxCode must be 32.", min = 32, max = 32) String wxCode,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The authCode must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of authCode must be 36.", min = 36, max = 36) String authCode,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The name must be not blank.")

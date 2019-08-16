@@ -2,31 +2,32 @@ package cn.scauaie.validator;
 
 import cn.scauaie.constant.DepEnum;
 import cn.scauaie.validator.annotation.Dep;
+import cn.scauaie.validator.annotation.TokenType;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * 描述: 部门校验器
- *  必须符合是 [BGS, CHB, CWB, JSB, SKB, WLB, XCB, XMB, XWB, YYB, ZKB] 中的一个
+ * 描述: TokenType校验器
+ *  必须符合是 [FORM | INTERVIEWER] 中的一个
  *
  * @author xhsf
  * @email 827032783@qq.com
  * @create 2019-08-09 13:57
  */
-public class DepValidator implements ConstraintValidator<Dep, String> {
+public class TokenTypeValidator implements ConstraintValidator<TokenType, String> {
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
         if (s == null) {
             return true;
         }
-        for (DepEnum dep : DepEnum.values()) {
-            if (s.equals(dep.name())) {
+        for (cn.scauaie.service.constant.TokenType
+                tokenType : cn.scauaie.service.constant.TokenType.values()) {
+            if (s.equals(tokenType.name())) {
                 return true;
             }
         }
         return false;
     }
-
 }

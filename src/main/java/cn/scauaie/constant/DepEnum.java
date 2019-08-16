@@ -8,5 +8,5 @@ package cn.scauaie.constant;
  * @create 2019-08-14 2:44
  */
 public enum DepEnum {
-    BGS, CHB, CWB, JSB, SKB, XCB, XMB, XWB, YYB, ZKB
+    BGS, CHB, CWB, JSB, SKB, WLB, XCB, XMB, XWB, YYB, ZKB
 }

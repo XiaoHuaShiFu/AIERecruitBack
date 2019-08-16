@@ -156,7 +156,7 @@
 
     <select id="getCountById" parameterType="int" resultType="int">
         select
-        count(1)
+        count(*)
         from form
         where id = #{id, jdbcType=INTEGER}
     </select>
