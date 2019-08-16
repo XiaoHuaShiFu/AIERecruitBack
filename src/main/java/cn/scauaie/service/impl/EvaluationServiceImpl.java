@@ -107,7 +107,6 @@ public class EvaluationServiceImpl implements EvaluationService {
      * @return List<EvaluationAO>
      */
     private List<EvaluationAO> listEvaluations(EvaluationQuery query) {
-        System.out.println(query);
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<EvaluationDO> evaluationDOList = evaluationMapper.listEvaluationsByQuery(query);
         if (evaluationDOList.size() < 1) {

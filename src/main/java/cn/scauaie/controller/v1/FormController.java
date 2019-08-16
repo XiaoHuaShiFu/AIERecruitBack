@@ -260,6 +260,36 @@ public class FormController {
     }
 
     /**
+     * 修改头像
+     * 此接口专门为微信小程序提供，为了适配微信小程序上传文件无put方法
+     * 并非规范的rest接口
+     *
+     * @param request HttpServletRequest
+     * @param avatar MultipartFile
+     * @return AvatarVO
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     * @errors:
+     * INTERNAL_ERROR: Upload file failed.
+     * INTERNAL_ERROR: Delete file failed.
+     * INTERNAL_ERROR: Update avatar exception.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_IS_NULL
+     */
+    @RequestMapping(value="/avatar/u", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    @FormTokenAuth
+    public AvatarVO updateAvatar(
+            HttpServletRequest request,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
+                    MultipartFile avatar) {
+        return putAvatar(request, avatar);
+    }
+
+    /**
      * 创建作品
      *
      * @param request HttpServletRequest
@@ -330,6 +360,40 @@ public class FormController {
         WorkVO workVO = new WorkVO();
         BeanUtils.copyProperties(workAO, workVO);
         return workVO;
+    }
+
+    /**
+     * 修改作品
+     * 此接口专门为微信小程序提供，为了适配微信小程序上传文件无put方法
+     * 并非规范的rest接口
+     *
+     * @param request HttpServletRequest
+     * @param work MultipartFile
+     * @return WorkVO
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     * @errors:
+     * INTERNAL_ERROR: Upload file failed.
+     * INTERNAL_ERROR: Delete file failed.
+     * INTERNAL_ERROR: Insert work failed.
+     * FORBIDDEN_SUB_USER: The specified action is not available for you.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_IS_NULL
+     */
+    @RequestMapping(value="/works/{wid}/u", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    @FormTokenAuth
+    public WorkVO updateWork(
+            HttpServletRequest request,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
+            @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
+            @PathVariable Integer wid,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
+                    MultipartFile work) {
+        return putWork(request, wid, work);
     }
 
 }

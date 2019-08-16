@@ -290,11 +290,7 @@ public class FormServiceImpl implements FormService {
         //更新头像文件
         String newAvatarUrl = fileService.updateFile(avatar, oldAvatarUrl, "/recruit/form/avatar/");
 
-        //更改数据库里的avatar
-        FormDO formDO = new FormDO();
-        formDO.setId(id);
-        formDO.setAvatar(newAvatarUrl);
-        int count = formMapper.updateByPrimaryKeySelective(formDO);
+        int count = formMapper.updateAvatar(id, newAvatarUrl);
         if (count < 1) {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update avatar failed.");
         }
@@ -348,7 +344,6 @@ public class FormServiceImpl implements FormService {
         }
         List<FormAO> formAOList = new ArrayList<>(formDOList.size());
         for (FormDO formDO : formDOList) {
-            System.out.println(formDO);
             List<WorkAO> workAOList = workService.listWorkAOsByFormId(formDO.getId());
             FormAO formAO = new FormAO();
             BeanUtils.copyProperties(formDO, formAO);

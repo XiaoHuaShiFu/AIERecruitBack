@@ -161,4 +161,9 @@
         where id = #{id, jdbcType=INTEGER}
     </select>
 
+    <update id="updateAvatar" parameterType="map">
+        update form
+        set avatar = #{avatar, jdbcType=VARCHAR}
+        where id = #{id, jdbcType=INTEGER}
+    </update>
 </mapper>

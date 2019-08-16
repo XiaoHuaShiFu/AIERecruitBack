@@ -3,6 +3,7 @@ package cn.scauaie.dao;
 import cn.scauaie.model.dao.DepNumberDO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.query.FormQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -33,4 +34,5 @@ public interface FormMapper {
 
     int getCountById(Integer id);
 
+    int updateAvatar(@Param("id") Integer id, @Param("avatar") String avatar);
 }
