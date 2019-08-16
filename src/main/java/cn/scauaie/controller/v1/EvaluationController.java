@@ -100,6 +100,7 @@ public class EvaluationController {
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
 //    @InterviewerTokenAuth
+
     public EvaluationVO get(HttpServletRequest request,
                       @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
                       @PathVariable Integer id) {
