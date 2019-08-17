@@ -1,21 +1,24 @@
-package cn.scauaie.model.ao;
+package cn.scauaie.model.vo;
 
-public class QueueAO {
+public class QueuerVO {
     private Integer fid;
+
+    private String name;
 
     private String dep;
 
-    private String state;
+    private Integer state;
 
     private Integer expectedWaitTime;
 
     private Integer frontNumber;
 
-    public QueueAO() {
+    public QueuerVO() {
     }
 
-    public QueueAO(Integer fid, String dep, String state, Integer expectedWaitTime, Integer frontNumber) {
+    public QueuerVO(Integer fid, String name, String dep, Integer state, Integer expectedWaitTime, Integer frontNumber) {
         this.fid = fid;
+        this.name = name;
         this.dep = dep;
         this.state = state;
         this.expectedWaitTime = expectedWaitTime;
@@ -30,6 +33,14 @@ public class QueueAO {
         this.fid = fid;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDep() {
         return dep;
     }
@@ -38,11 +49,11 @@ public class QueueAO {
         this.dep = dep;
     }
 
-    public String getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 
@@ -64,14 +75,14 @@ public class QueueAO {
 
     @Override
     public String toString() {
-        return "QueueAO{" +
+        return "QueuerVO{" +
                 "fid=" + fid +
+                ", name='" + name + '\'' +
                 ", dep='" + dep + '\'' +
-                ", state='" + state + '\'' +
+                ", state=" + state +
                 ", expectedWaitTime=" + expectedWaitTime +
                 ", frontNumber=" + frontNumber +
                 '}';
     }
-
 }
 

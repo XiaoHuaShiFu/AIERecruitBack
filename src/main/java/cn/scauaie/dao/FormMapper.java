@@ -35,4 +35,6 @@ public interface FormMapper {
     int getCountById(Integer id);
 
     int updateAvatar(@Param("id") Integer id, @Param("avatar") String avatar);
+
+    String getName(Integer id);
 }

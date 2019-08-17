@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.scauaie.dao.QueueMapper" >
-  <resultMap id="BaseResultMap" type="cn.scauaie.model.dao.QueueDO" >
+<mapper namespace="cn.scauaie.dao.QueuerMapper" >
+  <resultMap id="BaseResultMap" type="cn.scauaie.model.dao.QueuerDO" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="fid" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -15,19 +15,19 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from queue
+    from queuer
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from queue
+    delete from queuer
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="cn.scauaie.model.dao.QueueDO" >
-    insert into queue (id, fid, dep, state)
+  <insert id="insert" parameterType="cn.scauaie.model.dao.QueuerDO" >
+    insert into queuer (id, fid, dep, state)
     values (#{id,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{dep,jdbcType=CHAR}, #{state,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.scauaie.model.dao.QueueDO" >
-    insert into queue
+  <insert id="insertSelective" parameterType="cn.scauaie.model.dao.QueuerDO" >
+    insert into queuer
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -57,8 +57,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.QueueDO" >
-    update queue
+  <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.QueuerDO" >
+    update queuer
     <set >
       <if test="fid != null" >
         fid = #{fid,jdbcType=INTEGER},
@@ -72,11 +72,18 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.scauaie.model.dao.QueueDO" >
-    update queue
+  <update id="updateByPrimaryKey" parameterType="cn.scauaie.model.dao.QueuerDO" >
+    update queuer
     set fid = #{fid,jdbcType=INTEGER},
       dep = #{dep,jdbcType=CHAR},
       state = #{state,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getByFormId" parameterType="integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from queuer
+    where fid = #{formId, jdbcType=INTEGER}
+  </select>
 </mapper>

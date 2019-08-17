@@ -1,6 +1,9 @@
 package cn.scauaie.service;
 
+import redis.clients.jedis.Tuple;
+
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 描述:
@@ -34,6 +37,14 @@ public interface CacheService {
     String rpop(String key);
 
     Long llen(String key);
+
+    Long zadd(String key, double score, String member);
+
+    Set<Tuple> zrangeWithScores(String key, long start, long stop);
+
+    Long zrank(String key, String member);
+
+    Long zremrangeByRank(String key, long start, long stop);
 
     Long expire(String key, int seconds);
 

@@ -166,4 +166,11 @@
         set avatar = #{avatar, jdbcType=VARCHAR}
         where id = #{id, jdbcType=INTEGER}
     </update>
+
+    <select id="getName" parameterType="integer" resultType="string">
+        select
+        name
+        from form
+        where id = #{id, jdbcType=INTEGER}
+    </select>
 </mapper>

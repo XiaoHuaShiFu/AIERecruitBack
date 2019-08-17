@@ -8,9 +8,12 @@
       <w>llen</w>
       <w>lpop</w>
       <w>lpush</w>
+      <w>queuer</w>
+      <w>queuers</w>
       <w>rpop</w>
       <w>rpush</w>
       <w>scau</w>
+      <w>zset</w>
     </words>
   </dictionary>
 </component>

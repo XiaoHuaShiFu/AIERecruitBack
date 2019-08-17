@@ -20,6 +20,8 @@ public interface FormService {
 
     FormAO getFormAOById(Integer id);
 
+    String getName(Integer id);
+
     int getCountById(Integer id);
 
     FormAO getFormAOByCode(String code);

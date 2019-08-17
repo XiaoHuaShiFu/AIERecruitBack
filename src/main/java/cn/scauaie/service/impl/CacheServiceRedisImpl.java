@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Tuple;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 描述:
@@ -196,6 +198,64 @@ public class CacheServiceRedisImpl implements CacheService {
         return length;
     }
 
+    /**
+     * 添加一个元素到zset
+     *
+     * @param key key
+     * @param score score
+     * @param member member
+     * @return score
+     */
+    public Long zadd(String key, double score, String member) {
+        Jedis jedis = jedisPool.getResource();
+        Long s = jedis.zadd(key, score, member);
+        jedis.close();
+        return s;
+    }
+
+    /**
+     * 返回zset元素列表
+     *
+     * @param key key
+     * @param start start
+     * @param stop stop
+     * @return Set<Tuple>
+     */
+    public Set<Tuple> zrangeWithScores(String key, long start, long stop) {
+        Jedis jedis = jedisPool.getResource();
+        Set<Tuple> set = jedis.zrangeWithScores(key, start, stop);
+        jedis.close();
+        return set;
+    }
+
+    /**
+     * 获取zset某个元素的位置
+     *
+     * @param key key
+     * @param member member
+     * @return 下标
+     */
+    public Long zrank(String key, String member) {
+        Jedis jedis = jedisPool.getResource();
+        Long rank = jedis.zrank(key, member);
+        jedis.close();
+        return rank;
+    }
+
+    /**
+     * 删除zset的某个元素，通过下标
+     *
+     * @param key key
+     * @param start start
+     * @param stop stop
+     * @return 删除数量
+     */
+    public Long zremrangeByRank(String key, long start, long stop) {
+        Jedis jedis = jedisPool.getResource();
+        Long count = jedis.zremrangeByRank(key, start, stop);
+        jedis.close();
+        return count;
+    }
 
     /**
      * 设置过期时间
@@ -211,4 +271,5 @@ public class CacheServiceRedisImpl implements CacheService {
         jedis.close();
         return rowCount;
     }
+
 }

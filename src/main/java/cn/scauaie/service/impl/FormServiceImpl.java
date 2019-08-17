@@ -97,6 +97,16 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
+     * 获取名字通过报名表编号
+     *
+     * @param id 报名表编号
+     * @return 名字
+     */
+    public String getName(Integer id) {
+        return formMapper.getName(id);
+    }
+
+    /**
      * 通过id获取数量
      *
      * @param id 报名表编号

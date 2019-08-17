@@ -2,7 +2,7 @@ package cn.scauaie.model.dao;
 
 import java.util.Date;
 
-public class QueueDO {
+public class QueuerDO {
     private Integer id;
 
     private Integer fid;
@@ -15,14 +15,14 @@ public class QueueDO {
 
     private Date updateTime;
 
-    public QueueDO(Integer id, Integer fid, String dep, String state) {
+    public QueuerDO(Integer id, Integer fid, String dep, String state) {
         this.id = id;
         this.fid = fid;
         this.dep = dep;
         this.state = state;
     }
 
-    public QueueDO() {
+    public QueuerDO() {
         super();
     }
 
@@ -76,7 +76,7 @@ public class QueueDO {
 
     @Override
     public String toString() {
-        return "QueueDO{" +
+        return "QueuerDO{" +
                 "id=" + id +
                 ", fid=" + fid +
                 ", dep='" + dep + '\'' +

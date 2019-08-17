@@ -1,26 +1,20 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.FormTokenAuth;
-import cn.scauaie.model.ao.FormAO;
+import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.model.ao.TokenAO;
-import cn.scauaie.model.vo.FormVO;
-import cn.scauaie.service.FormService;
-import cn.scauaie.service.QueueService;
-import cn.scauaie.service.TokenService;
+import cn.scauaie.model.bo.QueuerBO;
+import cn.scauaie.model.vo.QueuerVO;
+import cn.scauaie.service.QueuerService;
+import cn.scauaie.service.constant.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.util.PriorityQueue;
+import java.util.List;
 
 
 /**
@@ -31,40 +25,67 @@ import java.util.PriorityQueue;
  * @create 2019-08-10 21:10
  */
 @RestController
-@RequestMapping("v1/queues")
+@RequestMapping("v1/queuers")
 @Validated
 public class QueueController {
 
     @Autowired
-    private QueueService queueService;
+    private QueuerService queuerService;
 
     /**
-     * 创建form-token凭证
+     * 创建队列元素
      *
      * @param request HttpServletRequest
-     * @return FormVO
-     *
-     * Http header里的Authorization带有form-token凭证
+     * @return QueuerVO
      *
      * @success:
      * HttpStatus.CREATED
      *
      * @errors:
-     * INVALID_PARAMETER: The code is not valid.
-     * INVALID_PARAMETER_NOT_FOUND: The specified openid does not exist.
-     * INTERNAL_ERROR: Failed to create form-token.
+     * INVALID_PARAMETER_NOT_FOUND: Not found.
+     * OPERATION_CONFLICT: Request was denied due to conflict, you has been in the queue.
+     * OPERATION_CONFLICT: Request was denied due to conflict, you have entered the queue.
      *
-     * @bindErrors
-     * INVALID_PARAMETER_IS_BLANK
-     * INVALID_PARAMETER_SIZE
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @FormTokenAuth
-    public Object post(HttpServletRequest request) {
+    public QueuerVO post(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        queueService.put(tokenAO.getDep(), tokenAO.getId());
-        return null;
+        QueuerBO queuerBO = queuerService.save(tokenAO.getDep(), tokenAO.getId());
+
+        QueuerVO queuerVO = new QueuerVO();
+        BeanUtils.copyProperties(queuerBO, queuerVO);
+        return queuerVO;
+    }
+
+    /**
+     * 获取队列信息
+     * @param request HttpServletRequest
+     * @return QueuerVO
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    @TokenAuth
+    public Object get(HttpServletRequest request,
+                      @RequestParam(defaultValue = "1") Integer pageNum,
+                      @RequestParam(defaultValue = "10") Integer pageSize) {
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+        if (tokenAO.getType() == TokenType.FORM) {
+            QueuerBO queuerBO = queuerService.getQueuerByDepAndFormId(tokenAO.getId(), tokenAO.getDep());
+
+            QueuerVO queuerVO = new QueuerVO();
+            BeanUtils.copyProperties(queuerBO, queuerVO);
+            return queuerVO;
+        }
+
+        List<QueuerBO> queuerBOList = queuerService.listQueuersByDep(tokenAO.getDep());
+        return queuerBOList;
+
     }
 
 }

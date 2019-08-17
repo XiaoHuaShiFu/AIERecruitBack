@@ -43,6 +43,7 @@ public class EvaluationController {
     @Autowired
     private EvaluationService evaluationService;
 
+    // TODO: 2019/8/17 面试官评价权判断
     /**
      * 创建Evaluation并返回Evaluation
      * @param evaluationAO 评价表信息
@@ -100,7 +101,6 @@ public class EvaluationController {
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
 //    @InterviewerTokenAuth
-
     public EvaluationVO get(HttpServletRequest request,
                       @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
                       @PathVariable Integer id) {
