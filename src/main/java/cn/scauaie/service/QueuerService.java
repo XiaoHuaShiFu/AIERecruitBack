@@ -1,6 +1,7 @@
 package cn.scauaie.service;
 
 import cn.scauaie.model.bo.QueuerBO;
+import cn.scauaie.model.query.QueuerQuery;
 
 import java.util.List;
 
@@ -14,7 +15,12 @@ import java.util.List;
 public interface QueuerService {
     QueuerBO save(String dep, Integer id);
 
+    void deleteByDep(String dep);
+
     QueuerBO getQueuerByDepAndFormId(Integer formId, String dep);
 
-    List<QueuerBO> listQueuersByDep(String dep);
+    List<QueuerBO> listQueuersByDep(QueuerQuery query);
+
+    int getCountByDep(String dep);
+
 }

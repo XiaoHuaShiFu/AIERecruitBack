@@ -7,6 +7,7 @@ import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.bo.QueuerBO;
 import cn.scauaie.model.dao.QueuerDO;
+import cn.scauaie.model.query.QueuerQuery;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.QueuerService;
 import org.springframework.beans.BeanUtils;
@@ -84,6 +85,20 @@ public class QueuerServiceImpl implements QueuerService {
     }
 
     /**
+     * 出队队头元素
+     *
+     * @param dep 部门
+     */
+    @Override
+    public void deleteByDep(String dep) {
+        String q = getQueueNameByDep(dep);
+        ArrayBlockingQueue<QueuerBO> queue = queueMap.get(q);
+        if (queue.poll() == null) {
+            throw new ProcessingException(ErrorCode.INVALID_OPERATION_NOT_FOUND, "The queue is empty.");
+        }
+    }
+
+    /**
      * 获取排队者信息
      *
      * @param formId 报名表编号
@@ -118,16 +133,44 @@ public class QueuerServiceImpl implements QueuerService {
         return queuerBO;
     }
 
+    /**
+     * 获取队列元素
+     *
+     * @param query 查询参数
+     * @return List<QueuerBO>
+     */
     @Override
-    public List<QueuerBO> listQueuersByDep(String dep) {
-        String q = getQueueNameByDep(dep);
+    public List<QueuerBO> listQueuersByDep(QueuerQuery query) {
+        int offset = (query.getPageNum() - 1) * query.getPageSize();
+
+        String q = getQueueNameByDep(query.getDep());
         ArrayBlockingQueue<QueuerBO> queue = queueMap.get(q);
+
+        if (offset >= queue.size()) {
+            throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+
         QueuerBO[] queuerBOS = new QueuerBO[queue.size()];
         queue.toArray(queuerBOS);
-        List<QueuerBO> queuerBOList = new ArrayList<>(queue.size());
-        queuerBOList.addAll(Arrays.asList(queuerBOS));
+        int limit = offset + offset - 1;
+
+        List<QueuerBO> queuerBOList = new ArrayList<>(query.getPageSize());
+        queuerBOList.addAll(Arrays.asList(queuerBOS).subList(offset, (queuerBOS.length > limit ? queuerBOS.length : limit)));
         return queuerBOList;
     }
+
+    /**
+     * 获取队列排队人数
+     *
+     * @param dep 部门
+     * @return 排队人数
+     */
+    @Override
+    public int getCountByDep(String dep) {
+        String q = getQueueNameByDep(dep);
+        return queueMap.get(q).size();
+    }
+
 
     /**
      * 通过部门名字获取队列名字
