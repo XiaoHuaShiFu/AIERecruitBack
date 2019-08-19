@@ -1,13 +1,16 @@
 package cn.scauaie.service.impl;
 
 import cn.scauaie.dao.ResultMapper;
-import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.ResultAO;
 import cn.scauaie.model.dao.ResultDO;
 import cn.scauaie.model.query.ResultQuery;
+import cn.scauaie.result.ErrorCode;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.ResultService;
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +28,14 @@ import java.util.List;
 @Service("resultService")
 public class ResultServiceImpl implements ResultService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ResultServiceImpl.class);
+
     @Autowired
     private ResultMapper resultMapper;
 
+    // TODO: 2019/8/20 这里要检查面试官权限
     @Override
-    public ResultAO saveResult(ResultAO resultAO) {
+    public Result<ResultAO> saveResult(ResultAO resultAO) {
         ResultDO resultDO = new ResultDO();
         BeanUtils.copyProperties(resultAO, resultDO);
         int count = resultMapper.insertSelective(resultDO);
@@ -38,7 +44,7 @@ public class ResultServiceImpl implements ResultService {
         }
 
         resultAO.setId(resultDO.getId());
-        return resultAO;
+        return Result.success(resultAO);
     }
 
     /**

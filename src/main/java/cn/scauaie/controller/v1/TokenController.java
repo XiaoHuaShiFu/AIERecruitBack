@@ -1,13 +1,12 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.ErrorHandler;
-import cn.scauaie.result.ErrorResponse;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.ao.TokenAO;
-import cn.scauaie.result.Result;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.InterviewerVO;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.InterviewerService;
 import cn.scauaie.service.TokenService;
@@ -15,7 +14,6 @@ import cn.scauaie.validator.annotation.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import javax.ws.rs.core.HttpHeaders;
 
 
 /**
@@ -53,11 +50,8 @@ public class TokenController {
      * 创建token凭证
      *
      * @param code 微信小程序的wx.login()接口返回值
-     * @param response HttpServletResponse
      * @param tokenType token类型
      * @return TokenAO
-     *
-     * Http header里的Authorization带有form-token凭证
      *
      * @success:
      * HttpStatus.CREATED
@@ -76,7 +70,7 @@ public class TokenController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @ErrorHandler
-    public Object postToken(HttpServletResponse response,
+    public Object postToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The tokenType must be not blank.")
@@ -86,7 +80,6 @@ public class TokenController {
             return result;
         }
 
-        response.setHeader(HttpHeaders.AUTHORIZATION, result.getData().getToken());
         return result.getData();
     }
 
@@ -117,7 +110,6 @@ public class TokenController {
     public Object postFormToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
-            @TokenType String tokenType,
             HttpServletResponse response) {
         FormAO formAO = formService.getFormByCode(code);
 
@@ -159,7 +151,6 @@ public class TokenController {
     public Object postInterviewerToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
-            @TokenType String tokenType,
             HttpServletResponse response) {
         InterviewerAO interviewerAO = interviewerService.getInterviewerByCode(code);
 

@@ -1,6 +1,7 @@
 package cn.scauaie.result;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 
 /**
  * 描述: 对RPC方法的封装
@@ -70,6 +71,18 @@ public class Result<T> implements Serializable {
      */
     public static <T> Result<T> fail(ErrorCode errorCode, String message) {
         return new Result<>(false, errorCode, message);
+    }
+
+    /**
+     * 失败调用时的构造方法
+     *
+     * @param errorCode 错误码
+     * @param format 格式化字符串
+     * @param args 参数
+     * @return Result<T>
+     */
+    public static <T> Result<T> fail(ErrorCode errorCode, String format, Object... args) {
+        return new Result<>(false, errorCode, MessageFormat.format(format, args));
     }
 
     /**

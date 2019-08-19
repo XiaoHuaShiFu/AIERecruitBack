@@ -1,5 +1,6 @@
 package cn.scauaie.controller.v1;
 
+import cn.scauaie.aspect.annotation.ErrorHandler;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.ResultAO;
@@ -52,8 +53,9 @@ public class ResultController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    @ErrorHandler
     public Object post(HttpServletRequest request, @Validated ResultAO resultAO) {
-        ResultAO newResultAO = resultService.saveResult(resultAO);
+        ResultAO newResultAO = resultService.saveResult(resultAO).getData();
         ResultVO resultVO = new ResultVO();
         BeanUtils.copyProperties(newResultAO, resultVO);
 

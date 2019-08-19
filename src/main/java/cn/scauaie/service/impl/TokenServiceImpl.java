@@ -85,6 +85,13 @@ public class TokenServiceImpl implements TokenService {
         return Result.success(tokenAO);
     }
 
+    /**
+     * 创建token并保存到redis里
+     *
+     * @param tokenType token类型
+     * @param code wx.login()接口获取的返回值
+     * @return Result<TokenAO>
+     */
     @Override
     public Result<TokenAO> createAndSaveToken(String tokenType, String code) {
         TokenAO tokenAO;
