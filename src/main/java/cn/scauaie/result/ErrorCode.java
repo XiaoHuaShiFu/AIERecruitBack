@@ -54,6 +54,12 @@ public enum ErrorCode {
             "UnknownError", "The request processing has failed due to some unknown exception."),
 
     /**
+     * 短时间内请求过多
+     */
+    THROTTLING(HttpStatus.BAD_REQUEST,
+            "Throttling", "You have made too many requests within a short time."),
+
+    /**
      * 未通过认证
      */
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED,

@@ -41,6 +41,8 @@ public class CacheServiceRedisImplTest {
 
     @Test
     public void get() {
+        System.out.println(jedis.get("tes1t"));
+        jedis.close();
     }
 
     @Test
@@ -85,5 +87,6 @@ public class CacheServiceRedisImplTest {
     @Test
     public void expire() {
         System.out.println(jedis.expire("queue:zkb", 33));
+        jedis.close();
     }
 }

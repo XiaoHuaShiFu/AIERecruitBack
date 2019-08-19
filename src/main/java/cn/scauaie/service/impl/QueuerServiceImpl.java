@@ -8,8 +8,13 @@ import cn.scauaie.model.dao.QueuerDO;
 import cn.scauaie.model.query.QueuerQuery;
 import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
+import cn.scauaie.service.CacheService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.QueuerService;
+import cn.scauaie.service.constant.QueuerConsts;
+import cn.scauaie.service.constant.QueuerState;
+import cn.scauaie.service.constant.RedisStatus;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -37,10 +42,8 @@ public class QueuerServiceImpl implements QueuerService {
     @Autowired
     private FormService formService;
 
-    /**
-     * 每个人预计等待时间
-     */
-    private static final int GAP = 3;
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 部门与队列映射
@@ -80,7 +83,7 @@ public class QueuerServiceImpl implements QueuerService {
         String name = formService.getName(formId);
         queuerBO.setName(name);
         queuerBO.setDep(q);
-        queuerBO.setState("0");
+        queuerBO.setState(QueuerState.QUE.name());
         if (!queue.offer(queuerBO)) {
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Into queue failed.");
         }
@@ -94,8 +97,6 @@ public class QueuerServiceImpl implements QueuerService {
      * @param dep 部门
      */
     @Override
-    // TODO: 2019/8/18 出队之后添加到数据库
-    // TODO: 2019/8/19 限制每个面试官的在某个时间内的出队人数
     public Result<QueuerBO> deleteQueuerByDep(String dep) {
         String q = getQueueNameByDep(dep);
         ArrayBlockingQueue<QueuerBO> queue = queueMap.get(q);
@@ -105,9 +106,8 @@ public class QueuerServiceImpl implements QueuerService {
         }
 
         QueuerDO queuerDO = new QueuerDO();
-        queuerBO.setState("1");
+        queuerBO.setState(QueuerState.OUT.name());
         BeanUtils.copyProperties(queuerBO, queuerDO);
-        System.out.println(queuerDO);
         int count = queuerMapper.insertSelective(queuerDO);
         if (count < 1) {
             logger.error("Insert queuer fail, fid: {}", queuerDO.getFid());
@@ -115,6 +115,43 @@ public class QueuerServiceImpl implements QueuerService {
         }
 
         return Result.success(queuerBO);
+    }
+
+    /**
+     * 检查间隔是否过小，如果不过小则出队队头元素
+     *
+     * @param interviewerId 面试官编号
+     * @param dep 部门
+     * @return Result<QueuerBO>
+     */
+    public Result<QueuerBO> checkGapAndDeleteQueuerByDep(Integer interviewerId, String dep) {
+        //检查是否还没有到间隔时间
+        String s = cacheService.get(QueuerConsts.KEY_PREFIX_QUEUE_DEL_GAP + interviewerId);
+        if (s != null) {
+            return Result.fail(ErrorCode.THROTTLING);
+        }
+
+        //出队头
+        Result<QueuerBO> result = deleteQueuerByDep(dep);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        //设置已进行删除操作的标记标记并设置过期时间
+        String key = QueuerConsts.KEY_PREFIX_QUEUE_DEL_GAP + interviewerId;
+        String status = cacheService.set(key, StringUtils.EMPTY);
+        if (!status.equals(RedisStatus.OK.name())) {
+            logger.error("Set interviewerId:{} to key: {} fail.", interviewerId, key);
+            return Result.fail(ErrorCode.INTERNAL_ERROR, "Set interviewerId fail.");
+        }
+        //设置过期时间
+        Long code = cacheService.expire(key, QueuerConsts.QUEUE_DEL_GAP);
+        if (code.equals(0L)) {
+            logger.error("Set expire fail, key: {}.", key);
+            return Result.fail(ErrorCode.INTERNAL_ERROR, "Set expire fail.");
+        }
+
+        return result;
     }
 
     /**
@@ -138,7 +175,7 @@ public class QueuerServiceImpl implements QueuerService {
             if (queuerBOS[i].equals(queuerBO)) {
                 queuerBO = queuerBOS[i];
                 queuerBO.setFrontNumber(i);
-                queuerBO.setExpectedWaitTime(i * GAP);
+                queuerBO.setExpectedWaitTime(i * QueuerConsts.GAP);
                 return Result.success(queuerBO);
             }
         }

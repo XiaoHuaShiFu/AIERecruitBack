@@ -18,6 +18,8 @@ public interface QueuerService {
 
     Result<QueuerBO> deleteQueuerByDep(String dep);
 
+    Result<QueuerBO> checkGapAndDeleteQueuerByDep(Integer interviewerId, String dep);
+
     Result<QueuerBO> getQueuerByDepAndFormId(Integer formId, String dep);
 
     Result<List<QueuerBO>> listQueuersByDep(QueuerQuery query);

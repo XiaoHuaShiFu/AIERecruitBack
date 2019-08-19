@@ -1,5 +1,6 @@
 package cn.scauaie.controller.v1;
 
+import cn.scauaie.aspect.annotation.ErrorHandler;
 import cn.scauaie.result.ErrorResponse;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
@@ -74,17 +75,15 @@ public class TokenController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @ErrorHandler
     public Object postToken(HttpServletResponse response,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The tokenType must be not blank.")
             @TokenType String tokenType) {
         Result<TokenAO> result = tokenService.createAndSaveToken(tokenType, code);
-
         if (!result.isSuccess()) {
-            return new ResponseEntity<>(
-                    new ErrorResponse(result.getErrorCode().getError(), result.getMessage()),
-                    result.getErrorCode().getHttpStatus());
+            return result;
         }
 
         response.setHeader(HttpHeaders.AUTHORIZATION, result.getData().getToken());
