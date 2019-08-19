@@ -1,7 +1,5 @@
 package cn.scauaie.model.ao;
 
-import cn.scauaie.service.constant.TokenType;
-
 /**
  * 描述:
  *
@@ -12,14 +10,14 @@ import cn.scauaie.service.constant.TokenType;
 public class TokenAO {
 
     private String token;
-    private TokenType type;
+    private String type;
     private Integer id;
     private String dep;
 
     public TokenAO() {
     }
 
-    public TokenAO(String token, TokenType type, Integer id, String dep) {
+    public TokenAO(String token, String type, Integer id, String dep) {
         this.token = token;
         this.type = type;
         this.id = id;
@@ -34,11 +32,11 @@ public class TokenAO {
         this.token = token;
     }
 
-    public TokenType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(TokenType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -62,7 +60,7 @@ public class TokenAO {
     public String toString() {
         return "TokenAO{" +
                 "token='" + token + '\'' +
-                ", type=" + type +
+                ", type='" + type + '\'' +
                 ", id=" + id +
                 ", dep='" + dep + '\'' +
                 '}';

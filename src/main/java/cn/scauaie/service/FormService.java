@@ -18,15 +18,15 @@ public interface FormService {
 
     FormAO saveForm(String code, FormAO formAO);
 
-    FormAO getFormAOById(Integer id);
+    FormAO getFormById(Integer id);
 
     String getName(Integer id);
 
     int getCountById(Integer id);
 
-    FormAO getFormAOByCode(String code);
+    FormAO getFormByCode(String code);
 
-    List<FormAO> listFormAOs(Integer pageNum, Integer pageSize, String q);
+    List<FormAO> listForms(Integer pageNum, Integer pageSize, String q);
 
     FormAO updateForm(FormAO formAO);
 

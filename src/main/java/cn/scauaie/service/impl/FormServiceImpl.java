@@ -89,7 +89,7 @@ public class FormServiceImpl implements FormService {
      * @return FormAO
      */
     @Override
-    public FormAO getFormAOById(Integer id) {
+    public FormAO getFormById(Integer id) {
         FormDO formDO = formMapper.selectByPrimaryKey(id);
         FormAO formAO = new FormAO();
         BeanUtils.copyProperties(formDO, formAO);
@@ -124,7 +124,7 @@ public class FormServiceImpl implements FormService {
         if (count < 1) {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update avatar failed.");
         }
-        return getFormAOById(formAO.getId());
+        return getFormById(formAO.getId());
     }
 
     /**
@@ -229,7 +229,7 @@ public class FormServiceImpl implements FormService {
      * @return FormAO
      */
     @Override
-    public FormAO getFormAOByCode(String code) {
+    public FormAO getFormByCode(String code) {
         String openid = weChatMpManager.getOpenid(code, WeChatMp.AIE_RECRUIT.name());
         return getFormAOByOpenid(openid);
     }
@@ -243,7 +243,7 @@ public class FormServiceImpl implements FormService {
      * @return FormAOList
      */
     @Override
-    public List<FormAO> listFormAOs(Integer pageNum, Integer pageSize, String q) {
+    public List<FormAO> listForms(Integer pageNum, Integer pageSize, String q) {
         FormQuery formQuery = queryConverter.convert(q);
         formQuery.setPageNum(pageNum);
         formQuery.setPageSize(pageSize);

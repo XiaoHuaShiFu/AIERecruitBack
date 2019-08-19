@@ -1,5 +1,7 @@
 package cn.scauaie.aspect.annotation;
 
+import cn.scauaie.constant.TokenType;
+
 import java.lang.annotation.*;
 
 /**
@@ -9,8 +11,11 @@ import java.lang.annotation.*;
  * @email 827032783@qq.com
  * @create 2019-08-13 22:49
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface TokenAuth {
+
+    TokenType[] tokenType() default {};
+
 }

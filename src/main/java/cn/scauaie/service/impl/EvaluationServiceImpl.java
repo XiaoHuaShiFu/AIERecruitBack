@@ -2,16 +2,12 @@ package cn.scauaie.service.impl;
 
 import cn.scauaie.converter.EvaluationQueryConverter;
 import cn.scauaie.dao.EvaluationMapper;
-import cn.scauaie.dao.FormMapper;
-import cn.scauaie.dao.InterviewerMapper;
 import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.EvaluationAO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.dao.EvaluationDO;
-import cn.scauaie.model.dao.FormDO;
-import cn.scauaie.model.dao.InterviewerDO;
 import cn.scauaie.model.query.EvaluationQuery;
 import cn.scauaie.service.EvaluationService;
 import cn.scauaie.service.FormService;
@@ -76,7 +72,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         EvaluationAO evaluationAO = new EvaluationAO();
         BeanUtils.copyProperties(evaluationDO, evaluationAO);
 
-        FormAO formAO = formService.getFormAOById(evaluationDO.getFid());
+        FormAO formAO = formService.getFormById(evaluationDO.getFid());
         InterviewerAO interviewerAO = interviewerService.getInterviewer(evaluationDO.getIid());
 
         evaluationAO.setForm(formAO);
@@ -118,7 +114,7 @@ public class EvaluationServiceImpl implements EvaluationService {
             EvaluationAO evaluationAO = new EvaluationAO();
             BeanUtils.copyProperties(evaluationDO, evaluationAO);
 
-            FormAO formAO = formService.getFormAOById(evaluationDO.getFid());
+            FormAO formAO = formService.getFormById(evaluationDO.getFid());
             InterviewerAO interviewerAO = interviewerService.getInterviewer(evaluationDO.getIid());
 
             evaluationAO.setForm(formAO);

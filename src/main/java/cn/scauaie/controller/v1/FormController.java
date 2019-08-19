@@ -1,7 +1,7 @@
 package cn.scauaie.controller.v1;
 
-import cn.scauaie.aspect.annotation.FormTokenAuth;
 import cn.scauaie.aspect.annotation.TokenAuth;
+import cn.scauaie.constant.TokenType;
 import cn.scauaie.error.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.FormAO;
@@ -13,7 +13,6 @@ import cn.scauaie.model.vo.AvatarVO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.service.FormService;
-import cn.scauaie.service.constant.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,8 +27,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+// TODO: 2019/8/19 无参数更新问题
 
 /**
  * 描述: Form Web层
@@ -68,7 +67,7 @@ public class FormController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public FormVO post(
+    public Object post(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @Validated(GroupFormAOPOST.class) FormAO formAO) {
@@ -95,14 +94,14 @@ public class FormController {
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth
-    public FormVO get(HttpServletRequest request,
+    public Object get(HttpServletRequest request,
                       @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
                       @PathVariable Integer id) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        TokenType type = tokenAO.getType();
+        TokenType type = TokenType.valueOf(tokenAO.getType());
 
         if (type == TokenType.INTERVIEWER) {
-            FormAO formAO = formService.getFormAOById(id);
+            FormAO formAO = formService.getFormById(id);
             FormVO formVO = new FormVO();
             BeanUtils.copyProperties(formAO, formVO);
             return formVO;
@@ -113,7 +112,7 @@ public class FormController {
             if (!tid.equals(id)) {
                 throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER);
             }
-            FormAO formAO = formService.getFormAOById(id);
+            FormAO formAO = formService.getFormById(id);
             FormVO formVO = new FormVO();
             BeanUtils.copyProperties(formAO, formVO);
             return formVO;
@@ -134,14 +133,13 @@ public class FormController {
      *
      * @success:
      * HttpStatus.OK
-     *
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-//    @InterviewerTokenAuth
-    public List<FormVO> get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
+    @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    public Object get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
                     @RequestParam(defaultValue = "10") Integer pageSize, String q) {
-        List<FormAO> formAOList = formService.listFormAOs(pageNum, pageSize, q);
+        List<FormAO> formAOList = formService.listForms(pageNum, pageSize, q);
         List<FormVO> formVOList = new ArrayList<>(formAOList.size());
         for (FormAO formAO : formAOList) {
             FormVO formVO = new FormVO();
@@ -171,8 +169,8 @@ public class FormController {
      */
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
-    @FormTokenAuth
-    public FormVO put(HttpServletRequest request, @Validated(GroupFormAO.class) FormAO formAO) {
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object put(HttpServletRequest request, @Validated(GroupFormAO.class) FormAO formAO) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         formAO.setId(tokenAO.getId());
         formAO = formService.updateForm(formAO);
@@ -192,8 +190,8 @@ public class FormController {
      */
     @RequestMapping(value="/number", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-//    @InterviewerTokenAuth
-    public Map<String, Integer> getDepNumber(HttpServletRequest request, @RequestParam(defaultValue = "false") Boolean includeSecondDep) {
+    @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    public Object getDepNumber(HttpServletRequest request, @RequestParam(defaultValue = "false") Boolean includeSecondDep) {
         return formService.listDepNumbers(includeSecondDep);
     }
 
@@ -218,8 +216,8 @@ public class FormController {
      */
     @RequestMapping(value="/avatar", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    @FormTokenAuth
-    public AvatarVO postAvatar(
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object postAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
@@ -249,8 +247,8 @@ public class FormController {
      */
     @RequestMapping(value="/avatar", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
-    @FormTokenAuth
-    public AvatarVO putAvatar(
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object putAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
@@ -282,8 +280,8 @@ public class FormController {
      */
     @RequestMapping(value="/avatar/u", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    @FormTokenAuth
-    public AvatarVO updateAvatar(
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object updateAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
@@ -311,8 +309,8 @@ public class FormController {
      */
     @RequestMapping(value="/works", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    @FormTokenAuth
-    public WorkVO postWork(
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object postWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
                     MultipartFile work) {
@@ -346,8 +344,8 @@ public class FormController {
      */
     @RequestMapping(value="/works/{wid}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
-    @FormTokenAuth
-    public WorkVO putWork(
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object putWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
             @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
@@ -386,8 +384,8 @@ public class FormController {
      */
     @RequestMapping(value="/works/{wid}/u", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    @FormTokenAuth
-    public WorkVO updateWork(
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object updateWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
             @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
@@ -395,10 +393,6 @@ public class FormController {
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
                     MultipartFile work) {
         return putWork(request, wid, work);
-    }
-
-    public static void main(String[] args) {
-        System.out.println("　请切记，不要抱怨朋友们，这样对自己很不好，试问我们自己又给了朋友们多少帮助和关心？人生一次，最难得的是知心朋友，我们应该珍惜此生能有做朋友的缘份。要记住朋友对我们好。要多加理解和体谅朋友们，这样我们的心情才会快乐得多，幸福得多。　请切记，不要抱怨朋友们，这样对自己很不好，试问我们自己又给了朋友们多少帮助和关心？人生一次，最难得的是知心朋友，我们应该珍惜此生能有做朋友的缘份。要记住朋友对我们好。要多加理解和体谅朋友们，这样我们的心情才会快乐得多，幸福得多。　请切记，不要抱怨朋友们，这样对自己很不好，试问我们自己又给了朋友们多少帮助和关心？人生一次，最难得的是知心朋友，我们应该珍惜此生能有做朋友的缘份。要记住朋友对我们好。要多加理解和体谅朋友们，这样我们的心情才会快乐得多，幸福得多。　请切记，不要抱怨朋友们，这样对自己很不好，试问我们自己又给了朋友们多少帮助和关心？人生一次，最难得的是知心朋友，我们应该珍惜此生能有做朋友的缘份。要记住朋友对我们好。要多加理解和体谅朋友们，这样我们的心情才会快乐得多，幸福得多。　请切记，不要抱怨朋友们，这样对自己很不好，试问我们自己又给了朋友们多少帮助和关心？人生一次，最难得的是知心朋友，我们应该珍惜此生能有做朋友的缘份。要记住朋友对我们好。要多加理解和体谅朋友们，这样我们的心情才会快乐得多，幸福得多。　请切记，不要抱怨朋友们，这样对自己很不好，试问我们自己又给了朋友们多少帮助和关心？人生一次，最难得的是知心朋友，我们应该珍惜此生能有做朋友的缘份。要记住朋友对我们好。要多加理解和体谅朋友们，这样我们的心情才会快乐得多，幸福得多。".length());
     }
 
 }

@@ -1,14 +1,12 @@
 package cn.scauaie.controller.v1;
 
-import cn.scauaie.aspect.annotation.FormTokenAuth;
-import cn.scauaie.aspect.annotation.InterviewerTokenAuth;
 import cn.scauaie.aspect.annotation.TokenAuth;
+import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.model.bo.QueuerBO;
 import cn.scauaie.model.query.QueuerQuery;
 import cn.scauaie.model.vo.QueuerVO;
 import cn.scauaie.service.QueuerService;
-import cn.scauaie.service.constant.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,8 +50,8 @@ public class QueuerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    @FormTokenAuth
-    public QueuerVO post(HttpServletRequest request) {
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object post(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         QueuerBO queuerBO = queuerService.save(tokenAO.getDep(), tokenAO.getId());
 
@@ -72,10 +70,11 @@ public class QueuerController {
      */
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    @InterviewerTokenAuth
-    public void delete(HttpServletRequest request) {
+    @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    public Object delete(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         queuerService.deleteByDep(tokenAO.getDep());
+        return Void.TYPE;
     }
 
     /**
@@ -97,7 +96,7 @@ public class QueuerController {
                       @RequestParam(defaultValue = "1") Integer pageNum,
                       @RequestParam(defaultValue = "10") Integer pageSize) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        if (tokenAO.getType() == TokenType.FORM) {
+        if (tokenAO.getType().equals(TokenType.FORM.name())) {
             QueuerBO queuerBO = queuerService.getQueuerByDepAndFormId(tokenAO.getId(), tokenAO.getDep());
             QueuerVO queuerVO = new QueuerVO();
             BeanUtils.copyProperties(queuerBO, queuerVO);
@@ -118,7 +117,7 @@ public class QueuerController {
     /**
      * 获取队列人数
      * @param request HttpServletRequest
-     * @return Queuer or QueuerList
+     * @return 队列人数
      *
      * @success:
      * HttpStatus.OK
@@ -126,7 +125,7 @@ public class QueuerController {
     @RequestMapping(value = "/number",method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth
-    public int getNumber(HttpServletRequest request) {
+    public Object getNumber(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         return queuerService.getCountByDep(tokenAO.getDep());
     }

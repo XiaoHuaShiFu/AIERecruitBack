@@ -1,7 +1,10 @@
 package cn.scauaie.controller.v1;
 
+import cn.scauaie.error.ErrorResponse;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
+import cn.scauaie.model.ao.TokenAO;
+import cn.scauaie.model.result.Result;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.InterviewerVO;
 import cn.scauaie.service.FormService;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import javax.ws.rs.core.HttpHeaders;
 
 
 /**
@@ -43,7 +47,47 @@ public class TokenController {
     @Autowired
     private InterviewerService interviewerService;
 
-    // TODO: 2019/8/15 合并成一个接口
+    /**
+     * 创建token凭证
+     *
+     * @param code 微信小程序的wx.login()接口返回值
+     * @param response HttpServletResponse
+     * @param tokenType token类型
+     * @return TokenAO
+     *
+     * Http header里的Authorization带有form-token凭证
+     *
+     * @success:
+     * HttpStatus.CREATED
+     *
+     * @errors:
+     * INVALID_PARAMETER: The code is not valid.
+     * INVALID_PARAMETER_NOT_FOUND: The specified openid does not exist.
+     *
+     * INTERNAL_ERROR: Failed to create token.
+     * INTERNAL_ERROR: Failed to set expire.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_IS_BLANK
+     * INVALID_PARAMETER_SIZE
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Object postToken(HttpServletResponse response,
+            @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
+            @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
+            @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The tokenType must be not blank.")
+            @TokenType String tokenType) {
+        Result<TokenAO> result = tokenService.createAndSaveToken(tokenType, code);
+
+        if (!result.isSuccess()) {
+            return new ErrorResponse(result.getErrorCode(), result.getMessage());
+        }
+
+        response.setHeader(HttpHeaders.AUTHORIZATION, result.getData().getToken());
+        return result.getData();
+    }
+
     /**
      * 创建form-token凭证
      *
@@ -67,12 +111,13 @@ public class TokenController {
      */
     @RequestMapping(value="/form", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public FormVO postFormToken(
+    @Deprecated
+    public Object postFormToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @TokenType String tokenType,
             HttpServletResponse response) {
-        FormAO formAO = formService.getFormAOByCode(code);
+        FormAO formAO = formService.getFormByCode(code);
 
         //创建token令牌
         String token = tokenService.createAndSaveFormToken(code, formAO.getId(), formAO.getFirstDep());
@@ -108,7 +153,8 @@ public class TokenController {
      */
     @RequestMapping(value="/interviewer", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public InterviewerVO postInterviewerToken(
+    @Deprecated
+    public Object postInterviewerToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @TokenType String tokenType,

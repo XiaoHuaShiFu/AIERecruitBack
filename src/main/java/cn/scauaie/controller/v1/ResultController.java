@@ -1,14 +1,9 @@
 package cn.scauaie.controller.v1;
 
-import cn.scauaie.aspect.annotation.FormTokenAuth;
-import cn.scauaie.aspect.annotation.InterviewerTokenAuth;
-import cn.scauaie.model.ao.EvaluationAO;
-import cn.scauaie.model.ao.FormAO;
+import cn.scauaie.aspect.annotation.TokenAuth;
+import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.ResultAO;
 import cn.scauaie.model.ao.TokenAO;
-import cn.scauaie.model.vo.EvaluationVO;
-import cn.scauaie.model.vo.FormVO;
-import cn.scauaie.model.vo.InterviewerVO;
 import cn.scauaie.model.vo.ResultVO;
 import cn.scauaie.service.ResultService;
 import org.springframework.beans.BeanUtils;
@@ -56,8 +51,8 @@ public class ResultController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-//    @InterviewerTokenAuth
-    public ResultVO post(HttpServletRequest request, @Validated ResultAO resultAO) {
+    @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    public Object post(HttpServletRequest request, @Validated ResultAO resultAO) {
         ResultAO newResultAO = resultService.saveResult(resultAO);
         ResultVO resultVO = new ResultVO();
         BeanUtils.copyProperties(newResultAO, resultVO);
@@ -80,8 +75,8 @@ public class ResultController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    @FormTokenAuth
-    public List<ResultVO> get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
+    @TokenAuth(tokenType = TokenType.FORM)
+    public Object get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "10") Integer pageSize) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         List<ResultAO> resultAOList = resultService.listResults(pageNum, pageSize, tokenAO.getId());

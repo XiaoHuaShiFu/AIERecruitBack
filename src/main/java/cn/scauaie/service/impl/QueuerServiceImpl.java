@@ -90,6 +90,8 @@ public class QueuerServiceImpl implements QueuerService {
      * @param dep 部门
      */
     @Override
+    // TODO: 2019/8/18 出队之后添加到数据库
+    // TODO: 2019/8/19 限制每个面试官的在某个时间内的出队人数
     public void deleteByDep(String dep) {
         String q = getQueueNameByDep(dep);
         ArrayBlockingQueue<QueuerBO> queue = queueMap.get(q);

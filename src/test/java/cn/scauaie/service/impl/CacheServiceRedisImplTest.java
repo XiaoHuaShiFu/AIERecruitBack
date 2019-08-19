@@ -32,6 +32,7 @@ public class CacheServiceRedisImplTest {
     @Test
     public void set() {
         System.out.println(jedis.set("test", "3333"));
+        jedis.close();
     }
 
     @Test
@@ -74,6 +75,7 @@ public class CacheServiceRedisImplTest {
     public void zrank() {
         System.out.println(UUID.randomUUID().toString());
         System.out.println(jedis.zrank("queue:zkb", "167"));
+        jedis.close();
     }
 
     @Test
@@ -82,5 +84,6 @@ public class CacheServiceRedisImplTest {
 
     @Test
     public void expire() {
+        System.out.println(jedis.expire("queue:zkb", 33));
     }
 }

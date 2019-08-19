@@ -1,20 +1,13 @@
 package cn.scauaie.controller.v1;
 
-import cn.scauaie.aspect.annotation.InterviewerTokenAuth;
 import cn.scauaie.aspect.annotation.TokenAuth;
-import cn.scauaie.error.ErrorCode;
-import cn.scauaie.exception.ProcessingException;
+import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.EvaluationAO;
-import cn.scauaie.model.ao.FormAO;
-import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.ao.TokenAO;
-import cn.scauaie.model.ao.group.GroupFormAOPOST;
 import cn.scauaie.model.vo.EvaluationVO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.InterviewerVO;
 import cn.scauaie.service.EvaluationService;
-import cn.scauaie.service.InterviewerService;
-import cn.scauaie.service.constant.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,8 +55,8 @@ public class EvaluationController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    @InterviewerTokenAuth
-    public EvaluationVO post(HttpServletRequest request, @Validated EvaluationAO evaluationAO) {
+    @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    public Object post(HttpServletRequest request, @Validated EvaluationAO evaluationAO) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         evaluationAO.setIid(tokenAO.getId());
         EvaluationAO newEvaluationAO = evaluationService.saveEvaluation(evaluationAO);
@@ -100,8 +91,8 @@ public class EvaluationController {
      */
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-//    @InterviewerTokenAuth
-    public EvaluationVO get(HttpServletRequest request,
+    @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    public Object get(HttpServletRequest request,
                       @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
                       @PathVariable Integer id) {
         EvaluationAO newEvaluationAO = evaluationService.getEvaluation(id);
@@ -133,8 +124,8 @@ public class EvaluationController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-//    @InterviewerTokenAuth
-    public List<EvaluationVO> get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
+    @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    public Object get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "10") Integer pageSize, String q) {
         List<EvaluationAO> evaluationAOList = evaluationService.listEvaluations(pageNum, pageSize, q);
         List<EvaluationVO> evaluationVOList = new ArrayList<>(evaluationAOList.size());

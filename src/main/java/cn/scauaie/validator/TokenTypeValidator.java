@@ -1,7 +1,5 @@
 package cn.scauaie.validator;
 
-import cn.scauaie.constant.DepEnum;
-import cn.scauaie.validator.annotation.Dep;
 import cn.scauaie.validator.annotation.TokenType;
 
 import javax.validation.ConstraintValidator;
@@ -22,8 +20,8 @@ public class TokenTypeValidator implements ConstraintValidator<TokenType, String
         if (s == null) {
             return true;
         }
-        for (cn.scauaie.service.constant.TokenType
-                tokenType : cn.scauaie.service.constant.TokenType.values()) {
+        for (cn.scauaie.constant.TokenType
+                tokenType : cn.scauaie.constant.TokenType.values()) {
             if (s.equals(tokenType.name())) {
                 return true;
             }

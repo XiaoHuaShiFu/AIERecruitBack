@@ -1,7 +1,6 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.model.ao.InterviewerAO;
-import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.InterviewerVO;
 import cn.scauaie.service.InterviewerService;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 /**
  * 描述: Interviewer Web层
@@ -54,7 +52,7 @@ public class InterviewerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public InterviewerVO post(
+    public Object post(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The wxCode must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of wxCode must be 32.", min = 32, max = 32) String wxCode,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The authCode must be not blank.")
