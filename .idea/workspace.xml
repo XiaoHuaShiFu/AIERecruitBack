@@ -7,33 +7,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2cf46ed-737a-4688-8a6c-f14a070cec2a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/constant/TokenType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/result/Result.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/cn/scauaie/model/result/ResultTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/ErrorHandlerAspect.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/ErrorHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/TokenAuthAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/TokenAuthAspect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/TokenAuth.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/TokenAuth.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/EvaluationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/EvaluationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/FormTokenAuth.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/InterviewerTokenAuth.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/config/package-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/handler/BindingExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/handler/BindingExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/handler/ProcessingExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/handler/ProcessingExceptionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/FormController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/FormController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/InterviewerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/InterviewerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/QueuerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/QueuerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/ResultController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/ResultController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/TokenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/TokenController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/ao/TokenAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/ao/TokenAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/FormService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/FormService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/error/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/result/ErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/error/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/result/ErrorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/exception/ProcessingException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/exception/ProcessingException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/bo/QueuerBO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/bo/QueuerBO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/dao/QueuerDO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/dao/QueuerDO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/result/Result.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/result/Result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/QueuerVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/QueuerVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/QueuerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/QueuerService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/TokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/TokenService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/constant/TokenType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/constant/TokenExpire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/constant/TokenExpire.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/EvaluationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/EvaluationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/FileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/FileServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/FormServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/FormServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/InterviewerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/InterviewerServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/QueuerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/QueuerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/ResultServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/ResultServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/TokenServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/TokenServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/scauaie/validator/TokenTypeValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/scauaie/validator/TokenTypeValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/cn/scauaie/service/impl/CacheServiceRedisImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cn/scauaie/service/impl/CacheServiceRedisImplTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ftp.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ftp.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/logback.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scauaie/WEB-INF/classes/ftp.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/scauaie/WEB-INF/classes/ftp.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scauaie/WEB-INF/classes/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/scauaie/WEB-INF/classes/logback.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mappers/QueuerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mappers/QueuerMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/cn/scauaie/model/result/ResultTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cn/scauaie/model/result/ResultTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/mappers/QueuerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mappers/QueuerMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scauaie/WEB-INF/classes/mappers/QueuerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/scauaie/WEB-INF/classes/mappers/QueuerMapper.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -58,83 +65,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/QueuerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-337">
-              <caret line="95" column="14" lean-forward="true" selection-start-line="95" selection-start-column="14" selection-end-line="95" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/ResultController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="84" column="41" selection-start-line="84" selection-start-column="41" selection-end-line="84" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/TokenController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="708">
-              <caret line="82" column="29" selection-start-line="82" selection-start-column="20" selection-end-line="82" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/FormController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-540">
-              <caret line="102" column="44" lean-forward="true" selection-start-line="102" selection-start-column="44" selection-end-line="102" selection-end-column="44" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/InterviewerTokenAuth.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/EvaluationController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="140" column="35" lean-forward="true" selection-start-line="140" selection-start-column="35" selection-end-line="140" selection-end-column="35" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/InterviewerController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="32" column="7" lean-forward="true" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/TokenServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-258">
-              <caret line="255" column="9" lean-forward="true" selection-start-line="255" selection-start-column="9" selection-end-line="255" selection-end-column="9" />
-              <folding>
-                <element signature="e#8591#8592#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="163">
+              <caret line="57" column="17" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -142,17 +77,86 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/TokenAuthAspect.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="113" column="54" selection-start-line="113" selection-start-column="54" selection-end-line="113" selection-end-column="54" />
+            <state relative-caret-position="393">
+              <caret line="48" column="57" lean-forward="true" selection-start-line="48" selection-start-column="28" selection-end-line="48" selection-end-column="57" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/TokenAuth.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/ErrorHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="5" column="19" lean-forward="true" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/TokenService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="260">
+              <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/QueuerVO.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
-              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+              <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/TokenServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="314">
+              <caret line="147" column="9" selection-start-line="145" selection-start-column="59" selection-end-line="147" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/ErrorHandlerAspect.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="294">
+              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="22" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/FormController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="251">
+              <caret line="113" column="13" lean-forward="true" selection-start-line="113" selection-start-column="13" selection-end-line="113" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/QueuerServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="242">
+              <caret line="202" column="18" selection-start-line="202" selection-start-column="18" selection-end-line="202" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/QueuerService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="215">
+              <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -169,15 +173,13 @@
         <option value="package-info" />
         <option value="Interface" />
         <option value="Enum" />
-        <option value="Class" />
         <option value="JUnit4 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>fid</find>
-      <find>Patch</find>
       <find>pageh</find>
       <find>page</find>
       <find>INTERNAL</find>
@@ -206,6 +208,8 @@
       <find>Forbidden</find>
       <find>authToken</find>
       <find>TokenAuth</find>
+      <find>getToken</find>
+      <find>state</find>
     </findStrings>
     <replaceStrings>
       <replace>url</replace>
@@ -217,57 +221,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/resources/mappers/InterviewerMapper.xml" />
-        <option value="$PROJECT_DIR$/src/main/resources/mappers/WorkMapper.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/validator/annotation/TokenType.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/validator/DepValidator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/validator/annotation/Dep.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/constant/DepEnum.java" />
         <option value="$PROJECT_DIR$/src/test/java/cn/scauaie/service/Test.java" />
         <option value="$PROJECT_DIR$/src/test/java/cn/scauaie/service/TestCacheServiceRedis.java" />
         <option value="$PROJECT_DIR$/src/main/resources/applicationContext.xml" />
         <option value="$PROJECT_DIR$/src/main/resources/generatorConfig.xml" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/CacheServiceRedisImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/CacheService.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/QueueService.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/QueueVO.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/ao/QueueAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/bo/QueuerBO.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/dao/QueueDO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/dao/QueuerDO.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/ao/QueuerAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/QueueServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/dao/QueuerMapper.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/mappers/QueuerMapper.xml" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/dao/FormMapper.java" />
         <option value="$PROJECT_DIR$/src/main/resources/mappers/FormMapper.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/QueuerVO.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/query/QueuerQuery.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/QueueController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/QueuerService.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/error/ErrorCode.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/FormServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/resources/ftp.properties" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/FormService.java" />
-        <option value="$PROJECT_DIR$/src/test/java/cn/scauaie/model/result/ResultTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/result/Result.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/ao/TokenAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/constant/TokenType.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/validator/TokenTypeValidator.java" />
         <option value="$PROJECT_DIR$/src/test/java/cn/scauaie/service/impl/CacheServiceRedisImplTest.java" />
         <option value="$PROJECT_DIR$/src/main/resources/logback.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/TokenController.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/InterviewerController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/QueuerServiceImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/TokenService.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/TokenServiceImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/TokenAuthAspect.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/TokenAuth.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/FormController.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/EvaluationController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/QueuerController.java" />
         <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/ResultController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/TokenService.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/QueuerService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/dao/QueuerDO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/bo/QueuerBO.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/mappers/QueuerMapper.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/result/ErrorResponse.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/TokenServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/TokenController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/ProcessingErrorAspect.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/Handler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/ErrorHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/result/Result.java" />
+        <option value="$PROJECT_DIR$/src/test/java/cn/scauaie/model/result/ResultTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/QueuerVO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/TokenAuthAspect.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/QueuerServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/ErrorHandlerAspect.java" />
+        <option value="$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/QueuerController.java" />
       </list>
     </option>
   </component>
@@ -372,15 +376,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="scauaie" type="462c0819:PsiDirectoryNode" />
-              <item name="constant" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AIERecruit" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AIERecruitBack" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="scauaie" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -410,6 +405,26 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="scauaie" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AIERecruit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AIERecruitBack" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="scauaie" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="bo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AIERecruit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AIERecruitBack" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="scauaie" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
               <item name="dao" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -420,6 +435,7 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="scauaie" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="vo" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AIERecruit" type="b2602c69:ProjectViewProjectNode" />
@@ -428,17 +444,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="scauaie" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-              <item name="ao" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AIERecruit" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AIERecruitBack" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="scauaie" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
+              <item name="result" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AIERecruit" type="b2602c69:ProjectViewProjectNode" />
@@ -448,17 +454,6 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="scauaie" type="462c0819:PsiDirectoryNode" />
               <item name="service" type="462c0819:PsiDirectoryNode" />
-              <item name="constant" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AIERecruit" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AIERecruitBack" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="scauaie" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-              <item name="impl" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AIERecruit" type="b2602c69:ProjectViewProjectNode" />
@@ -508,7 +503,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1566214173007" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1566234197801" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -524,15 +519,18 @@
       <recent name="cn.scauaie.model.result" />
       <recent name="cn.scauaie.service.impl" />
     </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="cn.scauaie.model.result" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="cn.scauaie.aspect.annotation" />
       <recent name="cn.scauaie.model.query" />
       <recent name="cn.scauaie.model.bo" />
       <recent name="cn.scauaie.model.vo" />
       <recent name="cn.scauaie.validator" />
-      <recent name="cn.scauaie.validator.annotation" />
-    </key>
-    <key name="CreateTestDialog.Recents.Supers">
-      <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\lenovo\Desktop\Github\AIERecruitBack\src\main\resources" />
@@ -657,7 +655,7 @@
       <module name="AIERecruitBack" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cn.scauaie.model.result.*" />
+          <option name="PATTERN" value="cn.scauaie.result.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -881,7 +879,7 @@
       <workItem from="1566032322013" duration="25358000" />
       <workItem from="1566100302231" duration="22317000" />
       <workItem from="1566154989389" duration="602000" />
-      <workItem from="1566204767397" duration="8118000" />
+      <workItem from="1566204767397" duration="21649000" />
     </task>
     <servers />
   </component>
@@ -918,7 +916,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="361281000" />
+    <option name="totallyTimeSpent" value="374812000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -930,7 +928,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="top" id="Bean Validation" order="0" weight="0.32894737" />
@@ -944,7 +942,7 @@
       <window_info id="Web" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32748538" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.14181286" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.05263158" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39943343" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -958,7 +956,7 @@
       <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="14" weight="0.3286119" />
       <window_info anchor="bottom" id="Spring" order="15" weight="0.3286119" />
-      <window_info anchor="bottom" id="Duplicate detector" order="16" weight="0.3286119" />
+      <window_info anchor="bottom" id="Duplicate detector" order="16" weight="0.32748538" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1015,131 +1013,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/EvaluationServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="97" column="34" lean-forward="true" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/src.zip!/java/util/AbstractQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="64" column="28" lean-forward="true" selection-start-line="64" selection-start-column="28" selection-end-line="64" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/src.zip!/java/util/AbstractCollection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="60" column="22" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/bo/QueuerBO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-323">
-          <caret line="7" column="4" lean-forward="true" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="24" />
-          <folding>
-            <element signature="e#1792#1793#0" expanded="true" />
-            <element signature="e#1832#1833#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/src.zip!/java/util/stream/Collectors.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="205" column="14" selection-start-line="205" selection-start-column="14" selection-end-line="205" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/src.zip!/java/util/concurrent/ArrayBlockingQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-995">
-          <caret line="560" column="18" lean-forward="true" selection-start-line="560" selection-start-column="17" selection-end-line="560" selection-end-column="18" />
-          <folding>
-            <element signature="e#6812#6813#0" expanded="true" />
-            <element signature="e#6849#6850#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/QueuerVO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="21" column="23" selection-start-line="21" selection-start-column="23" selection-end-line="21" selection-end-column="23" />
-          <folding>
-            <element signature="e#677#678#0" expanded="true" />
-            <element signature="e#707#708#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/EvaluationVO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/query/QueuerQuery.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="34" column="24" selection-start-line="34" selection-start-column="24" selection-end-line="34" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/validator/annotation/TokenType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="17" column="40" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/InterviewerVO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/FormVO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="16" column="25" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/FormServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
-          <folding>
-            <element signature="e#2839#2840#0" expanded="true" />
-            <element signature="e#2884#2885#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/FormService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="482">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/4.0.0.RELEASE/spring-web-4.0.0.RELEASE-sources.jar!/org/springframework/http/ResponseEntity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="219">
           <caret line="64" column="11" selection-start-line="64" selection-start-column="11" selection-end-line="64" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/error/ErrorResponse.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1150,13 +1027,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/handler/ProcessingExceptionHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="33" column="20" lean-forward="true" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/exception/ProcessingException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="316">
@@ -1164,16 +1034,6 @@
           <folding>
             <element signature="e#350#351#0" expanded="true" />
             <element signature="e#392#393#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/cn/scauaie/model/result/ResultTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1206,13 +1066,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/constant/TokenExpire.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/validator/TokenTypeValidator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="74">
@@ -1227,39 +1080,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="138" column="26" selection-start-line="138" selection-start-column="22" selection-end-line="138" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/ftp.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/result/Result.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="76" />
-          <folding>
-            <element signature="e#484#485#0" expanded="true" />
-            <element signature="e#522#523#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/ao/TokenAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="23" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
-          <folding>
-            <element signature="e#551#552#0" expanded="true" />
-            <element signature="e#585#586#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1270,34 +1094,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/error/ErrorCode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1216">
-          <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_201/src.zip!/java/lang/Void.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="346">
           <caret line="43" column="36" selection-start-line="43" selection-start-column="36" selection-end-line="43" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/QueuerService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="17" column="9" selection-start-line="17" selection-start-column="9" selection-end-line="17" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/QueuerServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="539">
-          <caret line="93" column="42" selection-start-line="93" selection-start-column="42" selection-end-line="93" selection-end-column="42" />
         </state>
       </provider>
     </entry>
@@ -1329,30 +1129,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/TokenService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="37" column="20" selection-start-line="37" selection-start-column="20" selection-end-line="37" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/TokenServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-258">
-          <caret line="255" column="9" lean-forward="true" selection-start-line="255" selection-start-column="9" selection-end-line="255" selection-end-column="9" />
-          <folding>
-            <element signature="e#8591#8592#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/TokenAuthAspect.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="113" column="54" selection-start-line="113" selection-start-column="54" selection-end-line="113" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/InterviewerTokenAuth.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
@@ -1360,20 +1136,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/FormController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/FormTokenAuth.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-540">
-          <caret line="102" column="44" lean-forward="true" selection-start-line="102" selection-start-column="44" selection-end-line="102" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="266">
+          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/EvaluationController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="140" column="35" lean-forward="true" selection-start-line="140" selection-start-column="35" selection-end-line="140" selection-end-column="35" />
+        <state relative-caret-position="366">
+          <caret line="103" column="35" lean-forward="true" selection-start-line="103" selection-start-column="35" selection-end-line="103" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1382,29 +1155,89 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/InterviewerController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="32" column="7" lean-forward="true" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
+        <state relative-caret-position="139">
+          <caret line="39" column="16" lean-forward="true" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/QueuerController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/config/package-info.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/constant/TokenExpire.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-337">
-          <caret line="95" column="14" lean-forward="true" selection-start-line="95" selection-start-column="14" selection-end-line="95" selection-end-column="14" />
+        <state relative-caret-position="323">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/WorkService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/InterviewerService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-beans/4.0.0.RELEASE/spring-beans-4.0.0.RELEASE-sources.jar!/org/springframework/beans/BeanUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="526" column="23" selection-start-line="526" selection-start-column="23" selection-end-line="526" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="575">
+          <caret line="299" lean-forward="true" selection-start-line="299" selection-end-line="299" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/ResultController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="84" column="41" selection-start-line="84" selection-start-column="41" selection-end-line="84" selection-end-column="41" />
+        <state relative-caret-position="468">
+          <caret line="88" column="28" lean-forward="true" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/TokenController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/FormService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="708">
-          <caret line="82" column="29" selection-start-line="82" selection-start-column="20" selection-end-line="82" selection-end-column="29" />
+        <state relative-caret-position="69">
+          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/dao/QueuerDO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="25" lean-forward="true" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/result/ErrorCode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="108" column="4" lean-forward="true" selection-start-line="108" selection-start-column="4" selection-end-line="108" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/result/Result.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-570">
+          <caret line="45" column="5" lean-forward="true" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+          <folding>
+            <element signature="e#929#930#0" expanded="true" />
+            <element signature="e#976#977#0" expanded="true" />
+            <element signature="e#1399#1400#0" expanded="true" />
+            <element signature="e#1452#1453#0" expanded="true" />
+            <element signature="e#1821#1822#0" expanded="true" />
+            <element signature="e#1853#1854#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1415,6 +1248,157 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/TokenController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="85" column="63" selection-start-line="85" selection-start-column="63" selection-end-line="85" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/cn/scauaie/model/result/ResultTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="14" column="76" selection-start-line="14" selection-start-column="76" selection-end-line="14" selection-end-column="76" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#232#233#0" expanded="true" />
+            <element signature="e#332#333#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/dao/QueuerMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-jdbc/4.0.0.RELEASE/spring-jdbc-4.0.0.RELEASE-sources.jar!/org/springframework/jdbc/support/SQLStateSQLExceptionTranslator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="99" selection-start-line="99" selection-end-line="99" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mappers/QueuerMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="28" column="2" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/bo/QueuerBO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/ao/TokenAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding>
+            <element signature="e#551#552#0" expanded="true" />
+            <element signature="e#585#586#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/handler/ProcessingExceptionHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="29" column="36" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/result/ErrorResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="24" column="11" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/TokenServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="147" column="9" selection-start-line="145" selection-start-column="59" selection-end-line="147" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/annotation/ErrorHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="19" lean-forward="true" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/TokenService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/model/vo/QueuerVO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/QueuerService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/service/impl/QueuerServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="202" column="18" selection-start-line="202" selection-start-column="18" selection-end-line="202" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/TokenAuthAspect.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="48" column="57" lean-forward="true" selection-start-line="48" selection-start-column="28" selection-end-line="48" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/aspect/ErrorHandlerAspect.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/FormController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="113" column="13" lean-forward="true" selection-start-line="113" selection-start-column="13" selection-end-line="113" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/cn/scauaie/controller/v1/QueuerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="57" column="17" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="17" />
         </state>
       </provider>
     </entry>

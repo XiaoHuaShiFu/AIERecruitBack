@@ -1,10 +1,8 @@
 package cn.scauaie.service;
 
-import cn.scauaie.model.ao.TokenAO;
-import cn.scauaie.model.result.Result;
 import cn.scauaie.constant.TokenType;
-
-import javax.servlet.http.HttpServletRequest;
+import cn.scauaie.model.ao.TokenAO;
+import cn.scauaie.result.Result;
 
 /**
  * 描述:
@@ -21,19 +19,14 @@ public interface TokenService {
 
     Result<TokenAO> createAndSaveToken(String tokenType, String code);
 
+    Result<TokenAO> getToken(String token);
+
+    Result<TokenAO> getTokenAndAuthTokenTypeAndUpdateExpire(String token, TokenType[] tokenTypes, int seconds);
+
     @Deprecated
     String createAndSaveFormToken(String code, Integer formId, String dep);
 
     @Deprecated
     String createAndSaveInterviewerToken(String code, Integer interviewerId, String dep);
 
-    Result<TokenAO> getToken(String token);
-
-    Result<TokenAO> getToken(HttpServletRequest request);
-
-//    Result<TokenAO> authTokenAndSetExpire(HttpServletRequest request);
-
-    Result<TokenAO> authTokenAndSetExpire(HttpServletRequest request, TokenType tokenType);
-
-    Result<TokenAO> getTokenAndAuthTokenTypeAndUpdateExpire(String token, TokenType[] tokenTypes, int seconds);
 }

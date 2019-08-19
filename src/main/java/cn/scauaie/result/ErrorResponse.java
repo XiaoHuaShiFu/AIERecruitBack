@@ -1,4 +1,4 @@
-package cn.scauaie.error;
+package cn.scauaie.result;
 
 /**
  * 描述: 错误响应对象
@@ -12,12 +12,15 @@ public class ErrorResponse {
     /**
      * 错误码
      */
-    private final String error;
+    private String error;
 
     /**
      * 错误信息
      */
-    private final String message;
+    private String message;
+
+    public ErrorResponse() {
+    }
 
     public ErrorResponse(String error, String message) {
         this.error = error;
@@ -32,4 +35,19 @@ public class ErrorResponse {
         return message;
     }
 
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorResponse{" +
+                "error='" + error + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

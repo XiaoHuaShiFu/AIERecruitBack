@@ -1,4 +1,4 @@
-package cn.scauaie.service.constant;
+package cn.scauaie.constant;
 
 /**
  * 描述: token的有效时间

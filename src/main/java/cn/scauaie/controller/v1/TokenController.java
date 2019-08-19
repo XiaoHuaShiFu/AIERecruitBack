@@ -1,10 +1,10 @@
 package cn.scauaie.controller.v1;
 
-import cn.scauaie.error.ErrorResponse;
+import cn.scauaie.result.ErrorResponse;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.ao.TokenAO;
-import cn.scauaie.model.result.Result;
+import cn.scauaie.result.Result;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.InterviewerVO;
 import cn.scauaie.service.FormService;
@@ -14,6 +14,7 @@ import cn.scauaie.validator.annotation.TokenType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,7 +82,9 @@ public class TokenController {
         Result<TokenAO> result = tokenService.createAndSaveToken(tokenType, code);
 
         if (!result.isSuccess()) {
-            return new ErrorResponse(result.getErrorCode(), result.getMessage());
+            return new ResponseEntity<>(
+                    new ErrorResponse(result.getErrorCode().getError(), result.getMessage()),
+                    result.getErrorCode().getHttpStatus());
         }
 
         response.setHeader(HttpHeaders.AUTHORIZATION, result.getData().getToken());

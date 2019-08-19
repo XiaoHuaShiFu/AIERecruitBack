@@ -1,13 +1,11 @@
 package cn.scauaie.service.impl;
 
 import cn.scauaie.dao.ResultMapper;
-import cn.scauaie.error.ErrorCode;
+import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.ResultAO;
 import cn.scauaie.model.dao.ResultDO;
 import cn.scauaie.model.query.ResultQuery;
-import cn.scauaie.model.vo.ResultVO;
-import cn.scauaie.service.FormService;
 import cn.scauaie.service.ResultService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;

@@ -1,4 +1,4 @@
-package cn.scauaie.model.result;
+package cn.scauaie.result;
 
 import java.io.Serializable;
 
@@ -24,7 +24,7 @@ public class Result<T> implements Serializable {
     /**
      * 错误码，在出错时才会带上
      */
-    private String errorCode;
+    private ErrorCode errorCode;
 
     /**
      * 错误简短信息
@@ -40,7 +40,12 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    private Result(Boolean success, String errorCode, String message) {
+    private Result(Boolean success, ErrorCode errorCode) {
+        this(success);
+        this.errorCode = errorCode;
+    }
+
+    private Result(Boolean success, ErrorCode errorCode, String message) {
         this(success);
         this.errorCode = errorCode;
         this.message = message;
@@ -63,8 +68,18 @@ public class Result<T> implements Serializable {
      * @param message 错误简短信息
      * @return Result<T>
      */
-    public static <T> Result<T> fail(String errorCode, String message) {
+    public static <T> Result<T> fail(ErrorCode errorCode, String message) {
         return new Result<>(false, errorCode, message);
+    }
+
+    /**
+     * 失败调用时的构造方法
+     *
+     * @param errorCode 错误码
+     * @return Result<T>
+     */
+    public static <T> Result<T> fail(ErrorCode errorCode) {
+        return new Result<>(false, errorCode);
     }
 
     public Boolean isSuccess() {
@@ -83,11 +98,11 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    public String getErrorCode() {
+    public ErrorCode getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
 
@@ -104,7 +119,7 @@ public class Result<T> implements Serializable {
         return "Result{" +
                 "success=" + success +
                 ", data=" + data +
-                ", errorCode='" + errorCode + '\'' +
+                ", errorCode=" + errorCode +
                 ", message='" + message + '\'' +
                 '}';
     }

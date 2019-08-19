@@ -1,6 +1,6 @@
 package cn.scauaie.service.impl;
 
-import cn.scauaie.error.ErrorCode;
+import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.constant.FileConsts;

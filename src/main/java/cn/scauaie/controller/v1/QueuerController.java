@@ -1,15 +1,19 @@
 package cn.scauaie.controller.v1;
 
+import cn.scauaie.aspect.annotation.ErrorHandler;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.model.bo.QueuerBO;
 import cn.scauaie.model.query.QueuerQuery;
 import cn.scauaie.model.vo.QueuerVO;
+import cn.scauaie.result.ErrorResponse;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.QueuerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,12 +55,16 @@ public class QueuerController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object post(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        QueuerBO queuerBO = queuerService.save(tokenAO.getDep(), tokenAO.getId());
+        Result<QueuerBO> result = queuerService.saveQueuer(tokenAO.getDep(), tokenAO.getId());
+        if (!result.isSuccess()) {
+            return result;
+    }
 
         QueuerVO queuerVO = new QueuerVO();
-        BeanUtils.copyProperties(queuerBO, queuerVO);
+        BeanUtils.copyProperties(result.getData(), queuerVO);
         return queuerVO;
     }
 
@@ -69,12 +77,20 @@ public class QueuerController {
      *
      */
     @RequestMapping(method = RequestMethod.DELETE)
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    @ErrorHandler
     public Object delete(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        queuerService.deleteByDep(tokenAO.getDep());
-        return Void.TYPE;
+        Result<QueuerBO> result = queuerService.deleteQueuerByDep(tokenAO.getDep());
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        QueuerVO queuerVO = new QueuerVO();
+        BeanUtils.copyProperties(result.getData(), queuerVO);
+
+        return queuerVO;
     }
 
     /**
@@ -97,14 +113,21 @@ public class QueuerController {
                       @RequestParam(defaultValue = "10") Integer pageSize) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         if (tokenAO.getType().equals(TokenType.FORM.name())) {
-            QueuerBO queuerBO = queuerService.getQueuerByDepAndFormId(tokenAO.getId(), tokenAO.getDep());
+            Result<QueuerBO> result = queuerService.getQueuerByDepAndFormId(tokenAO.getId(), tokenAO.getDep());
+            if (!result.isSuccess()) {
+                return new ErrorResponse(result.getErrorCode().getError(), result.getMessage());
+            }
             QueuerVO queuerVO = new QueuerVO();
-            BeanUtils.copyProperties(queuerBO, queuerVO);
+            BeanUtils.copyProperties(result.getData(), queuerVO);
             return queuerVO;
         }
 
         QueuerQuery queuerQuery = new QueuerQuery(pageNum, pageSize, tokenAO.getDep());
-        List<QueuerBO> queuerBOList = queuerService.listQueuersByDep(queuerQuery);
+        Result<List<QueuerBO>> result = queuerService.listQueuersByDep(queuerQuery);
+        if (!result.isSuccess()) {
+            return new ErrorResponse(result.getErrorCode().getError(), result.getMessage());
+        }
+        List<QueuerBO> queuerBOList = result.getData();
         List<QueuerVO> queuerVOList = new ArrayList<>(queuerBOList.size());
         for (QueuerBO queuerBO : queuerBOList) {
             QueuerVO queuerVO = new QueuerVO();

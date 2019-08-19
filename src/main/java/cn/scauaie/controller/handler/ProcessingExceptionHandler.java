@@ -1,7 +1,7 @@
 package cn.scauaie.controller.handler;
 
-import cn.scauaie.error.ErrorCode;
-import cn.scauaie.error.ErrorResponse;
+import cn.scauaie.result.ErrorCode;
+import cn.scauaie.result.ErrorResponse;
 import cn.scauaie.exception.ProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

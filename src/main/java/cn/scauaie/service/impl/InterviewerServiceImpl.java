@@ -2,7 +2,7 @@ package cn.scauaie.service.impl;
 
 import cn.scauaie.dao.AuthCodeMapper;
 import cn.scauaie.dao.InterviewerMapper;
-import cn.scauaie.error.ErrorCode;
+import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.manager.constant.WeChatMp;

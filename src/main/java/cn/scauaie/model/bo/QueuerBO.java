@@ -9,7 +9,7 @@ public class QueuerBO {
 
     private String dep;
 
-    private Integer state;
+    private String state;
 
     private Integer expectedWaitTime;
 
@@ -18,7 +18,7 @@ public class QueuerBO {
     public QueuerBO() {
     }
 
-    public QueuerBO(Integer fid, String name, String dep, Integer state, Integer expectedWaitTime, Integer frontNumber) {
+    public QueuerBO(Integer fid, String name, String dep, String state, Integer expectedWaitTime, Integer frontNumber) {
         this.fid = fid;
         this.name = name;
         this.dep = dep;
@@ -51,11 +51,11 @@ public class QueuerBO {
         this.dep = dep;
     }
 
-    public Integer getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(Integer state) {
+    public void setState(String state) {
         this.state = state;
     }
 

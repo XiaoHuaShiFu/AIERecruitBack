@@ -2,7 +2,7 @@ package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
-import cn.scauaie.error.ErrorCode;
+import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.TokenAO;

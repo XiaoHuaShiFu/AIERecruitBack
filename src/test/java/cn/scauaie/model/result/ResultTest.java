@@ -1,6 +1,7 @@
 package cn.scauaie.model.result;
 
-import cn.scauaie.error.ErrorCode;
+import cn.scauaie.result.ErrorCode;
+import cn.scauaie.result.Result;
 import org.junit.Test;
 
 public class ResultTest {
@@ -11,7 +12,7 @@ public class ResultTest {
 
     @Test
     public void fail() {
-        System.out.println(Result.fail(ErrorCode.INVALID_OPERATION_NOT_FOUND.getError(), "Not found."));
+        System.out.println(Result.fail(ErrorCode.INVALID_OPERATION_NOT_FOUND, "Not found."));
     }
 
     @Test

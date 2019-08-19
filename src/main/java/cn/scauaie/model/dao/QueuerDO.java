@@ -15,15 +15,14 @@ public class QueuerDO {
 
     private Date updateTime;
 
+    public QueuerDO() {
+    }
+
     public QueuerDO(Integer id, Integer fid, String dep, String state) {
         this.id = id;
         this.fid = fid;
         this.dep = dep;
         this.state = state;
-    }
-
-    public QueuerDO() {
-        super();
     }
 
     public Integer getId() {
@@ -47,7 +46,7 @@ public class QueuerDO {
     }
 
     public void setDep(String dep) {
-        this.dep = dep == null ? null : dep.trim();
+        this.dep = dep;
     }
 
     public String getState() {
@@ -55,7 +54,7 @@ public class QueuerDO {
     }
 
     public void setState(String state) {
-        this.state = state == null ? null : state.trim();
+        this.state = state;
     }
 
     public Date getCreateTime() {

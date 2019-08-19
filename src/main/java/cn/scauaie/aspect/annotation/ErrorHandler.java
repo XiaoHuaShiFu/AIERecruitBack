@@ -3,14 +3,15 @@ package cn.scauaie.aspect.annotation;
 import java.lang.annotation.*;
 
 /**
- * 描述: 进行Form-token身份认证
+ * 描述: 对返回结果的错误进行解析
  *
  * @author xhsf
  * @email 827032783@qq.com
- * @create 2019-08-06 22:29
+ * @create 2019-08-13 22:49
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface FormTokenAuth {
+public @interface ErrorHandler {
+
 }

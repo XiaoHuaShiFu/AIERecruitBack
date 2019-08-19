@@ -1,6 +1,6 @@
 package cn.scauaie.exception;
 
-import cn.scauaie.error.ErrorCode;
+import cn.scauaie.result.ErrorCode;
 
 /**
  * 描述: 处理 处理过程中的异常

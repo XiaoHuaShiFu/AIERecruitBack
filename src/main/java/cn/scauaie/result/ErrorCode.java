@@ -1,4 +1,4 @@
-package cn.scauaie.error;
+package cn.scauaie.result;
 
 import org.springframework.http.HttpStatus;
 

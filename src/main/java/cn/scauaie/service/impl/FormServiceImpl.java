@@ -3,7 +3,7 @@ package cn.scauaie.service.impl;
 import cn.scauaie.converter.FormQueryConverter;
 import cn.scauaie.dao.FormMapper;
 import cn.scauaie.dao.WorkMapper;
-import cn.scauaie.error.ErrorCode;
+import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.manager.constant.WeChatMp;
