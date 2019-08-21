@@ -12,7 +12,7 @@ public interface EvaluationMapper {
 
     int insertSelective(EvaluationDO record);
 
-    EvaluationDO selectByPrimaryKey(Integer id);
+    EvaluationDO getEvaluation(Integer id);
 
     int updateByPrimaryKeySelective(EvaluationDO record);
 

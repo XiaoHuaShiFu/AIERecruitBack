@@ -2,17 +2,22 @@ package cn.scauaie.service.impl;
 
 import cn.scauaie.converter.EvaluationQueryConverter;
 import cn.scauaie.dao.EvaluationMapper;
-import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.EvaluationAO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.dao.EvaluationDO;
 import cn.scauaie.model.query.EvaluationQuery;
+import cn.scauaie.result.ErrorCode;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.EvaluationService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.InterviewerService;
+import cn.scauaie.service.QueuerService;
+import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +35,8 @@ import java.util.List;
 @Service("evaluationService")
 public class EvaluationServiceImpl implements EvaluationService {
 
+    private static final Logger logger = LoggerFactory.getLogger(EvaluationServiceImpl.class);
+
     @Autowired
     private EvaluationMapper evaluationMapper;
 
@@ -40,23 +47,59 @@ public class EvaluationServiceImpl implements EvaluationService {
     private InterviewerService interviewerService;
 
     @Autowired
+    private QueuerService queuerService;
+
+    @Autowired
     private EvaluationQueryConverter evaluationQueryConverter;
 
+    @Autowired
+    private Mapper mapper;
+
+    /**
+     * 检查面试官的部门是否有权评价报名表的部门
+     * 并保存面试官评价
+     *
+     * @param evaluationAO 评价
+     * @return EvaluationAO
+     */
     @Override
-    public EvaluationAO saveEvaluation(EvaluationAO evaluationAO) {
-        int count = formService.getCountById(evaluationAO.getFid());
-        if (count < 1) {
-            throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The form does not exist.");
+    public Result<EvaluationAO> checkDepAndSaveEvaluation(EvaluationAO evaluationAO) {
+        String formDep = formService.getFirstDep(evaluationAO.getFid());
+        //此编号的报名表不存在
+        if (formDep == null) {
+            logger.warn("The form does not exist. interviewerId: {}, formId: {}.",
+                    evaluationAO.getIid(), evaluationAO.getFid());
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The form does not exist.");
         }
 
-        EvaluationDO evaluationDO = new EvaluationDO();
-        BeanUtils.copyProperties(evaluationAO, evaluationDO);
-        count = evaluationMapper.insertSelective(evaluationDO);
-        if (count < 1) {
-            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Insert evaluation failed.");
+        String interviewerDep = interviewerService.getDep(evaluationAO.getIid());
+        String formQueue = queuerService.getQueueNameByDep(formDep);
+        String interviewerQueue = queuerService.getQueueNameByDep(interviewerDep);
+        //面试官无权评价此报名表
+        if (!formQueue.equals(interviewerQueue)) {
+            return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
         }
 
-        return getEvaluation(evaluationDO.getId());
+        return saveEvaluation(evaluationAO);
+    }
+
+    /**
+     * 保存面试官评价
+     *
+     * @param evaluationAO 评价
+     * @return EvaluationAO
+     */
+    @Override
+    public Result<EvaluationAO> saveEvaluation(EvaluationAO evaluationAO) {
+        EvaluationDO evaluationDO = mapper.map(evaluationAO, EvaluationDO.class);
+        int count = evaluationMapper.insertSelective(evaluationDO);
+        //保存评价失败
+        if (count < 1) {
+            logger.error("Insert evaluation failed.");
+            return Result.fail(ErrorCode.INTERNAL_ERROR, "Insert evaluation failed.");
+        }
+
+        return Result.success(getEvaluation(evaluationDO.getId()));
     }
 
     /**
@@ -67,12 +110,14 @@ public class EvaluationServiceImpl implements EvaluationService {
      */
     @Override
     public EvaluationAO getEvaluation(Integer id) {
-        EvaluationDO evaluationDO = evaluationMapper.selectByPrimaryKey(id);
+        EvaluationDO evaluationDO = evaluationMapper.getEvaluation(id);
+        if (evaluationDO == null) {
+            return null;
+        }
 
-        EvaluationAO evaluationAO = new EvaluationAO();
-        BeanUtils.copyProperties(evaluationDO, evaluationAO);
+        EvaluationAO evaluationAO = mapper.map(evaluationDO, EvaluationAO.class);
 
-        FormAO formAO = formService.getFormById(evaluationDO.getFid());
+        FormAO formAO = formService.getForm(evaluationDO.getFid());
         InterviewerAO interviewerAO = interviewerService.getInterviewer(evaluationDO.getIid());
 
         evaluationAO.setForm(formAO);
@@ -114,7 +159,7 @@ public class EvaluationServiceImpl implements EvaluationService {
             EvaluationAO evaluationAO = new EvaluationAO();
             BeanUtils.copyProperties(evaluationDO, evaluationAO);
 
-            FormAO formAO = formService.getFormById(evaluationDO.getFid());
+            FormAO formAO = formService.getForm(evaluationDO.getFid());
             InterviewerAO interviewerAO = interviewerService.getInterviewer(evaluationDO.getIid());
 
             evaluationAO.setForm(formAO);

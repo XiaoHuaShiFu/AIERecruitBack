@@ -15,4 +15,6 @@ public interface InterviewerService {
     InterviewerAO getInterviewer(Integer id);
 
     InterviewerAO getInterviewerByCode(String code);
+
+    String getDep(Integer id);
 }

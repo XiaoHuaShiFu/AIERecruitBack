@@ -1,6 +1,7 @@
 package cn.scauaie.service;
 
 import cn.scauaie.model.ao.EvaluationAO;
+import cn.scauaie.result.Result;
 
 import java.util.List;
 
@@ -13,7 +14,9 @@ import java.util.List;
  */
 public interface EvaluationService {
 
-    EvaluationAO saveEvaluation(EvaluationAO evaluationAO);
+    Result<EvaluationAO> saveEvaluation(EvaluationAO evaluationAO);
+
+    Result<EvaluationAO> checkDepAndSaveEvaluation(EvaluationAO evaluationAO);
 
     EvaluationAO getEvaluation(Integer id);
 

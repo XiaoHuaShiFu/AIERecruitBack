@@ -26,4 +26,5 @@ public interface QueuerService {
 
     int getCountByDep(String dep);
 
+    String getQueueNameByDep(String dep);
 }

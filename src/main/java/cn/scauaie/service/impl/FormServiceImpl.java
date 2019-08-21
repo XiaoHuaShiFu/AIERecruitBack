@@ -3,7 +3,6 @@ package cn.scauaie.service.impl;
 import cn.scauaie.converter.FormQueryConverter;
 import cn.scauaie.dao.FormMapper;
 import cn.scauaie.dao.WorkMapper;
-import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.manager.constant.WeChatMp;
@@ -13,9 +12,11 @@ import cn.scauaie.model.dao.DepNumberDO;
 import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.dao.WorkDO;
 import cn.scauaie.model.query.FormQuery;
+import cn.scauaie.result.ErrorCode;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.WorkService;
+import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,13 +45,16 @@ public class FormServiceImpl implements FormService {
     private WorkMapper workMapper;
 
     @Autowired
-    private WeChatMpManager weChatMpManager;
-
-    @Autowired
     private WorkService workService;
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private WeChatMpManager weChatMpManager;
+
+    @Autowired
+    private Mapper mapper;
 
     @Autowired
     private FormQueryConverter queryConverter;
@@ -89,10 +93,15 @@ public class FormServiceImpl implements FormService {
      * @return FormAO
      */
     @Override
-    public FormAO getFormById(Integer id) {
+    public FormAO getForm(Integer id) {
         FormDO formDO = formMapper.selectByPrimaryKey(id);
-        FormAO formAO = new FormAO();
-        BeanUtils.copyProperties(formDO, formAO);
+        if (formDO == null) {
+            return null;
+        }
+        List<WorkAO> workAOList = workService.listWorksByFormId(id);
+
+        FormAO formAO = mapper.map(formDO, FormAO.class);
+        formAO.setWorks(workAOList);
         return formAO;
     }
 
@@ -106,16 +115,6 @@ public class FormServiceImpl implements FormService {
         return formMapper.getName(id);
     }
 
-    /**
-     * 通过id获取数量
-     *
-     * @param id 报名表编号
-     * @return 数量
-     */
-    public int getCountById(Integer id) {
-        return formMapper.getCountById(id);
-    }
-
     @Override
     public FormAO updateForm(FormAO formAO) {
         FormDO formDO = new FormDO();
@@ -124,7 +123,7 @@ public class FormServiceImpl implements FormService {
         if (count < 1) {
             throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Update avatar failed.");
         }
-        return getFormById(formAO.getId());
+        return getForm(formAO.getId());
     }
 
     /**
@@ -289,6 +288,16 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
+     * 获取第一部门通过报名表编号
+     *
+     * @param id 报名表编号
+     * @return 第一部门
+     */
+    public String getFirstDep(Integer id) {
+        return formMapper.getFirstDep(id);
+    }
+
+    /**
      * 更新头像
      *
      * @param id 报名表编号
@@ -319,7 +328,7 @@ public class FormServiceImpl implements FormService {
         FormAO formAO = new FormAO();
         BeanUtils.copyProperties(formDO, formAO);
 
-        List<WorkAO> workAOList = workService.listWorkAOsByFormId(formDO.getId());
+        List<WorkAO> workAOList = workService.listWorksByFormId(formDO.getId());
         formAO.setWorks(workAOList);
         return formAO;
     }
@@ -354,7 +363,7 @@ public class FormServiceImpl implements FormService {
         }
         List<FormAO> formAOList = new ArrayList<>(formDOList.size());
         for (FormDO formDO : formDOList) {
-            List<WorkAO> workAOList = workService.listWorkAOsByFormId(formDO.getId());
+            List<WorkAO> workAOList = workService.listWorksByFormId(formDO.getId());
             FormAO formAO = new FormAO();
             BeanUtils.copyProperties(formDO, formAO);
             formAO.setWorks(workAOList);

@@ -14,10 +14,10 @@ import cn.scauaie.service.QueuerService;
 import cn.scauaie.service.constant.QueuerConsts;
 import cn.scauaie.service.constant.QueuerState;
 import cn.scauaie.service.constant.RedisStatus;
+import com.github.dozermapper.core.Mapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +35,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class QueuerServiceImpl implements QueuerService {
 
     private static final Logger logger = LoggerFactory.getLogger(QueuerServiceImpl.class);
+
+    @Autowired
+    private Mapper mapper;
 
     @Autowired
     private QueuerMapper queuerMapper;
@@ -85,6 +88,7 @@ public class QueuerServiceImpl implements QueuerService {
         queuerBO.setDep(q);
         queuerBO.setState(QueuerState.QUE.name());
         if (!queue.offer(queuerBO)) {
+            logger.error("Into queue failed.");
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Into queue failed.");
         }
 
@@ -105,9 +109,8 @@ public class QueuerServiceImpl implements QueuerService {
             return Result.fail(ErrorCode.INVALID_OPERATION_NOT_FOUND, "The queue is empty.");
         }
 
-        QueuerDO queuerDO = new QueuerDO();
         queuerBO.setState(QueuerState.OUT.name());
-        BeanUtils.copyProperties(queuerBO, queuerDO);
+        QueuerDO queuerDO = mapper.map(queuerBO, QueuerDO.class);
         int count = queuerMapper.insertSelective(queuerDO);
         if (count < 1) {
             logger.error("Insert queuer fail, fid: {}", queuerDO.getFid());
@@ -185,7 +188,8 @@ public class QueuerServiceImpl implements QueuerService {
         if (queuerDO == null) {
             return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
         }
-        BeanUtils.copyProperties(queuerDO, queuerBO);
+
+        mapper.map(queuerDO, queuerBO);
         return Result.success(queuerBO);
     }
 
@@ -233,7 +237,7 @@ public class QueuerServiceImpl implements QueuerService {
      * @param dep 部门名字
      * @return 队列名字
      */
-    private String getQueueNameByDep(String dep) {
+    public String getQueueNameByDep(String dep) {
         if (!dep.equals(DepEnum.ZKB.name()) && !dep.equals(DepEnum.XCB.name())) {
             return AieConsts.AIE;
         }
@@ -245,8 +249,8 @@ public class QueuerServiceImpl implements QueuerService {
      */
     private void init() {
         Map<String, ArrayBlockingQueue<QueuerBO>> queueMap = new HashMap<>(5);
-        queueMap.put(DepEnum.ZKB.name(), new ArrayBlockingQueue<>(1000));
-        queueMap.put(DepEnum.XCB.name(), new ArrayBlockingQueue<>(1000));
+        queueMap.put(DepEnum.ZKB.name(), new ArrayBlockingQueue<>(500));
+        queueMap.put(DepEnum.XCB.name(), new ArrayBlockingQueue<>(200));
         queueMap.put(AieConsts.AIE, new ArrayBlockingQueue<>(1000));
         this.queueMap = queueMap;
     }

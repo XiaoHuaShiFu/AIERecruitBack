@@ -173,4 +173,11 @@
         from form
         where id = #{id, jdbcType=INTEGER}
     </select>
+
+    <select id="getFirstDep" parameterType="integer" resultType="string">
+        select
+        first_dep
+        from form
+        where id = #{id, jdbcType=INTEGER}
+    </select>
 </mapper>

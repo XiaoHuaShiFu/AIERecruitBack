@@ -2,10 +2,10 @@ package cn.scauaie.service.impl;
 
 import cn.scauaie.constant.TokenExpire;
 import cn.scauaie.constant.TokenType;
-import cn.scauaie.result.ErrorCode;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.ao.TokenAO;
+import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.CacheService;
 import cn.scauaie.service.FormService;

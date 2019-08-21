@@ -18,4 +18,6 @@ public interface InterviewerMapper {
     int countByOpenid(String openid);
 
     InterviewerDO getInterviewerByOpenid(String openid);
+
+    String getDep(Integer id);
 }

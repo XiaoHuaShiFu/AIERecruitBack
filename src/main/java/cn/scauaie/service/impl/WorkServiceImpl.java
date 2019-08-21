@@ -31,7 +31,7 @@ public class WorkServiceImpl implements WorkService {
      * @return List<WorkAO>
      */
     @Override
-    public List<WorkAO> listWorkAOsByFormId(Integer formId) {
+    public List<WorkAO> listWorksByFormId(Integer formId) {
         List<WorkDO> workDOList = workMapper.selectByFid(formId);
         List<WorkAO> workAOList = new ArrayList<>(workDOList.size());
         workDOList.forEach((workDO) -> {

@@ -18,11 +18,9 @@ public interface FormService {
 
     FormAO saveForm(String code, FormAO formAO);
 
-    FormAO getFormById(Integer id);
+    FormAO getForm(Integer id);
 
     String getName(Integer id);
-
-    int getCountById(Integer id);
 
     FormAO getFormByCode(String code);
 
@@ -40,4 +38,5 @@ public interface FormService {
 
     Map<String, Integer> listDepNumbers(Boolean includeSecondDep);
 
+    String getFirstDep(Integer id);
 }

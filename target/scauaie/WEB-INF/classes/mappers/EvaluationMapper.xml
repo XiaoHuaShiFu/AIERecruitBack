@@ -13,7 +13,7 @@
   <sql id="Base_Column_List" >
     id, fid, iid, evaluation, is_pass
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getEvaluation" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from evaluation

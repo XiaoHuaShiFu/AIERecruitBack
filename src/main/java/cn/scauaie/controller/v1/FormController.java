@@ -2,7 +2,6 @@ package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
-import cn.scauaie.result.ErrorCode;
 import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.TokenAO;
@@ -12,6 +11,7 @@ import cn.scauaie.model.ao.group.GroupFormAOPOST;
 import cn.scauaie.model.vo.AvatarVO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.WorkVO;
+import cn.scauaie.result.ErrorCode;
 import cn.scauaie.service.FormService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +101,7 @@ public class FormController {
         TokenType type = TokenType.valueOf(tokenAO.getType());
 
         if (type == TokenType.INTERVIEWER) {
-            FormAO formAO = formService.getFormById(id);
+            FormAO formAO = formService.getForm(id);
             FormVO formVO = new FormVO();
             BeanUtils.copyProperties(formAO, formVO);
             return formVO;
@@ -112,7 +112,7 @@ public class FormController {
             if (!tid.equals(id)) {
                 throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER);
             }
-            FormAO formAO = formService.getFormById(id);
+            FormAO formAO = formService.getForm(id);
             FormVO formVO = new FormVO();
             BeanUtils.copyProperties(formAO, formVO);
             return formVO;

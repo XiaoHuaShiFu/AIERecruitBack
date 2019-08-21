@@ -9,7 +9,7 @@ import cn.scauaie.model.query.QueuerQuery;
 import cn.scauaie.model.vo.QueuerVO;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.QueuerService;
-import org.springframework.beans.BeanUtils;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +35,8 @@ public class QueuerController {
     @Autowired
     private QueuerService queuerService;
 
+    @Autowired
+    private Mapper mapper;
 
     /**
      * 创建队列元素
@@ -112,8 +114,7 @@ public class QueuerController {
         List<QueuerBO> queuerBOList = result.getData();
         List<QueuerVO> queuerVOList = new ArrayList<>(queuerBOList.size());
         for (QueuerBO queuerBO : queuerBOList) {
-            QueuerVO queuerVO = new QueuerVO();
-            BeanUtils.copyProperties(queuerBO, queuerVO);
+            QueuerVO queuerVO = mapper.map(queuerBO, QueuerVO.class);
             queuerVOList.add(queuerVO);
         }
         return queuerVOList;
@@ -146,9 +147,7 @@ public class QueuerController {
         if (!result.isSuccess()) {
             return result;
         }
-        QueuerVO queuerVO = new QueuerVO();
-        BeanUtils.copyProperties(result.getData(), queuerVO);
-        return queuerVO;
+        return mapper.map(result.getData(), QueuerVO.class);
     }
 
 }

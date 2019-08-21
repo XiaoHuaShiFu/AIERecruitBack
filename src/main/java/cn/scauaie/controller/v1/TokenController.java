@@ -11,7 +11,7 @@ import cn.scauaie.service.FormService;
 import cn.scauaie.service.InterviewerService;
 import cn.scauaie.service.TokenService;
 import cn.scauaie.validator.annotation.TokenType;
-import org.springframework.beans.BeanUtils;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -36,6 +36,9 @@ import javax.validation.constraints.Size;
 @RequestMapping("v1/tokens")
 @Validated
 public class TokenController {
+
+    @Autowired
+    private Mapper mapper;
 
     @Autowired
     private TokenService tokenService;
@@ -119,9 +122,9 @@ public class TokenController {
         //响应头设置token
         response.setHeader("Authorization", token);
 
-        FormVO formVO = new FormVO();
-        BeanUtils.copyProperties(formAO, formVO);
-        return formVO;
+//        FormVO formVO = new FormVO();
+//        BeanUtils.copyProperties(formAO, formVO);
+        return mapper.map(formAO, FormVO.class);
     }
 
     /**
@@ -160,9 +163,10 @@ public class TokenController {
         //响应头设置token
         response.setHeader("Authorization", token);
 
-        InterviewerVO interviewerVO = new InterviewerVO();
-        BeanUtils.copyProperties(interviewerAO, interviewerVO);
-        return interviewerVO;
+//        InterviewerVO interviewerVO = new InterviewerVO();
+//        BeanUtils.copyProperties(interviewerAO, interviewerVO);
+//
+        return mapper.map(interviewerAO, InterviewerVO.class);
     }
 
 }

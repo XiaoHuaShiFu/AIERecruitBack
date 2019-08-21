@@ -2,6 +2,8 @@ package cn.scauaie.config;
 
 import cn.scauaie.util.PropertiesUtils;
 import cn.scauaie.util.ftp.FTPClientTemplate;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,6 +62,16 @@ public class SingletonBeansConfig {
         String username = PropertiesUtils.getProperty("ftp.username", "ftp.properties");
         String password = PropertiesUtils.getProperty("ftp.password", "ftp.properties");
         return new FTPClientTemplate(host, username, password);
+    }
+
+    /**
+     * dozer配置
+     *
+     * @return Mapper
+     */
+    @Bean
+    public Mapper mapper() {
+        return DozerBeanMapperBuilder.buildDefault();
     }
 
 }

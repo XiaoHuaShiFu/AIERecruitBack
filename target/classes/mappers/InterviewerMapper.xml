@@ -88,10 +88,17 @@
     where openid = #{openid, jdbcType=CHAR}
   </select>
 
-  <select id="getInterviewerByOpenid" resultType="string" resultMap="BaseResultMap">
+  <select id="getInterviewerByOpenid" parameterType="string" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from interviewer
     where openid = #{openid, jdbcType=CHAR}
+  </select>
+
+  <select id="getDep"  parameterType="integer" resultType="string">
+    select
+    dep
+    from interviewer
+    where id = #{id, jdbcType=INTEGER}
   </select>
 </mapper>

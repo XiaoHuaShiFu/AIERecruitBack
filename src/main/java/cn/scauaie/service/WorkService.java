@@ -15,6 +15,6 @@ import java.util.List;
  */
 public interface WorkService {
 
-    List<WorkAO> listWorkAOsByFormId(Integer formId);
+    List<WorkAO> listWorksByFormId(Integer formId);
 
 }

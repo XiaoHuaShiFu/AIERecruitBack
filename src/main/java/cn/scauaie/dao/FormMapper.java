@@ -37,4 +37,6 @@ public interface FormMapper {
     int updateAvatar(@Param("id") Integer id, @Param("avatar") String avatar);
 
     String getName(Integer id);
+
+    String getFirstDep(Integer id);
 }

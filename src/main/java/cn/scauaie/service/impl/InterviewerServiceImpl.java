@@ -104,6 +104,17 @@ public class InterviewerServiceImpl implements InterviewerService {
     }
 
     /**
+     * 通过编号获取部门
+     *
+     * @param id 编号
+     * @return 部门
+     */
+    @Override
+    public String getDep(Integer id) {
+        return interviewerMapper.getDep(id);
+    }
+
+    /**
      * 获取面试官通过编号
      *
      * @param id 面试官编号
