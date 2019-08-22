@@ -6,15 +6,16 @@ import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.ResultAO;
 import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.model.vo.ResultVO;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.ResultService;
-import org.springframework.beans.BeanUtils;
+import cn.scauaie.util.BeanUtils;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,6 +33,12 @@ public class ResultController {
 
     @Autowired
     private ResultService resultService;
+
+    @Autowired
+    private Mapper mapper;
+
+    @Autowired
+    private BeanUtils beanUtils;
 
     /**
      * 创建Result并返回Result
@@ -55,11 +62,11 @@ public class ResultController {
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
     @ErrorHandler
     public Object post(HttpServletRequest request, @Validated ResultAO resultAO) {
-        ResultAO newResultAO = resultService.saveResult(resultAO).getData();
-        ResultVO resultVO = new ResultVO();
-        BeanUtils.copyProperties(newResultAO, resultVO);
-
-        return resultVO;
+        Result<ResultAO> result = resultService.saveResult(resultAO);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        return mapper.map(result.getData(), ResultVO.class);
     }
 
     /**
@@ -78,17 +85,16 @@ public class ResultController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "10") Integer pageSize) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        List<ResultAO> resultAOList = resultService.listResults(pageNum, pageSize, tokenAO.getId());
-        List<ResultVO> resultVOList = new ArrayList<>(resultAOList.size());
-        for (ResultAO resultAO : resultAOList) {
-            ResultVO resultVO = new ResultVO();
-            BeanUtils.copyProperties(resultAO, resultVO);
-            resultVOList.add(resultVO);
+        Result<List<ResultAO>> result = resultService.listResults(pageNum, pageSize, tokenAO.getId());
+        if (!result.isSuccess()) {
+            return result;
         }
-        return resultVOList;
+
+        return beanUtils.mapList(result.getData(), ResultVO.class);
     }
 
 }

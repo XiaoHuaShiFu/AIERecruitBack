@@ -16,5 +16,5 @@ public interface ResultService {
 
     Result<ResultAO> saveResult(ResultAO resultAO);
 
-    List<ResultAO> listResults(Integer pageNum, Integer pageSize, Integer formId);
+    Result<List<ResultAO>> listResults(Integer pageNum, Integer pageSize, Integer formId);
 }

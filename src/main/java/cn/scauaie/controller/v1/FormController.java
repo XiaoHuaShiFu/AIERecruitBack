@@ -3,7 +3,6 @@ package cn.scauaie.controller.v1;
 import cn.scauaie.aspect.annotation.ErrorHandler;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
-import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.model.ao.WorkAO;
@@ -15,6 +14,7 @@ import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.FormService;
+import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,10 +28,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
-
-// TODO: 2019/8/19 无参数更新问题
 
 /**
  * 描述: Form Web层
@@ -50,6 +47,9 @@ public class FormController {
 
     @Autowired
     private Mapper mapper;
+
+    @Autowired
+    private BeanUtils beanUtils;
 
     /**
      * 创建Form并返回Form
@@ -123,7 +123,7 @@ public class FormController {
         }
 
         //非form-token或interviewer-token
-        throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER);
+        return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
     }
 
     // TODO: 2019/8/16 查询优化
@@ -148,9 +148,7 @@ public class FormController {
             return result;
         }
 
-        List<FormVO> formVOList = new ArrayList<>(result.getData().size());
-        mapper.map(result.getData(), formVOList);
-        return formVOList;
+        return beanUtils.mapList(result.getData(), FormVO.class);
     }
 
     /**

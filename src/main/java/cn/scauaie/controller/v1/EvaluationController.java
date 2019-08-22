@@ -6,12 +6,10 @@ import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.EvaluationAO;
 import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.model.vo.EvaluationVO;
-import cn.scauaie.model.vo.FormVO;
-import cn.scauaie.model.vo.InterviewerVO;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.EvaluationService;
+import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -19,8 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
-import java.util.ArrayList;
 import java.util.List;
+
+// TODO: 2019/8/23 面试官权限问题
+// TODO: 2019/8/23 面试结果自动发送问题
+
 
 /**
  * 描述: Evaluation Web层
@@ -39,6 +40,9 @@ public class EvaluationController {
 
     @Autowired
     private Mapper mapper;
+
+    @Autowired
+    private BeanUtils beanUtils;
 
     /**
      * 创建Evaluation并返回Evaluation
@@ -92,22 +96,16 @@ public class EvaluationController {
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    @ErrorHandler
     public Object get(HttpServletRequest request,
                       @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
                       @PathVariable Integer id) {
-        EvaluationAO newEvaluationAO = evaluationService.getEvaluation(id);
+        Result<EvaluationAO> result = evaluationService.getEvaluation(id);
+        if (!result.isSuccess()) {
+            return result;
+        }
 
-        EvaluationVO evaluationVO = new EvaluationVO();
-        BeanUtils.copyProperties(newEvaluationAO, evaluationVO);
-        FormVO formVO = new FormVO();
-        BeanUtils.copyProperties(newEvaluationAO.getForm(), formVO);
-        evaluationVO.setForm(formVO);
-        InterviewerVO interviewerVO = new InterviewerVO();
-
-        BeanUtils.copyProperties(newEvaluationAO.getInterviewer(), interviewerVO);
-        evaluationVO.setInterviewer(interviewerVO);
-
-        return evaluationVO;
+        return mapper.map(result.getData(), EvaluationVO.class);
     }
 
     /**
@@ -125,25 +123,15 @@ public class EvaluationController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    @ErrorHandler
     public Object get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "10") Integer pageSize, String q) {
-        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        List<EvaluationAO> evaluationAOList = evaluationService.listEvaluations(pageNum, pageSize, q);
-        List<EvaluationVO> evaluationVOList = new ArrayList<>(evaluationAOList.size());
-        for (EvaluationAO evaluationAO : evaluationAOList) {
-            EvaluationVO evaluationVO = new EvaluationVO();
-            BeanUtils.copyProperties(evaluationAO, evaluationVO);
-            FormVO formVO = new FormVO();
-            BeanUtils.copyProperties(evaluationAO.getForm(), formVO);
-            evaluationVO.setForm(formVO);
-            InterviewerVO interviewerVO = new InterviewerVO();
-
-            BeanUtils.copyProperties(evaluationAO.getInterviewer(), interviewerVO);
-            evaluationVO.setInterviewer(interviewerVO);
-
-            evaluationVOList.add(evaluationVO);
+        Result<List<EvaluationAO>> result = evaluationService.listEvaluations(pageNum, pageSize, q);
+        if (!result.isSuccess()) {
+            return result;
         }
-        return evaluationVOList;
+
+        return beanUtils.mapList(result.getData(), EvaluationVO.class);
     }
 
 }

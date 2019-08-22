@@ -4,6 +4,7 @@
       <w>authcode</w>
       <w>authcodes</w>
       <w>consts</w>
+      <w>dozer</w>
       <w>hdel</w>
       <w>hget</w>
       <w>hset</w>

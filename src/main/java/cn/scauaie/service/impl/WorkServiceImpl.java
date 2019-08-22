@@ -7,6 +7,7 @@ import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.WorkService;
+import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +37,9 @@ public class WorkServiceImpl implements WorkService {
 
     @Autowired
     private Mapper mapper;
+
+    @Autowired
+    private BeanUtils beanUtils;
 
     private static final String PREFIX_WORK_FILE_DIRECTORY = "/recruit/form/work/";
 
@@ -113,9 +116,8 @@ public class WorkServiceImpl implements WorkService {
         if (workDOList.size() < 1) {
             return null;
         }
-        List<WorkAO> workAOList = new ArrayList<>(workDOList.size());
-        mapper.map(workDOList, workAOList);
-        return workAOList;
+
+        return beanUtils.mapList(workDOList, WorkAO.class);
     }
 
     /**

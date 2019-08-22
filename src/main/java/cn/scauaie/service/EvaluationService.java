@@ -18,7 +18,7 @@ public interface EvaluationService {
 
     Result<EvaluationAO> checkDepAndSaveEvaluation(EvaluationAO evaluationAO);
 
-    EvaluationAO getEvaluation(Integer id);
+    Result<EvaluationAO> getEvaluation(Integer id);
 
-    List<EvaluationAO> listEvaluations(Integer pageNum, Integer pageSize, String q);
+    Result<List<EvaluationAO>> listEvaluations(Integer pageNum, Integer pageSize, String q);
 }

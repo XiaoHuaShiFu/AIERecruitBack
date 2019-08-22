@@ -96,7 +96,11 @@ public class TokenServiceImpl implements TokenService {
     public Result<TokenAO> createAndSaveToken(String tokenType, String code) {
         TokenAO tokenAO;
         if (tokenType.equals(TokenType.INTERVIEWER.name())) {
-            InterviewerAO interviewer = interviewerService.getInterviewerByCode(code);
+            Result<InterviewerAO> result = interviewerService.getInterviewerByCode(code);
+            if (!result.isSuccess()) {
+                return Result.fail(result.getErrorCode(), result.getMessage());
+            }
+            InterviewerAO interviewer = result.getData();
             tokenAO = new TokenAO();
             tokenAO.setId(interviewer.getId());
             tokenAO.setDep(interviewer.getDep());

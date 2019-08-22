@@ -14,7 +14,7 @@ import cn.scauaie.result.Result;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.WorkService;
-import cn.scauaie.util.BeanCheckerUtils;
+import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -54,6 +54,9 @@ public class FormServiceImpl implements FormService {
 
     @Autowired
     private Mapper mapper;
+
+    @Autowired
+    private BeanUtils beanUtils;
 
     @Autowired
     private FormQueryConverter queryConverter;
@@ -175,7 +178,7 @@ public class FormServiceImpl implements FormService {
         formDO.setPhone(formAO.getPhone());
         formDO.setIntroduction(formAO.getIntroduction());
         //所有参数都为空
-        if (BeanCheckerUtils.allFieldIsNULL(formDO)) {
+        if (beanUtils.allFieldIsNull(formDO)) {
             return Result.fail(ErrorCode.INVALID_PARAMETER_IS_BLANK,
                     "The required parameter must be not all null.");
         }
@@ -329,6 +332,7 @@ public class FormServiceImpl implements FormService {
         if (formDOList.size() < 1) {
             return null;
         }
+
         List<FormAO> formAOList = new ArrayList<>(formDOList.size());
         for (FormDO formDO : formDOList) {
             FormAO formAO = mapper.map(formDO, FormAO.class);

@@ -153,12 +153,17 @@ public class TokenController {
      */
     @RequestMapping(value="/interviewer", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @ErrorHandler
     @Deprecated
     public Object postInterviewerToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             HttpServletResponse response) {
-        InterviewerAO interviewerAO = interviewerService.getInterviewerByCode(code);
+        Result<InterviewerAO> result = interviewerService.getInterviewerByCode(code);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        InterviewerAO interviewerAO = result.getData();
 
         //创建token令牌
         String token = tokenService.createAndSaveInterviewerToken(code, interviewerAO.getId(), interviewerAO.getDep());

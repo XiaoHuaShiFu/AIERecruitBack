@@ -1,9 +1,11 @@
 package cn.scauaie.controller.v1;
 
+import cn.scauaie.aspect.annotation.ErrorHandler;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.vo.InterviewerVO;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.InterviewerService;
-import org.springframework.beans.BeanUtils;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +32,9 @@ public class InterviewerController {
     @Autowired
     private InterviewerService interviewerService;
 
+    @Autowired
+    private Mapper mapper;
+
     /**
      * 创建Interviewer并返回Interviewer
      * @param authCode 认证码
@@ -52,6 +57,7 @@ public class InterviewerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @ErrorHandler
     public Object post(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The wxCode must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of wxCode must be 32.", min = 32, max = 32) String wxCode,
@@ -59,10 +65,12 @@ public class InterviewerController {
             @Size(message = "INVALID_PARAMETER_SIZE: The size of authCode must be 36.", min = 36, max = 36) String authCode,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The name must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of name must be from 1 to 10.", min = 1, max = 10) String name) {
-        InterviewerAO interviewerAO = interviewerService.saveInterviewer(wxCode, authCode, name);
-        InterviewerVO interviewerVO = new InterviewerVO();
-        BeanUtils.copyProperties(interviewerAO, interviewerVO);
-        return interviewerVO;
+        Result<InterviewerAO> result = interviewerService.saveInterviewer(wxCode, authCode, name);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        return mapper.map(result.getData(), InterviewerVO.class);
     }
 
 }

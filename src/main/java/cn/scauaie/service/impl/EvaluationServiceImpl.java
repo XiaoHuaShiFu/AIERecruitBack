@@ -2,7 +2,6 @@ package cn.scauaie.service.impl;
 
 import cn.scauaie.converter.EvaluationQueryConverter;
 import cn.scauaie.dao.EvaluationMapper;
-import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.ao.EvaluationAO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
@@ -14,15 +13,14 @@ import cn.scauaie.service.EvaluationService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.InterviewerService;
 import cn.scauaie.service.QueuerService;
+import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +52,9 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Autowired
     private Mapper mapper;
+
+    @Autowired
+    private BeanUtils beanUtils;
 
     /**
      * 检查面试官的部门是否有权评价报名表的部门
@@ -99,7 +100,7 @@ public class EvaluationServiceImpl implements EvaluationService {
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Insert evaluation failed.");
         }
 
-        return Result.success(getEvaluation(evaluationDO.getId()));
+        return getEvaluation(evaluationDO.getId());
     }
 
     /**
@@ -109,21 +110,13 @@ public class EvaluationServiceImpl implements EvaluationService {
      * @return EvaluationAO
      */
     @Override
-    public EvaluationAO getEvaluation(Integer id) {
+    public Result<EvaluationAO> getEvaluation(Integer id) {
         EvaluationDO evaluationDO = evaluationMapper.getEvaluation(id);
         if (evaluationDO == null) {
-            return null;
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
         }
 
-        EvaluationAO evaluationAO = mapper.map(evaluationDO, EvaluationAO.class);
-
-        FormAO formAO = formService.getForm(evaluationDO.getFid());
-        InterviewerAO interviewerAO = interviewerService.getInterviewer(evaluationDO.getIid());
-
-        evaluationAO.setForm(formAO);
-        evaluationAO.setInterviewer(interviewerAO);
-
-        return evaluationAO;
+        return Result.success(assembleEvaluationAOByEvaluationDO(evaluationDO));
     }
 
     /**
@@ -134,11 +127,15 @@ public class EvaluationServiceImpl implements EvaluationService {
      * @param q 搜索参数
      * @return List<EvaluationAO>
      */
-    public List<EvaluationAO> listEvaluations(Integer pageNum, Integer pageSize, String q) {
+    public Result<List<EvaluationAO>> listEvaluations(Integer pageNum, Integer pageSize, String q) {
         EvaluationQuery query = evaluationQueryConverter.convert(q);
         query.setPageNum(pageNum);
         query.setPageSize(pageSize);
-        return listEvaluations(query);
+        List<EvaluationAO> evaluationAOList = listEvaluations(query);
+        if (evaluationAOList == null) {
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+        return Result.success(evaluationAOList);
     }
 
     /**
@@ -151,23 +148,27 @@ public class EvaluationServiceImpl implements EvaluationService {
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<EvaluationDO> evaluationDOList = evaluationMapper.listEvaluationsByQuery(query);
         if (evaluationDOList.size() < 1) {
-            throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+            return null;
         }
 
-        List<EvaluationAO> evaluationAOList = new ArrayList<>(evaluationDOList.size());
-        for (EvaluationDO evaluationDO : evaluationDOList) {
-            EvaluationAO evaluationAO = new EvaluationAO();
-            BeanUtils.copyProperties(evaluationDO, evaluationAO);
+        return beanUtils.mapList(evaluationDOList, EvaluationAO.class);
+    }
 
-            FormAO formAO = formService.getForm(evaluationDO.getFid());
-            InterviewerAO interviewerAO = interviewerService.getInterviewer(evaluationDO.getIid());
+    /**
+     * 装配EvaluationDO成EvaluationAO
+     *
+     * @param evaluationDO EvaluationDO
+     * @return EvaluationAO
+     */
+    private EvaluationAO assembleEvaluationAOByEvaluationDO(EvaluationDO evaluationDO) {
+        EvaluationAO evaluationAO = mapper.map(evaluationDO, EvaluationAO.class);
 
-            evaluationAO.setForm(formAO);
-            evaluationAO.setInterviewer(interviewerAO);
+        FormAO formAO = formService.getForm(evaluationDO.getFid());
+        InterviewerAO interviewerAO = interviewerService.getInterviewer(evaluationDO.getIid());
 
-            evaluationAOList.add(evaluationAO);
-        }
-        return evaluationAOList;
+        evaluationAO.setForm(formAO);
+        evaluationAO.setInterviewer(interviewerAO);
+        return evaluationAO;
     }
 
 }

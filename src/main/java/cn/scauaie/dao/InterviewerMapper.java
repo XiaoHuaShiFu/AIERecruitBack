@@ -9,7 +9,7 @@ public interface InterviewerMapper {
 
     int insertSelective(InterviewerDO record);
 
-    InterviewerDO selectByPrimaryKey(Integer id);
+    InterviewerDO getInterviewer(Integer id);
 
     int updateByPrimaryKeySelective(InterviewerDO record);
 

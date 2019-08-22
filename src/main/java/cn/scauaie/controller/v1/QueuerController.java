@@ -9,6 +9,7 @@ import cn.scauaie.model.query.QueuerQuery;
 import cn.scauaie.model.vo.QueuerVO;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.QueuerService;
+import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,6 +37,9 @@ public class QueuerController {
 
     @Autowired
     private Mapper mapper;
+
+    @Autowired
+    private BeanUtils beanUtils;
 
     /**
      * 创建队列元素
@@ -60,7 +63,11 @@ public class QueuerController {
     public Object post(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         Result<QueuerBO> result = queuerService.saveQueuer(tokenAO.getDep(), tokenAO.getId());
-        return checkAndReturn(result);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        return mapper.map(result.getData(), QueuerVO.class);
     }
 
     /**
@@ -78,7 +85,11 @@ public class QueuerController {
     public Object delete(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         Result<QueuerBO> result = queuerService.checkGapAndDeleteQueuerByDep(tokenAO.getId(), tokenAO.getDep());
-        return checkAndReturn(result);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        return mapper.map(result.getData(), QueuerVO.class);
     }
 
     /**
@@ -103,7 +114,10 @@ public class QueuerController {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         if (tokenAO.getType().equals(TokenType.FORM.name())) {
             Result<QueuerBO> result = queuerService.getQueuerByDepAndFormId(tokenAO.getId(), tokenAO.getDep());
-            return checkAndReturn(result);
+            if (!result.isSuccess()) {
+                return result;
+            }
+            return mapper.map(result.getData(), QueuerVO.class);
         }
 
         QueuerQuery queuerQuery = new QueuerQuery(pageNum, pageSize, tokenAO.getDep());
@@ -111,13 +125,8 @@ public class QueuerController {
         if (!result.isSuccess()) {
             return result;
         }
-        List<QueuerBO> queuerBOList = result.getData();
-        List<QueuerVO> queuerVOList = new ArrayList<>(queuerBOList.size());
-        for (QueuerBO queuerBO : queuerBOList) {
-            QueuerVO queuerVO = mapper.map(queuerBO, QueuerVO.class);
-            queuerVOList.add(queuerVO);
-        }
-        return queuerVOList;
+
+        return beanUtils.mapList(result.getData(), QueuerVO.class);
     }
 
     /**
@@ -135,19 +144,6 @@ public class QueuerController {
     public Object getNumber(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         return queuerService.getCountByDep(tokenAO.getDep());
-    }
-
-    /**
-     * 检查result并返回
-     *
-     * @param result Result<QueuerBO>
-     * @return QueuerVO
-     */
-    private Object checkAndReturn(Result<QueuerBO> result) {
-        if (!result.isSuccess()) {
-            return result;
-        }
-        return mapper.map(result.getData(), QueuerVO.class);
     }
 
 }

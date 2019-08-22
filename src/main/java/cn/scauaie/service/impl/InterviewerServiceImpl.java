@@ -2,15 +2,17 @@ package cn.scauaie.service.impl;
 
 import cn.scauaie.dao.AuthCodeMapper;
 import cn.scauaie.dao.InterviewerMapper;
-import cn.scauaie.result.ErrorCode;
-import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.manager.constant.WeChatMp;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.dao.AuthCodeDO;
 import cn.scauaie.model.dao.InterviewerDO;
+import cn.scauaie.result.ErrorCode;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.InterviewerService;
-import org.springframework.beans.BeanUtils;
+import com.github.dozermapper.core.Mapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import org.springframework.stereotype.Service;
 @Service("interviewerService")
 public class InterviewerServiceImpl implements InterviewerService {
 
+    private static final Logger logger = LoggerFactory.getLogger(InterviewerServiceImpl.class);
+
     @Autowired
     private WeChatMpManager weChatMpManager;
 
@@ -32,6 +36,9 @@ public class InterviewerServiceImpl implements InterviewerService {
 
     @Autowired
     private InterviewerMapper interviewerMapper;
+
+    @Autowired
+    private Mapper mapper;
 
     // TODO: 2019/8/15 此处需要加锁，防止一个认证码被多个人使用
     /**
@@ -43,21 +50,20 @@ public class InterviewerServiceImpl implements InterviewerService {
      * @return InterviewerAO
      */
     @Override
-    public InterviewerAO saveInterviewer(String wxCode, String authCode, String name) {
+    public Result<InterviewerAO> saveInterviewer(String wxCode, String authCode, String name) {
         AuthCodeDO authCodeDO = authCodeMapper.getAuthCodeByCode(authCode);
         if (authCodeDO == null) {
-            throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND,
-                    "The specified authCode does not exist.");
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The specified authCode does not exist.");
         }
 
         String openid = weChatMpManager.getOpenid(wxCode, WeChatMp.SCAU_AIE);
         if (openid == null) {
-            throw new ProcessingException(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
+            return Result.fail(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
         }
 
         int count = interviewerMapper.countByOpenid(openid);
         if (count >= 1) {
-            throw new ProcessingException(ErrorCode.OPERATION_CONFLICT,
+            return Result.fail(ErrorCode.OPERATION_CONFLICT,
                     "Request was denied due to conflict, the openid already exists.");
         }
 
@@ -67,18 +73,17 @@ public class InterviewerServiceImpl implements InterviewerService {
         interviewerDO.setOpenid(openid);
         count = interviewerMapper.insert(interviewerDO);
         if (count < 1) {
-            throw new ProcessingException(ErrorCode.INTERNAL_ERROR, "Insert interviewer failed.");
+            logger.error("Insert interviewer failed. ");
+            return Result.fail(ErrorCode.INTERNAL_ERROR, "Insert interviewer failed.");
         }
 
         //删除已经被使用的认证码
         count = authCodeMapper.deleteAuthCodeByCode(authCode);
         if (count < 1) {
-            // TODO: 2019/8/15 加进日志
+            logger.error("Delete authCode fail. authcode: {}", authCode);
         }
 
-        InterviewerAO interviewerAO = new InterviewerAO();
-        BeanUtils.copyProperties(interviewerDO, interviewerAO);
-        return interviewerAO;
+        return Result.success(mapper.map(interviewerDO, InterviewerAO.class));
     }
 
     /**
@@ -88,19 +93,17 @@ public class InterviewerServiceImpl implements InterviewerService {
      * @return InterviewerAO
      */
     @Override
-    public InterviewerAO getInterviewerByCode(String code) {
+    public Result<InterviewerAO> getInterviewerByCode(String code) {
         String openid = weChatMpManager.getOpenid(code, WeChatMp.SCAU_AIE);
         if (openid == null) {
-            throw new ProcessingException(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
+            return Result.fail(ErrorCode.INVALID_PARAMETER, "The code is not valid.");
         }
 
         InterviewerDO interviewerDO = interviewerMapper.getInterviewerByOpenid(openid);
         if (interviewerDO == null) {
-            throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The openid is not found.");
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "The openid is not found.");
         }
-        InterviewerAO interviewerAO = new InterviewerAO();
-        BeanUtils.copyProperties(interviewerDO, interviewerAO);
-        return interviewerAO;
+        return Result.success(mapper.map(interviewerDO, InterviewerAO.class));
     }
 
     /**
@@ -122,9 +125,11 @@ public class InterviewerServiceImpl implements InterviewerService {
      */
     @Override
     public InterviewerAO getInterviewer(Integer id) {
-        InterviewerDO interviewerDO = interviewerMapper.selectByPrimaryKey(id);
-        InterviewerAO interviewerAO = new InterviewerAO();
-        BeanUtils.copyProperties(interviewerDO, interviewerAO);
-        return interviewerAO;
+        InterviewerDO interviewerDO = interviewerMapper.getInterviewer(id);
+        if (interviewerDO == null) {
+            return null;
+        }
+        return mapper.map(interviewerDO, InterviewerAO.class);
     }
+
 }
