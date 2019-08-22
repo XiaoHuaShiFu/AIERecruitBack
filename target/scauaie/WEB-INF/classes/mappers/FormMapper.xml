@@ -19,7 +19,7 @@
     <sql id="Base_Column_List">
                 id, openid, name, avatar, gender, college, major, phone, first_dep, second_dep, introduction
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="getForm" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from form
@@ -98,14 +98,14 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectByOpenid" parameterType="string" resultMap="BaseResultMap">
+    <select id="getFormByOpenid" parameterType="string" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from form
         where openid = #{openid, jdbcType=CHAR}
     </select>
 
-    <select id="selectAvatarById" parameterType="integer" resultType="string">
+    <select id="getAvatar" parameterType="integer" resultType="string">
         select avatar
         from form
         where id = #{id, jdbcType=INTEGER}
@@ -154,11 +154,18 @@
         group by first_dep
     </select>
 
-    <select id="getCountById" parameterType="int" resultType="int">
+    <select id="getCount" parameterType="int" resultType="int">
         select
         count(*)
         from form
         where id = #{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="getCountByOpenid" parameterType="string" resultType="int">
+        select
+        count(*)
+        from form
+        where openid = #{openid, jdbcType=VARCHAR}
     </select>
 
     <update id="updateAvatar" parameterType="map">

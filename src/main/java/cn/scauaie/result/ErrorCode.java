@@ -84,13 +84,13 @@ public enum ErrorCode {
             "Forbidden.SubUser", "The specified action is not available for you."),
 
     /**
-     * 为找到该参数
+     * 未找到该参数
      */
     INVALID_PARAMETER_NOT_FOUND(HttpStatus.NOT_FOUND,
-            "InvalidParameter.NotFound", "{ParameterName}"),
+            "InvalidParameter.NotFound", "The specified resource does not exist."),
 
     /**
-     * 为找到该参数
+     * 未找到该参数
      */
     INVALID_OPERATION_NOT_FOUND(HttpStatus.NOT_FOUND,
             "InvalidOperation.NotFound", "The specified resource does not exist."),

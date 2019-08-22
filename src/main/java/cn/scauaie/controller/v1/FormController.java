@@ -15,7 +15,7 @@ import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.FormService;
-import org.springframework.beans.BeanUtils;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +48,9 @@ public class FormController {
     @Autowired
     private FormService formService;
 
+    @Autowired
+    private Mapper mapper;
+
     /**
      * 创建Form并返回Form
      * @param code 微信小程序的wx.login()接口返回值
@@ -70,14 +73,17 @@ public class FormController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @ErrorHandler
     public Object post(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             @Validated(GroupFormAOPOST.class) FormAO formAO) {
-        formAO = formService.saveForm(code, formAO);
-        FormVO formVO = new FormVO();
-        BeanUtils.copyProperties(formAO, formVO);
-        return formVO;
+        Result<FormAO> result = formService.saveForm(code, formAO);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        return mapper.map(result.getData(), FormVO.class);
     }
 
     /**
@@ -97,6 +103,7 @@ public class FormController {
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth
+    @ErrorHandler
     public Object get(HttpServletRequest request,
                       @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
                       @PathVariable Integer id) {
@@ -104,21 +111,15 @@ public class FormController {
         TokenType type = TokenType.valueOf(tokenAO.getType());
 
         if (type == TokenType.INTERVIEWER) {
-            FormAO formAO = formService.getForm(id);
-            FormVO formVO = new FormVO();
-            BeanUtils.copyProperties(formAO, formVO);
-            return formVO;
+            return mapper.map(formService.getForm(id), FormVO.class);
         }
 
         if (type == TokenType.FORM) {
             Integer tid = tokenAO.getId();
             if (!tid.equals(id)) {
-                throw new ProcessingException(ErrorCode.FORBIDDEN_SUB_USER);
+                return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
             }
-            FormAO formAO = formService.getForm(id);
-            FormVO formVO = new FormVO();
-            BeanUtils.copyProperties(formAO, formVO);
-            return formVO;
+            return mapper.map(formService.getForm(id), FormVO.class);
         }
 
         //非form-token或interviewer-token
@@ -142,13 +143,13 @@ public class FormController {
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
     public Object get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
                     @RequestParam(defaultValue = "10") Integer pageSize, String q) {
-        List<FormAO> formAOList = formService.listForms(pageNum, pageSize, q);
-        List<FormVO> formVOList = new ArrayList<>(formAOList.size());
-        for (FormAO formAO : formAOList) {
-            FormVO formVO = new FormVO();
-            BeanUtils.copyProperties(formAO, formVO);
-            formVOList.add(formVO);
+        Result<List<FormAO>> result = formService.listForms(pageNum, pageSize, q);
+        if (!result.isSuccess()) {
+            return result;
         }
+
+        List<FormVO> formVOList = new ArrayList<>(result.getData().size());
+        mapper.map(result.getData(), formVOList);
         return formVOList;
     }
 
@@ -173,13 +174,16 @@ public class FormController {
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object put(HttpServletRequest request, @Validated(GroupFormAO.class) FormAO formAO) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         formAO.setId(tokenAO.getId());
-        formAO = formService.updateForm(formAO);
-        FormVO formVO = new FormVO();
-        BeanUtils.copyProperties(formAO, formVO);
-        return formVO;
+        Result<FormAO> result = formService.updateForm(formAO);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        return mapper.map(result.getData(), FormVO.class);
     }
 
     /**
@@ -220,14 +224,17 @@ public class FormController {
     @RequestMapping(value="/avatar", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object postAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        Integer id = tokenAO.getId();
-        String avatarUrl = formService.saveAvatar(id, avatar);
-        return new AvatarVO(avatarUrl);
+        Result<String> result = formService.saveAvatar(tokenAO.getId(), avatar);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        return new AvatarVO(result.getData());
     }
 
     /**
@@ -251,14 +258,17 @@ public class FormController {
     @RequestMapping(value="/avatar", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object putAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
                     MultipartFile avatar) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        Integer id = tokenAO.getId();
-        String newAvatarUrl = formService.updateAvatar(id, avatar);
-        return new AvatarVO(newAvatarUrl);
+        Result<String> result = formService.updateAvatar(tokenAO.getId(), avatar);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        return new AvatarVO(result.getData());
     }
 
     /**
@@ -284,6 +294,7 @@ public class FormController {
     @RequestMapping(value="/avatar/u", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object updateAvatar(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required avatar must be not null.")
@@ -313,17 +324,19 @@ public class FormController {
     @RequestMapping(value="/works", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object postWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
                     MultipartFile work) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        Integer fid = tokenAO.getId();
 
-        WorkAO workAO = formService.saveWork(fid, work);
-        WorkVO workVO = new WorkVO();
-        BeanUtils.copyProperties(workAO, workVO);
-        return workVO;
+        Result<WorkAO> result = formService.saveWork(tokenAO.getId(), work);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        return mapper.map(result.getData(), WorkVO.class);
     }
 
     /**
@@ -386,6 +399,7 @@ public class FormController {
     @RequestMapping(value="/works/{wid}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object putWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
@@ -394,12 +408,13 @@ public class FormController {
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required work must be not null.")
                     MultipartFile work) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        Integer fid = tokenAO.getId();
 
-        WorkAO workAO = formService.updateWork(wid, fid, work);
-        WorkVO workVO = new WorkVO();
-        BeanUtils.copyProperties(workAO, workVO);
-        return workVO;
+        Result<WorkAO> result = formService.updateWork(wid, tokenAO.getId(), work);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        return mapper.map(result.getData(), WorkVO.class);
     }
 
     /**
@@ -426,6 +441,7 @@ public class FormController {
     @RequestMapping(value="/works/{wid}/u", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
     public Object updateWork(
             HttpServletRequest request,
             @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")

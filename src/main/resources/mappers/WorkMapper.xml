@@ -76,6 +76,13 @@
     where fid = #{fid, jdbcType=INTEGER}
   </select>
 
+  <select id="getCount" parameterType="integer" resultType="int">
+    select
+    count(*)
+    from work
+    where id = #{id, jdbcType=INTEGER}
+  </select>
+
   <select id="getCountByFormId" parameterType="integer" resultType="int">
     select
     count(*)
@@ -83,7 +90,7 @@
     where fid = #{fid, jdbcType=INTEGER}
   </select>
 
-  <select id="selectUrlByFormIdAndWorkId" parameterType="map" resultType="string">
+  <select id="getUrlByFormIdAndWorkId" parameterType="map" resultType="string">
     select
     url
     from work

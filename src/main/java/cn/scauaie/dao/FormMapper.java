@@ -14,15 +14,15 @@ public interface FormMapper {
 
     int insertIfOpenidNotExist(FormDO record);
 
-    FormDO selectByPrimaryKey(Integer id);
+    FormDO getForm(Integer id);
 
     int updateByPrimaryKeySelective(FormDO record);
 
     int updateByPrimaryKey(FormDO record);
 
-    FormDO selectByOpenid(String openid);
+    FormDO getFormByOpenid(String openid);
 
-    String selectAvatarById(Integer id);
+    String getAvatar(Integer id);
 
     List<FormDO> listByFormQuery(FormQuery formQuery);
 
@@ -32,11 +32,14 @@ public interface FormMapper {
 
     List<DepNumberDO> listDepNumbersIfFirstDepSameAsSecondDep();
 
-    int getCountById(Integer id);
+    int getCount(Integer id);
+
+    int getCountByOpenid(String openid);
 
     int updateAvatar(@Param("id") Integer id, @Param("avatar") String avatar);
 
     String getName(Integer id);
 
     String getFirstDep(Integer id);
+
 }

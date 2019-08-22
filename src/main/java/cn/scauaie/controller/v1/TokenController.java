@@ -109,12 +109,17 @@ public class TokenController {
      */
     @RequestMapping(value="/form", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @ErrorHandler
     @Deprecated
     public Object postFormToken(
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The code must be not blank.")
             @Size(message = "INVALID_PARAMETER_SIZE: The size of code must be 32.", min = 32, max = 32) String code,
             HttpServletResponse response) {
-        FormAO formAO = formService.getFormByCode(code);
+        Result<FormAO> result = formService.getFormByCode(code);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        FormAO formAO = result.getData();
 
         //创建token令牌
         String token = tokenService.createAndSaveFormToken(code, formAO.getId(), formAO.getFirstDep());
@@ -122,8 +127,6 @@ public class TokenController {
         //响应头设置token
         response.setHeader("Authorization", token);
 
-//        FormVO formVO = new FormVO();
-//        BeanUtils.copyProperties(formAO, formVO);
         return mapper.map(formAO, FormVO.class);
     }
 
@@ -162,10 +165,6 @@ public class TokenController {
 
         //响应头设置token
         response.setHeader("Authorization", token);
-
-//        InterviewerVO interviewerVO = new InterviewerVO();
-//        BeanUtils.copyProperties(interviewerAO, interviewerVO);
-//
         return mapper.map(interviewerAO, InterviewerVO.class);
     }
 

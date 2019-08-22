@@ -102,7 +102,11 @@ public class TokenServiceImpl implements TokenService {
             tokenAO.setDep(interviewer.getDep());
             tokenAO.setType(TokenType.INTERVIEWER.name());
         } else {
-            FormAO form = formService.getFormByCode(code);
+            Result<FormAO> result = formService.getFormByCode(code);
+            if (!result.isSuccess()) {
+                return Result.fail(result.getErrorCode(), result.getMessage());
+            }
+            FormAO form = result.getData();
             tokenAO = new TokenAO();
             tokenAO.setId(form.getId());
             tokenAO.setDep(form.getFirstDep());

@@ -17,30 +17,30 @@ import java.util.Map;
  */
 public interface FormService {
 
-    FormAO saveForm(String code, FormAO formAO);
+    Result<FormAO> saveForm(String code, FormAO formAO);
 
     FormAO getForm(Integer id);
 
+    Result<FormAO> getFormByCode(String code);
+
+    Result<List<FormAO>> listForms(Integer pageNum, Integer pageSize, String q);
+
+    Result<FormAO> updateForm(FormAO formAO);
+
     String getName(Integer id);
 
-    FormAO getFormByCode(String code);
-
-    List<FormAO> listForms(Integer pageNum, Integer pageSize, String q);
-
-    FormAO updateForm(FormAO formAO);
-
-    String saveAvatar(Integer formId, MultipartFile avatar);
-
-    String updateAvatar(Integer formId, MultipartFile avatar);
-
-    WorkAO saveWork(Integer formId, MultipartFile work);
-
-    Result<WorkAO> deleteWork(Integer workId, Integer formId);
-
-    WorkAO updateWork(Integer workId, Integer formId, MultipartFile work);
+    String getFirstDep(Integer id);
 
     Map<String, Integer> listDepNumbers(Boolean includeSecondDep);
 
-    String getFirstDep(Integer id);
+    Result<String> saveAvatar(Integer formId, MultipartFile avatar);
+
+    Result<String> updateAvatar(Integer formId, MultipartFile avatar);
+
+    Result<WorkAO> saveWork(Integer formId, MultipartFile work);
+
+    Result<WorkAO> deleteWork(Integer workId, Integer formId);
+
+    Result<WorkAO> updateWork(Integer workId, Integer formId, MultipartFile work);
 
 }
