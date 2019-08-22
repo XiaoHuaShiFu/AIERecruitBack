@@ -1,5 +1,6 @@
 package cn.scauaie.controller.v1;
 
+import cn.scauaie.aspect.annotation.ErrorHandler;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
 import cn.scauaie.exception.ProcessingException;
@@ -12,10 +13,12 @@ import cn.scauaie.model.vo.AvatarVO;
 import cn.scauaie.model.vo.FormVO;
 import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.result.ErrorCode;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.FormService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -321,6 +324,44 @@ public class FormController {
         WorkVO workVO = new WorkVO();
         BeanUtils.copyProperties(workAO, workVO);
         return workVO;
+    }
+
+    /**
+     * 删除作品
+     *
+     * @param request HttpServletRequest
+     * @param id 作品编号
+     * @return WorkVO
+     *
+     * @success:
+     * HttpStatus.NO_CONTENT
+     *
+     * @errors:
+     * INVALID_PARAMETER_NOT_FOUND: The work of this id does not exist.
+     * FORBIDDEN_SUB_USER
+     * INTERNAL_ERROR: Delete work fail.
+     *
+     * @bindErrors
+     * INVALID_PARAMETER_IS_NULL
+     * INVALID_PARAMETER_VALUE_BELOW
+     */
+    @RequestMapping(value="/works/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
+    public Object deleteWork(
+            HttpServletRequest request,
+            @NotNull(message = "INVALID_PARAMETER_IS_NULL: The required wid must be not null.")
+            @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
+            @PathVariable Integer id) {
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+
+        Result<WorkAO> result = formService.deleteWork(id, tokenAO.getId());
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        return ResponseEntity.EMPTY;
     }
 
     /**

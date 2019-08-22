@@ -55,6 +55,15 @@ public class Result<T> implements Serializable {
     /**
      * 成功调用时的构造方法
      *
+     * @return Result<T>
+     */
+    public static <T> Result<T> success() {
+        return new Result<>(true);
+    }
+
+    /**
+     * 成功调用时的构造方法
+     *
      * @param data 业务数据
      * @return Result<T>
      */

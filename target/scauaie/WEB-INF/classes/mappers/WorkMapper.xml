@@ -76,7 +76,7 @@
     where fid = #{fid, jdbcType=INTEGER}
   </select>
 
-  <select id="selectCountByFormId" parameterType="integer" resultType="int">
+  <select id="getCountByFormId" parameterType="integer" resultType="int">
     select
     count(*)
     from work
@@ -89,5 +89,27 @@
     from work
     where id = #{id,  jdbcType=INTEGER}
     and fid = #{fid, jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByWorkIdAndFormId" parameterType="map">
+    delete from work
+    where id = #{id,jdbcType=INTEGER}
+    and fid = #{fid,jdbcType=INTEGER}
+  </delete>
+
+  <select id="getCountByWorkIdAndFormId" parameterType="map" resultType="int">
+    select
+    count(*)
+    from work
+    where id = #{id,jdbcType=INTEGER}
+    and fid = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="getUrlByWorkIdAndFormId" parameterType="map" resultType="string">
+    select
+    url
+    from work
+    where id = #{id,jdbcType=INTEGER}
+    and fid = #{fid,jdbcType=INTEGER}
   </select>
 </mapper>

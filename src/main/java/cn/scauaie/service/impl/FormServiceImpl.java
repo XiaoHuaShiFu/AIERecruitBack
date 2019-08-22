@@ -4,6 +4,7 @@ import cn.scauaie.converter.FormQueryConverter;
 import cn.scauaie.dao.FormMapper;
 import cn.scauaie.dao.WorkMapper;
 import cn.scauaie.exception.ProcessingException;
+import cn.scauaie.manager.FormManager;
 import cn.scauaie.manager.WeChatMpManager;
 import cn.scauaie.manager.constant.WeChatMp;
 import cn.scauaie.model.ao.FormAO;
@@ -13,6 +14,7 @@ import cn.scauaie.model.dao.FormDO;
 import cn.scauaie.model.dao.WorkDO;
 import cn.scauaie.model.query.FormQuery;
 import cn.scauaie.result.ErrorCode;
+import cn.scauaie.result.Result;
 import cn.scauaie.service.FileService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.WorkService;
@@ -40,6 +42,9 @@ public class FormServiceImpl implements FormService {
 
     @Autowired
     private FormMapper formMapper;
+
+    @Autowired
+    private FormManager formManager;
 
     @Autowired
     private WorkMapper workMapper;
@@ -160,7 +165,7 @@ public class FormServiceImpl implements FormService {
     @Override
     public WorkAO saveWork(Integer formId, MultipartFile work) {
         //查询作品数量
-        int count = workMapper.selectCountByFormId(formId);
+        int count = workMapper.getCountByFormId(formId);
         //作品数量已经到达上限
         if (count >= 6) {
             throw new ProcessingException(ErrorCode.OPERATION_CONFLICT,
@@ -183,6 +188,28 @@ public class FormServiceImpl implements FormService {
         WorkAO workAO = new WorkAO();
         BeanUtils.copyProperties(workDO, workAO);
         return workAO;
+    }
+
+    /**
+     * 删除作品，通过作品编号和报名表编号
+     *
+     * @param workId 作品编号
+     * @param formId 报名表编号
+     * @return Result<WorkAO>
+     */
+    @Override
+    public Result<WorkAO> deleteWork(Integer workId, Integer formId) {
+        //先获取作品url，否则删除之后就拿不到url了
+        String url = formManager.getWorkUrlByWorkIdAndFormId(workId, formId);
+
+        Result<WorkAO> result = formManager.deleteWork(workId, formId);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        fileService.delete(url);
+        return result;
+
     }
 
     /**

@@ -20,7 +20,13 @@ public interface WorkMapper {
 
     List<WorkDO> selectByFid(Integer fid);
 
-    int selectCountByFormId(Integer fid);
+    int getCountByFormId(Integer fid);
+
+    int getCountByWorkIdAndFormId(@Param("id") Integer id, @Param("fid") Integer fid);
 
     String selectUrlByFormIdAndWorkId(@Param("id") Integer workId, @Param("fid") Integer formId);
+
+    int deleteByWorkIdAndFormId(@Param("id") Integer id, @Param("fid") Integer fid);
+
+    String getUrlByWorkIdAndFormId(@Param("id") Integer id, @Param("fid") Integer fid);
 }

@@ -2,6 +2,7 @@ package cn.scauaie.service;
 
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.WorkAO;
+import cn.scauaie.result.Result;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -34,9 +35,12 @@ public interface FormService {
 
     WorkAO saveWork(Integer formId, MultipartFile work);
 
+    Result<WorkAO> deleteWork(Integer workId, Integer formId);
+
     WorkAO updateWork(Integer workId, Integer formId, MultipartFile work);
 
     Map<String, Integer> listDepNumbers(Boolean includeSecondDep);
 
     String getFirstDep(Integer id);
+
 }
