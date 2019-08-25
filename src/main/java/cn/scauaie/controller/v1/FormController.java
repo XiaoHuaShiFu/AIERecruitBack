@@ -141,6 +141,7 @@ public class FormController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    @ErrorHandler
     public Object get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
                     @RequestParam(defaultValue = "10") Integer pageSize, String q) {
         Result<List<FormAO>> result = formService.listForms(pageNum, pageSize, q);
@@ -196,6 +197,7 @@ public class FormController {
     @RequestMapping(value="/number", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    @ErrorHandler
     public Object getDepNumber(HttpServletRequest request, @RequestParam(defaultValue = "false") Boolean includeSecondDep) {
         return formService.listDepNumbers(includeSecondDep);
     }
