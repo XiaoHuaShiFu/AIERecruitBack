@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -151,7 +152,11 @@ public class EvaluationServiceImpl implements EvaluationService {
             return null;
         }
 
-        return beanUtils.mapList(evaluationDOList, EvaluationAO.class);
+        List<EvaluationAO> list = new ArrayList<>(evaluationDOList.size());
+        for (EvaluationDO evaluationDO : evaluationDOList) {
+            list.add(assembleEvaluationAOByEvaluationDO(evaluationDO));
+        }
+        return list;
     }
 
     /**

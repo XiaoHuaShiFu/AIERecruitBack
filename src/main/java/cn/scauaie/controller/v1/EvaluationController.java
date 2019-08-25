@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO: 2019/8/23 面试官权限问题
@@ -131,7 +132,9 @@ public class EvaluationController {
             return result;
         }
 
-        return beanUtils.mapList(result.getData(), EvaluationVO.class);
+        List<EvaluationVO> list = new ArrayList<>(result.getData().size());
+        mapper.map(result.getData(), list);
+        return list;
     }
 
 }
