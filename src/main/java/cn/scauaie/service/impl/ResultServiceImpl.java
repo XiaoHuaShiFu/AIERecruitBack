@@ -7,7 +7,6 @@ import cn.scauaie.model.query.ResultQuery;
 import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.ResultService;
-import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,9 +34,6 @@ public class ResultServiceImpl implements ResultService {
 
     @Autowired
     private Mapper mapper;
-
-    @Autowired
-    private BeanUtils beanUtils;
 
     // TODO: 2019/8/20 这里要检查面试官权限
     @Override
@@ -83,6 +80,10 @@ public class ResultServiceImpl implements ResultService {
             return null;
         }
 
-        return beanUtils.mapList(resultDOList, ResultAO.class);
+        List<ResultAO> resultAOList = new ArrayList<>(resultDOList.size());
+        for (ResultDO resultDO : resultDOList) {
+            resultAOList.add(mapper.map(resultDO, ResultAO.class));
+        }
+        return resultAOList;
     }
 }

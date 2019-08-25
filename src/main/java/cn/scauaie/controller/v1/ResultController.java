@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,9 +37,6 @@ public class ResultController {
 
     @Autowired
     private Mapper mapper;
-
-    @Autowired
-    private BeanUtils beanUtils;
 
     /**
      * 创建Result并返回Result
@@ -94,7 +92,11 @@ public class ResultController {
             return result;
         }
 
-        return beanUtils.mapList(result.getData(), ResultVO.class);
+        List<ResultVO> resultVOList = new ArrayList<>(result.getData().size());
+        for (ResultAO resultAO : result.getData()) {
+            resultVOList.add(mapper.map(resultAO, ResultVO.class));
+        }
+        return resultVOList;
     }
 
 }
