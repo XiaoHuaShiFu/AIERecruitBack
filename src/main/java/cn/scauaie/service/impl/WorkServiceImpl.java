@@ -66,7 +66,7 @@ public class WorkServiceImpl implements WorkService {
         workDO.setFid(formId);
 
         //添加作品到数据库
-        count = workMapper.insertSelective(workDO);
+        count = workMapper.insertWorkSelective(workDO);
         //插入失败
         if (count < 1) {
             logger.error("Insert work failed. formId: {}", formId);
@@ -111,7 +111,7 @@ public class WorkServiceImpl implements WorkService {
      */
     @Override
     public List<WorkAO> listWorksByFormId(Integer formId) {
-        List<WorkDO> workDOList = workMapper.selectByFid(formId);
+        List<WorkDO> workDOList = workMapper.listWorksByFormId(formId);
         System.out.println(workDOList);
         if (workDOList.size() < 1) {
             return null;
@@ -157,7 +157,7 @@ public class WorkServiceImpl implements WorkService {
         WorkDO workDO = new WorkDO();
         workDO.setId(workId);
         workDO.setUrl(newWorkUrl);
-        int count = workMapper.updateByPrimaryKeySelective(workDO);
+        int count = workMapper.updateWorkSelective(workDO);
         if (count < 1) {
             logger.error("Update work failed. workId: {}, oldWorkUrl: {}", workId, oldWorkUrl);
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Update work failed.");

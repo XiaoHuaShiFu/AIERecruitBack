@@ -6,19 +6,22 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface WorkMapper {
-    int deleteByPrimaryKey(Integer id);
 
-    int insert(WorkDO record);
+    int insertWork(WorkDO record);
 
-    int insertSelective(WorkDO record);
+    int insertWorkSelective(WorkDO record);
 
-    WorkDO selectByPrimaryKey(Integer id);
+    int deleteWork(Integer id);
 
-    int updateByPrimaryKeySelective(WorkDO record);
+    int deleteByWorkIdAndFormId(@Param("id") Integer id, @Param("fid") Integer fid);
 
-    int updateByPrimaryKey(WorkDO record);
+    WorkDO getWork(Integer id);
 
-    List<WorkDO> selectByFid(Integer fid);
+    List<WorkDO> listWorksByFormId(Integer fid);
+
+    int updateWorkSelective(WorkDO record);
+
+    int updateWork(WorkDO record);
 
     int getCount(Integer id);
 
@@ -28,9 +31,6 @@ public interface WorkMapper {
 
     String getUrlByFormIdAndWorkId(@Param("id") Integer id, @Param("fid") Integer fid);
 
-    int deleteByWorkIdAndFormId(@Param("id") Integer id, @Param("fid") Integer fid);
-
     String getUrlByWorkIdAndFormId(@Param("id") Integer id, @Param("fid") Integer fid);
-
 
 }

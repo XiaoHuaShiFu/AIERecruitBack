@@ -11,21 +11,21 @@
   <sql id="Base_Column_List" >
     id, fid, url
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getWork" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from work
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteWork" parameterType="java.lang.Integer" >
     delete from work
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="cn.scauaie.model.dao.WorkDO" >
+  <insert id="insertWork" parameterType="cn.scauaie.model.dao.WorkDO" >
     insert into work (id, fid, url)
     values (#{id,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.scauaie.model.dao.WorkDO" useGeneratedKeys="true" keyProperty="id" >
+  <insert id="insertWorkSelective" parameterType="cn.scauaie.model.dao.WorkDO" useGeneratedKeys="true" keyProperty="id" >
     insert into work
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -50,7 +50,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.WorkDO" >
+  <update id="updateWorkSelective" parameterType="cn.scauaie.model.dao.WorkDO" >
     update work
     <set >
       <if test="fid != null" >
@@ -62,14 +62,14 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.scauaie.model.dao.WorkDO" >
+  <update id="updateWork" parameterType="cn.scauaie.model.dao.WorkDO" >
     update work
     set fid = #{fid,jdbcType=INTEGER},
       url = #{url,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByFid" parameterType="integer" resultMap="BaseResultMap">
+  <select id="listWorksByFormId" parameterType="integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from work
