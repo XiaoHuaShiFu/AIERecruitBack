@@ -1,5 +1,6 @@
 package cn.scauaie.service.impl;
 
+import cn.scauaie.constant.DepEnum;
 import cn.scauaie.dao.ResultMapper;
 import cn.scauaie.model.ao.ResultAO;
 import cn.scauaie.model.dao.ResultDO;
@@ -7,6 +8,7 @@ import cn.scauaie.model.query.ResultQuery;
 import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.ResultService;
+import cn.scauaie.util.PropertiesUtils;
 import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -14,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 描述:
@@ -34,6 +36,40 @@ public class ResultServiceImpl implements ResultService {
 
     @Autowired
     private Mapper mapper;
+
+    /**
+     * 结果模板集合的文件名
+     */
+    private final static String RESULT_SET_FILE_NAME = "result-set.properties";
+
+    /**
+     * 发送面试结果
+     *
+     * @param id 报名表编号
+     * @param firstDep 报名表编号
+     * @param secondDep 报名表编号
+     * @return Result<ResultAO>
+     */
+    public Result<ResultAO> sendInterviewResults(Integer id, String firstDep, String secondDep) {
+        ResultAO resultAO = new ResultAO();
+        resultAO.setFid(id);
+        resultAO.setResult(PropertiesUtils.getProperty(firstDep, RESULT_SET_FILE_NAME));
+        Result<ResultAO> result = saveResult(resultAO);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (firstDep.equals(DepEnum.ZKB.name()) || firstDep.equals(DepEnum.XCB.name())) {
+
+            return result;
+        }
+
+        if (!firstDep.equals(secondDep)) {
+            resultAO.setResult(PropertiesUtils.getProperty(secondDep, RESULT_SET_FILE_NAME));
+            result = saveResult(resultAO);
+        }
+        return result;
+    }
 
     // TODO: 2019/8/20 这里要检查面试官权限
     @Override
@@ -80,10 +116,8 @@ public class ResultServiceImpl implements ResultService {
             return null;
         }
 
-        List<ResultAO> resultAOList = new ArrayList<>(resultDOList.size());
-        for (ResultDO resultDO : resultDOList) {
-            resultAOList.add(mapper.map(resultDO, ResultAO.class));
-        }
-        return resultAOList;
+        return resultDOList.stream()
+                .map(resultDO -> mapper.map(resultDO, ResultAO.class))
+                .collect(Collectors.toList());
     }
 }

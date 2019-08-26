@@ -1,19 +1,15 @@
 package cn.scauaie.service.impl;
 
-import cn.scauaie.converter.EvaluationQueryConverter;
 import cn.scauaie.dao.EvaluationMapper;
 import cn.scauaie.model.ao.EvaluationAO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
+import cn.scauaie.model.ao.ResultAO;
 import cn.scauaie.model.dao.EvaluationDO;
 import cn.scauaie.model.query.EvaluationQuery;
 import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
-import cn.scauaie.service.EvaluationService;
-import cn.scauaie.service.FormService;
-import cn.scauaie.service.InterviewerService;
-import cn.scauaie.service.QueuerService;
-import cn.scauaie.util.BeanUtils;
+import cn.scauaie.service.*;
 import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -21,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 描述:
@@ -49,23 +45,21 @@ public class EvaluationServiceImpl implements EvaluationService {
     private QueuerService queuerService;
 
     @Autowired
-    private EvaluationQueryConverter evaluationQueryConverter;
+    private ResultService resultService;
 
     @Autowired
     private Mapper mapper;
 
-    @Autowired
-    private BeanUtils beanUtils;
-
     /**
      * 检查面试官的部门是否有权评价报名表的部门
      * 并保存面试官评价
+     * 并发送面试结果
      *
      * @param evaluationAO 评价
      * @return EvaluationAO
      */
     @Override
-    public Result<EvaluationAO> checkDepAndSaveEvaluation(EvaluationAO evaluationAO) {
+    public Result<EvaluationAO> checkDepAndSaveEvaluationAndSendInterviewResults(EvaluationAO evaluationAO) {
         String formDep = formService.getFirstDep(evaluationAO.getFid());
         //此编号的报名表不存在
         if (formDep == null) {
@@ -82,7 +76,21 @@ public class EvaluationServiceImpl implements EvaluationService {
             return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
         }
 
-        return saveEvaluation(evaluationAO);
+        Result<EvaluationAO> result = saveEvaluation(evaluationAO);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        //发送面试结果
+        FormAO formAO = result.getData().getForm();
+        Result<ResultAO> result1 = resultService.sendInterviewResults(
+                formAO.getId(), formAO.getFirstDep(), formAO.getSecondDep());
+        //发送失败
+        if (!result1.isSuccess()) {
+            logger.error("Send interview results fail. evaluationId: {}.", result.getData().getIid());
+        }
+
+        return result;
     }
 
     /**
@@ -97,7 +105,8 @@ public class EvaluationServiceImpl implements EvaluationService {
         int count = evaluationMapper.insertSelective(evaluationDO);
         //保存评价失败
         if (count < 1) {
-            logger.error("Insert evaluation failed.");
+            logger.error("Insert evaluation failed. formId: {}, pass: {}",
+                    evaluationAO.getFid(), evaluationAO.getPass());
             return Result.fail(ErrorCode.INTERNAL_ERROR, "Insert evaluation failed.");
         }
 
@@ -121,22 +130,39 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     /**
-     * 搜索评价表列表
+     * 获取评价表，需要面试官与该面试者同部门
      *
-     * @param pageNum 页码
-     * @param pageSize 页条数
-     * @param q 搜索参数
-     * @return List<EvaluationAO>
+     * @param id 评价表编号
+     * @param interviewerDep 面试官部门
+     * @return EvaluationAO
      */
-    public Result<List<EvaluationAO>> listEvaluations(Integer pageNum, Integer pageSize, String q) {
-        EvaluationQuery query = evaluationQueryConverter.convert(q);
-        query.setPageNum(pageNum);
-        query.setPageSize(pageSize);
-        List<EvaluationAO> evaluationAOList = listEvaluations(query);
-        if (evaluationAOList == null) {
+    @Override
+    public Result<EvaluationAO> getEvaluation(Integer id, String interviewerDep) {
+        EvaluationDO evaluationDO =
+                evaluationMapper.getEvaluationByEvaluationIdAndIfInterviewerDepEqualFormFirstDepOrSecondDep(id, interviewerDep);
+        if (evaluationDO == null) {
             return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
         }
-        return Result.success(evaluationAOList);
+
+        return Result.success(assembleEvaluationAOByEvaluationDO(evaluationDO));
+    }
+
+    /**
+     * 获取评价表，通过编号和面试官编号
+     *
+     * @param evaluationId 评价表编号
+     * @param interviewerId 面试官编号
+     * @return EvaluationAO
+     */
+    @Override
+    public Result<EvaluationAO> getEvaluation(Integer evaluationId, Integer interviewerId) {
+        EvaluationDO evaluationDO =
+                evaluationMapper.getEvaluationByEvaluationIdAndInterviewerId(evaluationId, interviewerId);
+        if (evaluationDO == null) {
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+
+        return Result.success(assembleEvaluationAOByEvaluationDO(evaluationDO));
     }
 
     /**
@@ -145,18 +171,17 @@ public class EvaluationServiceImpl implements EvaluationService {
      * @param query EvaluationQuery
      * @return List<EvaluationAO>
      */
-    private List<EvaluationAO> listEvaluations(EvaluationQuery query) {
+    public Result<List<EvaluationAO>> listEvaluations(EvaluationQuery query) {
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<EvaluationDO> evaluationDOList = evaluationMapper.listEvaluationsByQuery(query);
         if (evaluationDOList.size() < 1) {
-            return null;
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
         }
 
-        List<EvaluationAO> list = new ArrayList<>(evaluationDOList.size());
-        for (EvaluationDO evaluationDO : evaluationDOList) {
-            list.add(assembleEvaluationAOByEvaluationDO(evaluationDO));
-        }
-        return list;
+        return Result.success(
+                evaluationDOList.stream()
+                        .map(evaluationDO -> mapper.map(evaluationDO, EvaluationAO.class))
+                        .collect(Collectors.toList()));
     }
 
     /**

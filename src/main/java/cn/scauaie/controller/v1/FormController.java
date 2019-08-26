@@ -14,7 +14,6 @@ import cn.scauaie.model.vo.WorkVO;
 import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.FormService;
-import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +28,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 描述: Form Web层
@@ -47,9 +47,6 @@ public class FormController {
 
     @Autowired
     private Mapper mapper;
-
-    @Autowired
-    private BeanUtils beanUtils;
 
     /**
      * 创建Form并返回Form
@@ -126,7 +123,6 @@ public class FormController {
         return Result.fail(ErrorCode.FORBIDDEN_SUB_USER);
     }
 
-    // TODO: 2019/8/16 查询优化
     /**
      * 查询form
      * @param request HttpServletRequest
@@ -149,7 +145,9 @@ public class FormController {
             return result;
         }
 
-        return beanUtils.mapList(result.getData(), FormVO.class);
+        return result.getData().stream()
+                .map(formAO -> mapper.map(formAO, FormVO.class))
+                .collect(Collectors.toList());
     }
 
     /**

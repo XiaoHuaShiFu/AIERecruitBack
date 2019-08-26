@@ -1,90 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.scauaie.dao.EvaluationMapper" >
-  <resultMap id="BaseResultMap" type="cn.scauaie.model.dao.EvaluationDO" >
-    <constructor >
-      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="fid" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="iid" jdbcType="VARCHAR" javaType="java.lang.Integer" />
-      <arg column="evaluation" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="is_pass" jdbcType="BIT" javaType="java.lang.Boolean" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="cn.scauaie.dao.EvaluationMapper">
+    <resultMap id="BaseResultMap" type="cn.scauaie.model.dao.EvaluationDO">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="fid" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="iid" jdbcType="VARCHAR" javaType="java.lang.Integer"/>
+            <arg column="evaluation" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="is_pass" jdbcType="BIT" javaType="java.lang.Boolean"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, fid, iid, evaluation, is_pass
   </sql>
-  <select id="getEvaluation" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from evaluation
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="getEvaluation" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from evaluation
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from evaluation
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="cn.scauaie.model.dao.EvaluationDO" >
+    <insert id="insert" parameterType="cn.scauaie.model.dao.EvaluationDO">
     insert into evaluation (id, fid, iid,
       evaluation, is_pass)
     values (#{id,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{iid,jdbcType=INTEGER},
       #{evaluation,jdbcType=VARCHAR}, #{pass,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="cn.scauaie.model.dao.EvaluationDO" useGeneratedKeys="true" keyProperty="id" >
-    insert into evaluation
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="fid != null" >
-        fid,
-      </if>
-      <if test="iid != null" >
-        iid,
-      </if>
-      <if test="evaluation != null" >
-        evaluation,
-      </if>
-      <if test="pass != null" >
-        is_pass,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="fid != null" >
-        #{fid,jdbcType=INTEGER},
-      </if>
-      <if test="iid != null" >
-        #{iid,jdbcType=INTEGER},
-      </if>
-      <if test="evaluation != null" >
-        #{evaluation,jdbcType=VARCHAR},
-      </if>
-      <if test="pass != null" >
-        #{pass,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.EvaluationDO" >
-    update evaluation
-    <set >
-      <if test="fid != null" >
-        fid = #{fid,jdbcType=INTEGER},
-      </if>
-      <if test="iid != null" >
-        iid = #{iid,jdbcType=INTEGER},
-      </if>
-      <if test="evaluation != null" >
-        evaluation = #{evaluation,jdbcType=VARCHAR},
-      </if>
-      <if test="pass != null" >
-        is_pass = #{pass,jdbcType=BIT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.scauaie.model.dao.EvaluationDO" >
+    <insert id="insertSelective" parameterType="cn.scauaie.model.dao.EvaluationDO" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into evaluation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="fid != null">
+                fid,
+            </if>
+            <if test="iid != null">
+                iid,
+            </if>
+            <if test="evaluation != null">
+                evaluation,
+            </if>
+            <if test="pass != null">
+                is_pass,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="fid != null">
+                #{fid,jdbcType=INTEGER},
+            </if>
+            <if test="iid != null">
+                #{iid,jdbcType=INTEGER},
+            </if>
+            <if test="evaluation != null">
+                #{evaluation,jdbcType=VARCHAR},
+            </if>
+            <if test="pass != null">
+                #{pass,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.scauaie.model.dao.EvaluationDO">
+        update evaluation
+        <set>
+            <if test="fid != null">
+                fid = #{fid,jdbcType=INTEGER},
+            </if>
+            <if test="iid != null">
+                iid = #{iid,jdbcType=INTEGER},
+            </if>
+            <if test="evaluation != null">
+                evaluation = #{evaluation,jdbcType=VARCHAR},
+            </if>
+            <if test="pass != null">
+                is_pass = #{pass,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.scauaie.model.dao.EvaluationDO">
     update evaluation
     set fid = #{fid,jdbcType=INTEGER},
       iid = #{iid,jdbcType=INTEGER},
@@ -93,17 +94,43 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="listEvaluationsByQuery" parameterType="cn.scauaie.model.query.EvaluationQuery" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from evaluation
-    <where>
-      <if test="fid != null">
-        and fid = #{fid, jdbcType=INTEGER}
-      </if>
-      <if test="pass != null">
-        and is_pass = #{pass, jdbcType=BIT}
-      </if>
-    </where>
-  </select>
+    <select id="listEvaluationsByQuery" parameterType="cn.scauaie.model.query.EvaluationQuery"
+            resultMap="BaseResultMap">
+        select
+        e.id, e.fid, e.iid, e.evaluation, e.is_pass
+        from evaluation e, form f
+        <where>
+            <if test="fid != null">
+                and e.fid = #{fid, jdbcType=INTEGER}
+            </if>
+            <if test="pass != null">
+                and e.is_pass = #{pass, jdbcType=BIT}
+            </if>
+            <if test="true">
+                and f.id = e.fid
+            </if>
+            <if test="true">
+                and (f.first_dep = #{interviewerDep, jdbcType=CHAR} or f.second_dep = #{interviewerDep, jdbcType=CHAR})
+            </if>
+        </where>
+        order by e.update_time desc
+    </select>
+
+    <select id="getEvaluationByEvaluationIdAndIfInterviewerDepEqualFormFirstDepOrSecondDep" parameterType="map"
+            resultMap="BaseResultMap">
+        select
+        e.id, e.fid, e.iid, e.evaluation, e.is_pass
+        from evaluation e, form f
+        where e.id = #{id, jdbcType=INTEGER}
+        and f.id = e.fid
+        and (f.first_dep = #{interviewerDep, jdbcType=CHAR} or f.second_dep = #{interviewerDep, jdbcType=CHAR})
+    </select>
+
+    <select id="getEvaluationByEvaluationIdAndInterviewerId" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from evaluation
+        where id = #{id, jdbcType=INTEGER}
+        and iid = #{iid, jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -23,10 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 描述:
@@ -212,28 +212,24 @@ public class FormServiceImpl implements FormService {
      */
     @Override
     public Map<String, Integer> listDepNumbers(Boolean includeSecondDep) {
-        List<DepNumberDO> firstDepNumberDOList = formMapper.listFirstDepNumbers();
         Map<String, Integer> depNumberMap = new HashMap<>(16);
-        for (DepNumberDO depNumberDO : firstDepNumberDOList) {
-            depNumberMap.merge(depNumberDO.getDep(), depNumberDO.getNumber(),
-                    (oldNumber, newNumber) -> oldNumber + newNumber);
-        }
+        //加上第一志愿部门的人数
+        List<DepNumberDO> firstDepNumberDOList = formMapper.listFirstDepNumbers();
+        firstDepNumberDOList.forEach(depNumberDO -> depNumberMap.merge(
+                depNumberDO.getDep(), depNumberDO.getNumber(), (oldNumber, newNumber) -> oldNumber + newNumber));
         if (!includeSecondDep) {
             return depNumberMap;
         }
 
+        //加上第二志愿部门的人数
         List<DepNumberDO> secondDepNumberDOList = formMapper.listSecondDepNumbers();
-        for (DepNumberDO depNumberDO : secondDepNumberDOList) {
-            depNumberMap.merge(depNumberDO.getDep(), depNumberDO.getNumber(),
-                    (oldNumber, newNumber) -> oldNumber + newNumber);
-        }
+        secondDepNumberDOList.forEach(depNumberDO -> depNumberMap.merge(
+                depNumberDO.getDep(), depNumberDO.getNumber(), (oldNumber, newNumber) -> oldNumber + newNumber));
 
         //减去第一第二志愿部门都一样的人数
         List<DepNumberDO> firstDepSameAsSecondDepDepNumberDOList = formMapper.listDepNumbersIfFirstDepSameAsSecondDep();
-        for (DepNumberDO depNumberDO : firstDepSameAsSecondDepDepNumberDOList) {
-            depNumberMap.merge(depNumberDO.getDep(), depNumberDO.getNumber(),
-                    (oldNumber, newNumber) -> oldNumber - newNumber);
-        }
+        firstDepSameAsSecondDepDepNumberDOList.forEach(depNumberDO -> depNumberMap.merge(
+                depNumberDO.getDep(), depNumberDO.getNumber(), (oldNumber, newNumber) -> oldNumber - newNumber));
 
         return depNumberMap;
     }
@@ -333,14 +329,11 @@ public class FormServiceImpl implements FormService {
             return null;
         }
 
-        List<FormAO> formAOList = new ArrayList<>(formDOList.size());
-        for (FormDO formDO : formDOList) {
+        return formDOList.stream().map(formDO -> {
             FormAO formAO = mapper.map(formDO, FormAO.class);
-            List<WorkAO> workAOList = workService.listWorksByFormId(formDO.getId());
-            formAO.setWorks(workAOList);
-            formAOList.add(formAO);
-        }
-        return formAOList;
+            formAO.setWorks(workService.listWorksByFormId(formDO.getId()));
+            return formAO;
+        }).collect(Collectors.toList());
     }
 
     /**

@@ -8,7 +8,6 @@ import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.model.vo.ResultVO;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.ResultService;
-import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -92,11 +91,9 @@ public class ResultController {
             return result;
         }
 
-        List<ResultVO> resultVOList = new ArrayList<>(result.getData().size());
-        for (ResultAO resultAO : result.getData()) {
-            resultVOList.add(mapper.map(resultAO, ResultVO.class));
-        }
-        return resultVOList;
+        return result.getData().stream()
+                .map(resultAO -> mapper.map(resultAO, ResultVO.class))
+                .collect(Collectors.toList());
     }
 
 }

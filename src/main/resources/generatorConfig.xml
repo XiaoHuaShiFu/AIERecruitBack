@@ -21,11 +21,9 @@
         <!--jdbc的数据库连接 -->
         <jdbcConnection
                 driverClass="${db.driverClassName}"
-                connectionURL="${db.avatar}"
+                connectionURL="${db.url}"
                 userId="${db.username}"
-                password="${db.password}">
-        </jdbcConnection>
-
+                password="${db.password}"/>
 
         <!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制-->
         <javaTypeResolver>
@@ -73,6 +71,7 @@
         <!--<table tableName="interviewer" domainObjectName="InterviewerDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
         <!--<table tableName="evaluation" domainObjectName="EvaluationDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
         <!--<table tableName="auth_code" domainObjectName="AuthCodeDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
+        <table tableName="evaluation_log" domainObjectName="EvaluationLogDO" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
 
 
     </context>

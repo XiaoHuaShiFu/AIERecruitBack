@@ -25,20 +25,14 @@ public class EvaluationQueryConverter implements Converter<String, EvaluationQue
         if (StringUtils.isBlank(source)) {
             return new EvaluationQuery();
         }
+        EvaluationQuery evaluationQuery = new EvaluationQuery();
         if (NumberUtils.isDigits(source)) {
-            EvaluationQuery evaluationQuery = new EvaluationQuery();
             evaluationQuery.setFid(Integer.valueOf(source));
-            return evaluationQuery;
         }
         if (source.equals(PASS)) {
-            EvaluationQuery evaluationQuery = new EvaluationQuery();
             evaluationQuery.setPass(true);
-            return evaluationQuery;
-        }
-        if (source.equals(NOT_PASS)) {
-            EvaluationQuery evaluationQuery = new EvaluationQuery();
+        } else if (source.equals(NOT_PASS)) {
             evaluationQuery.setPass(false);
-            return evaluationQuery;
         }
         return new EvaluationQuery();
     }

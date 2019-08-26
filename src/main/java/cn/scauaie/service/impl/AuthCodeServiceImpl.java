@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 描述:
@@ -37,14 +38,15 @@ public class AuthCodeServiceImpl implements AuthCodeService {
      */
     @Override
     public List<AuthCodeAO> createAndSaveAuthCodes(String dep, Integer count) {
-        List<AuthCodeDO> authCodeList = new ArrayList<>(count);
+        List<AuthCodeDO> authCodeDOList = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            authCodeList.add(new AuthCodeDO(UUID.randomUUID().toString(), dep));
+            authCodeDOList.add(new AuthCodeDO(UUID.randomUUID().toString(), dep));
         }
-        authCodeMapper.insertAuthCodes(authCodeList);
-        List<AuthCodeAO> authCodeAOList = new ArrayList<>();
-        mapper.map(authCodeList, authCodeAOList);
-        return authCodeAOList;
+
+        authCodeMapper.insertAuthCodes(authCodeDOList);
+        return authCodeDOList.stream()
+                .map(authCodeDO -> mapper.map(authCodeDO, AuthCodeAO.class))
+                .collect(Collectors.toList());
     }
 
 }

@@ -16,14 +16,17 @@ public class EvaluationQuery {
 
     Integer fid;
 
+    String interviewerDep;
+
     public EvaluationQuery() {
     }
 
-    public EvaluationQuery(Integer pageNum, Integer pageSize, Boolean pass, Integer fid) {
+    public EvaluationQuery(Integer pageNum, Integer pageSize, Boolean pass, Integer fid, String interviewerDep) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.pass = pass;
         this.fid = fid;
+        this.interviewerDep = interviewerDep;
     }
 
     public Integer getPageNum() {
@@ -58,6 +61,14 @@ public class EvaluationQuery {
         this.fid = fid;
     }
 
+    public String getInterviewerDep() {
+        return interviewerDep;
+    }
+
+    public void setInterviewerDep(String interviewerDep) {
+        this.interviewerDep = interviewerDep;
+    }
+
     @Override
     public String toString() {
         return "EvaluationQuery{" +
@@ -65,6 +76,7 @@ public class EvaluationQuery {
                 ", pageSize=" + pageSize +
                 ", pass=" + pass +
                 ", fid=" + fid +
+                ", interviewerDep='" + interviewerDep + '\'' +
                 '}';
     }
 }

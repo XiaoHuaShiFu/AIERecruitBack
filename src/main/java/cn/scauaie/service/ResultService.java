@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface ResultService {
 
+    Result<ResultAO> sendInterviewResults(Integer id, String firstDep, String secondDep);
+
     Result<ResultAO> saveResult(ResultAO resultAO);
 
     Result<List<ResultAO>> listResults(Integer pageNum, Integer pageSize, Integer formId);

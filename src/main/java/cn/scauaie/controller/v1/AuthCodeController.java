@@ -6,8 +6,8 @@ import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.AuthCodeAO;
 import cn.scauaie.model.vo.AuthCodeVO;
 import cn.scauaie.service.AuthCodeService;
-import cn.scauaie.util.BeanUtils;
 import cn.scauaie.validator.annotation.Dep;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +20,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -38,9 +39,9 @@ public class AuthCodeController {
     private AuthCodeService authCodeService;
 
     @Autowired
-    private BeanUtils beanUtils;
+    private Mapper mapper;
 
-    // TODO: 2019/8/21 弄成一个特权接口
+    // TODO: 2019/8/21 弄成一个特权接口（如admin权限）
     /**
      * 生成authcode
      *
@@ -55,12 +56,14 @@ public class AuthCodeController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
     @ErrorHandler
-    public Object postToken(
+    public Object post(
             @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of count below, min: 0.", value = 1)
             @Max(message = "INVALID_PARAMETER_VALUE_EXCEEDED: The name of count exceeded, max: 10.", value = 10) Integer count,
             @NotBlank(message = "INVALID_PARAMETER_IS_BLANK: The dep must be not blank.") @Dep String dep) {
-        List<AuthCodeAO> authCodeList = authCodeService.createAndSaveAuthCodes(dep, count);
-        return beanUtils.mapList(authCodeList, AuthCodeVO.class);
+        List<AuthCodeAO> authCodeAOList = authCodeService.createAndSaveAuthCodes(dep, count);
+        return authCodeAOList.stream()
+                .map(authCodeAO -> mapper.map(authCodeAO, AuthCodeVO.class))
+                .collect(Collectors.toList());
     }
 
 }
