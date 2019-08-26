@@ -1,12 +1,10 @@
 package cn.scauaie.config;
 
-import cn.scauaie.util.BeanUtils;
 import cn.scauaie.util.PropertiesUtils;
 import cn.scauaie.util.ftp.FTPClientTemplate;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -74,18 +72,6 @@ public class SingletonBeansConfig {
     @Bean
     public Mapper mapper() {
         return DozerBeanMapperBuilder.buildDefault();
-    }
-
-    /**
-     * bean工具类，对dozer没有功能的补充
-     *
-     * @param mapper dozer实例
-     * @return BeanUtils
-     */
-    @Bean
-    @Autowired
-    public BeanUtils beanUtils(Mapper mapper) {
-        return new BeanUtils(mapper);
     }
 
 }
