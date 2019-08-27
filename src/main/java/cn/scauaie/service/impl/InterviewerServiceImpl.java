@@ -11,10 +11,14 @@ import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.InterviewerService;
 import com.github.dozermapper.core.Mapper;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 描述:
@@ -87,6 +91,22 @@ public class InterviewerServiceImpl implements InterviewerService {
     }
 
     /**
+     * 获取面试官通过编号
+     *
+     * @param id 面试官编号
+     * @return InterviewerAO
+     */
+    @Override
+    public InterviewerAO getInterviewer(Integer id) {
+        InterviewerDO interviewerDO = interviewerMapper.getInterviewer(id);
+        if (interviewerDO == null) {
+            return null;
+        }
+        return mapper.map(interviewerDO, InterviewerAO.class);
+    }
+
+
+    /**
      * 通过code寻找Interviewer
      *
      * @param code 微信小程序wx.login()接口返回值
@@ -107,6 +127,26 @@ public class InterviewerServiceImpl implements InterviewerService {
     }
 
     /**
+     * 获得面试官列表
+     *
+     * @param pageNum 页码
+     * @param pageSize 页条数
+     * @return Result<List<InterviewerAO>>
+     */
+    @Override
+    public Result<List<InterviewerAO>> listInterviewers(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<InterviewerDO> interviewerDOList = interviewerMapper.listInterviewers();
+        if (interviewerDOList.size() < 1) {
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+        return Result.success(
+                interviewerDOList.stream()
+                        .map(interviewerDO -> mapper.map(interviewerDO, InterviewerAO.class))
+                        .collect(Collectors.toList()));
+    }
+
+    /**
      * 通过编号获取部门
      *
      * @param id 编号
@@ -115,21 +155,6 @@ public class InterviewerServiceImpl implements InterviewerService {
     @Override
     public String getDep(Integer id) {
         return interviewerMapper.getDep(id);
-    }
-
-    /**
-     * 获取面试官通过编号
-     *
-     * @param id 面试官编号
-     * @return InterviewerAO
-     */
-    @Override
-    public InterviewerAO getInterviewer(Integer id) {
-        InterviewerDO interviewerDO = interviewerMapper.getInterviewer(id);
-        if (interviewerDO == null) {
-            return null;
-        }
-        return mapper.map(interviewerDO, InterviewerAO.class);
     }
 
 }

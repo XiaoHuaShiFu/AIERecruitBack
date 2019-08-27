@@ -19,6 +19,8 @@ public interface EvaluationMapper {
 
     int updateByPrimaryKey(EvaluationDO record);
 
+    List<EvaluationDO> listEvaluations();
+
     /**
      * 只能查询到面试官对应部门的评价表
      *

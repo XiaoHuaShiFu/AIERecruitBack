@@ -18,4 +18,6 @@ public interface ResultMapper {
     int updateByPrimaryKey(ResultDO record);
 
     List<ResultDO> listByFormId(Integer formId);
+
+    List<ResultDO> listResults();
 }

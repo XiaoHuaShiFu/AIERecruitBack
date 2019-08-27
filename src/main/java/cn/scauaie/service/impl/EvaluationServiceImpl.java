@@ -168,6 +168,25 @@ public class EvaluationServiceImpl implements EvaluationService {
     /**
      * 搜索评价表列表
      *
+     * @param pageNum 页码
+     * @param pageSize 页条数
+     * @return List<EvaluationAO>
+     */
+    public Result<List<EvaluationAO>> listEvaluations(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<EvaluationDO> evaluationDOList = evaluationMapper.listEvaluations();
+        if (evaluationDOList.size() < 1) {
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+
+        return Result.success(evaluationDOList.stream()
+                .map(evaluationDO -> mapper.map(evaluationDO, EvaluationAO.class))
+                .collect(Collectors.toList()));
+    }
+
+    /**
+     * 搜索评价表列表
+     *
      * @param query EvaluationQuery
      * @return List<EvaluationAO>
      */
@@ -178,9 +197,8 @@ public class EvaluationServiceImpl implements EvaluationService {
             return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
         }
 
-        return Result.success(
-                evaluationDOList.stream()
-                        .map(evaluationDO -> mapper.map(evaluationDO, EvaluationAO.class))
+        return Result.success(evaluationDOList.stream()
+                        .map(this::assembleEvaluationAOByEvaluationDO)
                         .collect(Collectors.toList()));
     }
 

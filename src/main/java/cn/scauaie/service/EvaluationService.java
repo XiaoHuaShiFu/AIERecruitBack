@@ -25,6 +25,8 @@ public interface EvaluationService {
 
     Result<EvaluationAO> getEvaluation(Integer evaluationId, Integer interviewerId);
 
+    Result<List<EvaluationAO>> listEvaluations(Integer pageNum, Integer pageSize);
+
     Result<List<EvaluationAO>> listEvaluations(EvaluationQuery query);
 
 }

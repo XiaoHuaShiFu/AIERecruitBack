@@ -87,5 +87,4 @@
         <property name="rollbackOnCommitFailure" value="true"/><!--提交失败时是否回滚-->
     </bean>
 
-
 </beans>

@@ -90,6 +90,26 @@ public class ResultServiceImpl implements ResultService {
      *
      * @param pageNum 页码
      * @param pageSize 页条数
+     * @return Result<List<ResultAO>>
+     */
+    @Override
+    public Result<List<ResultAO>> listResults(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ResultDO> resultDOList = resultMapper.listResults();
+        if (resultDOList.size() < 1) {
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+        return Result.success(
+                resultDOList.stream()
+                        .map(resultDO -> mapper.map(resultDO, ResultAO.class))
+                        .collect(Collectors.toList()));
+    }
+
+    /**
+     * 查询结果列表
+     *
+     * @param pageNum 页码
+     * @param pageSize 页条数
      * @param formId 报名表编号
      * @return Result<List<ResultAO>>
      */

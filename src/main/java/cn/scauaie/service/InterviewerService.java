@@ -3,6 +3,8 @@ package cn.scauaie.service;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.result.Result;
 
+import java.util.List;
+
 /**
  * 描述:
  *
@@ -16,6 +18,8 @@ public interface InterviewerService {
     InterviewerAO getInterviewer(Integer id);
 
     Result<InterviewerAO> getInterviewerByCode(String code);
+
+    Result<List<InterviewerAO>> listInterviewers(Integer pageNum, Integer pageSize);
 
     String getDep(Integer id);
 }

@@ -56,9 +56,6 @@ public class FormServiceImpl implements FormService {
     private Mapper mapper;
 
     @Autowired
-    private BeanUtils beanUtils;
-
-    @Autowired
     private FormQueryConverter queryConverter;
 
     /**
@@ -142,6 +139,27 @@ public class FormServiceImpl implements FormService {
     }
 
     /**
+     * 获取FormAOList
+     *
+     * @param pageNum 页码
+     * @param pageSize 页条数
+     * @return FormAOList
+     */
+    @Override
+    public Result<List<FormAO>> listForms(Integer pageNum, Integer pageSize) {
+        FormQuery formQuery = new FormQuery();
+        formQuery.setPageNum(pageNum);
+        formQuery.setPageSize(pageSize);
+        List<FormDO> formDOList = formMapper.listByFormQuery(formQuery);
+        if (formDOList == null) {
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        }
+        return Result.success(formDOList.stream()
+                        .map(formDO -> mapper.map(formDO, FormAO.class))
+                        .collect(Collectors.toList()));
+    }
+
+    /**
      * 获取FormAOList通过查询参数q
      *
      * @param pageNum 页码
@@ -178,7 +196,7 @@ public class FormServiceImpl implements FormService {
         formDO.setPhone(formAO.getPhone());
         formDO.setIntroduction(formAO.getIntroduction());
         //所有参数都为空
-        if (beanUtils.allFieldIsNull(formDO)) {
+        if (BeanUtils.allFieldIsNull(formDO)) {
             return Result.fail(ErrorCode.INVALID_PARAMETER_IS_BLANK,
                     "The required parameter must be not all null.");
         }

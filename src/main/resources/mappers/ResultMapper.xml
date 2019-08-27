@@ -75,4 +75,10 @@
     from result
     where fid = #{formId, jdbcType=INTEGER}
   </select>
+
+  <select id="listResults" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from result
+  </select>
 </mapper>

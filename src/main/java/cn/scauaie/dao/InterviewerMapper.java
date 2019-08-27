@@ -2,6 +2,8 @@ package cn.scauaie.dao;
 
 import cn.scauaie.model.dao.InterviewerDO;
 
+import java.util.List;
+
 public interface InterviewerMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -20,4 +22,6 @@ public interface InterviewerMapper {
     InterviewerDO getInterviewerByOpenid(String openid);
 
     String getDep(Integer id);
+
+    List<InterviewerDO> listInterviewers();
 }

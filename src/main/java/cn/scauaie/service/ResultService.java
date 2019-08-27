@@ -18,5 +18,8 @@ public interface ResultService {
 
     Result<ResultAO> saveResult(ResultAO resultAO);
 
+    Result<List<ResultAO>> listResults(Integer pageNum, Integer pageSize);
+
     Result<List<ResultAO>> listResults(Integer pageNum, Integer pageSize, Integer formId);
+
 }

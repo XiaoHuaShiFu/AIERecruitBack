@@ -23,6 +23,8 @@ public interface FormService {
 
     Result<FormAO> getFormByCode(String code);
 
+    Result<List<FormAO>> listForms(Integer pageNum, Integer pageSize);
+
     Result<List<FormAO>> listForms(Integer pageNum, Integer pageSize, String q);
 
     Result<FormAO> updateForm(FormAO formAO);
