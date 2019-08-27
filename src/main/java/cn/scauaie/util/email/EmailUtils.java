@@ -26,7 +26,11 @@ public class EmailUtils {
         try {
             MimeMessage mimeMessage = new MimeMessage(session);
             mimeMessage.setFrom(new InternetAddress(mb.getFrom()));
-            InternetAddress[] address = {new InternetAddress(mb.getTo())};
+            InternetAddress[] address = new InternetAddress[mb.getTo().size()];
+            for (int i = 0; i < mb.getTo().size(); i++) {
+                address[i] = new InternetAddress(mb.getTo().get(i));
+            }
+
             mimeMessage.setRecipients(Message.RecipientType.TO, address);
             mimeMessage.setSubject(mb.getSubject());
 
@@ -47,9 +51,8 @@ public class EmailUtils {
             mimeMessage.setContent(multipart);
             mimeMessage.setSentDate(new Date());
             Transport.send(mimeMessage);
-        } catch (MessagingException e) {
+        }  catch (MessagingException e) {
             e.printStackTrace();
-            return false;
         }
         return true;
     }

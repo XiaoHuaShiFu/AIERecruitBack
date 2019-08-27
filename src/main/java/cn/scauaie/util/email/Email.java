@@ -3,7 +3,7 @@ package cn.scauaie.util.email;
 import java.util.List;
 
 public class Email {
-    private String to; // 收件人
+    private List<String> to; // 收件人
 
     private String from; // 发件人
 
@@ -22,7 +22,7 @@ public class Email {
     public Email() {
     }
 
-    public Email(String to, String from, String host, String username, String password, String subject, String content, List<String> file) {
+    public Email(List<String> to, String from, String host, String username, String password, String subject, String content, List<String> file) {
         this.to = to;
         this.from = from;
         this.host = host;
@@ -33,11 +33,11 @@ public class Email {
         this.file = file;
     }
 
-    public String getTo() {
+    public List<String> getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(List<String> to) {
         this.to = to;
     }
 
@@ -100,7 +100,7 @@ public class Email {
     @Override
     public String toString() {
         return "Email{" +
-                "to='" + to + '\'' +
+                "to=" + to +
                 ", from='" + from + '\'' +
                 ", host='" + host + '\'' +
                 ", username='" + username + '\'' +

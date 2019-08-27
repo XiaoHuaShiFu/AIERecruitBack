@@ -101,4 +101,10 @@
     from interviewer
     where id = #{id, jdbcType=INTEGER}
   </select>
+
+  <select id="listInterviewers" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from interviewer
+  </select>
 </mapper>

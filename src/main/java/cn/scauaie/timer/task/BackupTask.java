@@ -9,8 +9,10 @@ import cn.scauaie.service.EvaluationService;
 import cn.scauaie.service.FormService;
 import cn.scauaie.service.InterviewerService;
 import cn.scauaie.service.ResultService;
+import cn.scauaie.util.PropertiesUtils;
 import cn.scauaie.util.email.Email;
 import cn.scauaie.util.email.EmailUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimerTask;
-
-//994892083@qq.com
-//827032783@qq.com
-//859703569@qq.com
+import java.util.*;
 
 /**
- * 描述:
+ * 描述: 自动备份招新信息任务
  *
  * @author xhsf
  * @email 827032783@qq.com
@@ -61,70 +56,147 @@ public class BackupTask extends TimerTask {
     private static final String FILE_CONTENT_SPLIT_MARK = System.getProperty("line.separator");
 
     /**
-     * FORM文件各个字段的名字
+     * 暂存文件的文件夹
+     */
+    private static final String DIRECTORY_PREFIX = "D:\\buf_file\\";
+
+    /**
+     * 日期格式器
+     */
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
+
+    /**
+     * Form文件各个字段的名字
      */
     private static final String FORM_COLUMN_NAMES =
             "编号,姓名,性别,学院,专业,手机,头像,第一志愿部门,第二志愿部门,个人简介";
 
     /**
-     * 日期格式器
+     * Result文件各个字段的名字
      */
-    private static final SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
+    private static final String RESULT_COLUMN_NAMES = "编号,报名表编号,结果";
 
-    // TODO: 2019/8/27 进一步封装
-    // TODO: 2019/8/27 多个接收者
+    /**
+     * Interviewer文件各个字段的名字
+     */
+    private static final String INTERVIEWER_COLUMN_NAMES = "编号,姓名,部门";
+
+    /**
+     * Evaluation文件各个字段的名字
+     */
+    private static final String EVALUATION_COLUMN_NAMES = "编号,面试官编号,报名表编号,评价,是否通过";
+
+    /**
+     * 主机
+     */
+    private static final String HOST =
+            PropertiesUtils.getProperty("email.host", "email.properties");
+
+    /**
+     * 邮箱
+     */
+    private static final String USERNAME =
+            PropertiesUtils.getProperty("email.username", "email.properties");
+
+    /**
+     * 密码
+     */
+    private static final String PASSWORD =
+            PropertiesUtils.getProperty("email.password", "email.properties");
+
+    /**
+     * 发送方
+     */
+    private static final String FROM =
+            PropertiesUtils.getProperty("email.from", "email.properties");
+
+    /**
+     * 接收方
+     */
+    private static final List<String> TO = Arrays.asList(Objects.requireNonNull(
+            PropertiesUtils.getProperty("email.toList", "email.properties")).split(","));
+
+    /**
+     * 备份主流程
+     */
     @Override
     public void run() {
-        //备份报名表
-        Result<List<FormAO>> formResult = formService.listForms(1, 2000);
-        if (!formResult.isSuccess()) {
-            return;
+        Email mb = new Email();
+        mb.setHost(HOST);
+        mb.setUsername(USERNAME);
+        mb.setPassword(PASSWORD);
+        mb.setFrom(FROM);
+        mb.setTo(TO);
+        mb.setSubject("招新资料备份" + format.format(new Date()));
+        mb.setContent("本邮件中包含四个附件，请检查！");
+        ArrayList<String> fileNameList = new ArrayList<>(4);
+        fileNameList.add(backupForm());
+        fileNameList.add(backupEvaluation());
+        fileNameList.add(backupInterviewer());
+        fileNameList.add(backupResult());
+        mb.setFile(fileNameList);
+        if (!EmailUtils.sendEmail(mb)) {
+            logger.error("Send email fail.");
         }
-        String formFileName = createAndWriteFile("form", formResult.getData(), form -> form.getId() + ","
+    }
+
+    /**
+     * 备份报名表
+     * @return 文件名
+     */
+    private String backupForm() {
+        Result<List<FormAO>> result = formService.listForms(1, 2000);
+        if (!result.isSuccess()) {
+            logger.error(result.getMessage());
+            return StringUtils.EMPTY;
+        }
+        return createAndWriteFile("form", result.getData(), form -> form.getId() + ","
                 + form.getName() + "," + form.getGender() + "," + form.getCollege() + "," + form.getMajor() + ","
                 + form.getPhone() + "," + form.getAvatar() + "," + form.getFirstDep() + "," + form.getSecondDep() + ","
-                + form.getIntroduction());
+                + form.getIntroduction(), FORM_COLUMN_NAMES);
+    }
 
-        //备份评价表
-        Result<List<EvaluationAO>> evaluationResult = evaluationService.listEvaluations(1, 2000);
-        if (!evaluationResult.isSuccess()) {
-            return;
+    /**
+     * 备份面试结果
+     * @return 文件名
+     */
+    private String backupResult() {
+        Result<List<ResultAO>> result = resultService.listResults(1, 2000);
+        if (!result.isSuccess()) {
+            logger.error(result.getMessage());
+            return StringUtils.EMPTY;
         }
-        String evaluationFileName = createAndWriteFile("evaluation", evaluationResult.getData(),
-                evaluation -> evaluation.getIid() + "," + evaluation.getFid() + "," + evaluation.getIid() + ","
-                        + evaluation.getEvaluation() + "," + evaluation.getPass());
+        return createAndWriteFile("result", result.getData(),
+                r -> r.getId() + "," + r.getFid() + "," + r.getResult(),RESULT_COLUMN_NAMES);
+    }
 
-        //备份面试结果
-        Result<List<ResultAO>> resultResult = resultService.listResults(1, 2000);
-        if (!resultResult.isSuccess()) {
-            return;
+    /**
+     * 备份面试官
+     * @return 文件名
+     */
+    private String backupInterviewer() {
+        Result<List<InterviewerAO>> result = interviewerService.listInterviewers(1, 2000);
+        if (!result.isSuccess()) {
+            logger.error(result.getMessage());
+            return StringUtils.EMPTY;
         }
-        String resultFileName = createAndWriteFile("result", resultResult.getData(),
-                result -> result.getId() + "," + result.getFid() + "," + result.getResult());
+        return createAndWriteFile("interviewer", result.getData(), interviewer -> interviewer.getId() + ","
+                + interviewer.getName() + "," + interviewer.getDep(), INTERVIEWER_COLUMN_NAMES);
+    }
 
-        //备份面试官
-        Result<List<InterviewerAO>> interviewerResult = interviewerService.listInterviewers(1, 2000);
-        if (!interviewerResult.isSuccess()) {
-            return;
+    /**
+     * 备份评价表
+     * @return 文件名
+     */
+    private String backupEvaluation() {
+        Result<List<EvaluationAO>> result = evaluationService.listEvaluations(1, 2000);
+        if (!result.isSuccess()) {
+            logger.error(result.getMessage());
+            return StringUtils.EMPTY;
         }
-        String interviewerFileName = createAndWriteFile("interviewer", interviewerResult.getData(),
-                interviewer -> interviewer.getId() + "," + interviewer.getName() + "," + interviewer.getDep());
-
-        Email mb = new Email();
-        mb.setHost("smtp.163.com");
-        mb.setUsername("scauaierecruit@163.com");
-        mb.setPassword("scauaie2019");
-        mb.setFrom("scauaierecruit@163.com");
-        mb.setTo("827032783@qq.com");
-        mb.setSubject("报名表备份" + formater.format(new Date()));
-        mb.setContent("本邮件中包含一个附件，请检查！");
-        ArrayList<String> fileNameList = new ArrayList<>(4);
-        fileNameList.add(formFileName);
-        fileNameList.add(evaluationFileName);
-        fileNameList.add(resultFileName);
-        fileNameList.add(interviewerFileName);
-        mb.setFile(fileNameList);
-        EmailUtils.sendEmail(mb);
+        return createAndWriteFile("evaluation", result.getData(),
+                evaluation -> evaluation.getId() + "," + evaluation.getIid() + "," + evaluation.getFid() + ","
+                        + evaluation.getEvaluation() + "," + evaluation.getPass(), EVALUATION_COLUMN_NAMES);
     }
 
     /**
@@ -135,8 +207,8 @@ public class BackupTask extends TimerTask {
      * @param converter 转换器
      * @return fileName 文件名
      */
-    private <T> String createAndWriteFile(String fileName, List<T> list, Converter<T, String> converter) {
-        fileName = "D:\\buf_file\\" + fileName + formater.format(new Date()) + ".csv";
+    private <T> String createAndWriteFile(String fileName, List<T> list, Converter<T, String> converter, String columnNames) {
+        fileName = DIRECTORY_PREFIX + fileName + format.format(new Date()) + ".csv";
 
         File file = new File(fileName);
         try {
@@ -147,7 +219,7 @@ public class BackupTask extends TimerTask {
             logger.error("Create file: {} fail", fileName);
         }
         try (PrintWriter printWriter = new PrintWriter(file)) {
-            StringBuilder stringBuilder = new StringBuilder().append(FORM_COLUMN_NAMES).append(FILE_CONTENT_SPLIT_MARK);
+            StringBuilder stringBuilder = new StringBuilder().append(columnNames).append(FILE_CONTENT_SPLIT_MARK);
             list.forEach(formAO -> stringBuilder.append(converter.convert(formAO)).append(FILE_CONTENT_SPLIT_MARK));
 
             printWriter.print(stringBuilder);

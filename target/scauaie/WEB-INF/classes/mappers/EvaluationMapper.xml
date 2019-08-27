@@ -94,6 +94,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+    <select id="listEvaluations" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from evaluation
+    </select>
+
     <select id="listEvaluationsByQuery" parameterType="cn.scauaie.model.query.EvaluationQuery"
             resultMap="BaseResultMap">
         select
