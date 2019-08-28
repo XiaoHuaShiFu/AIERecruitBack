@@ -1,8 +1,11 @@
 package cn.scauaie.service.impl;
 
+import cn.scauaie.constant.AieConsts;
 import cn.scauaie.constant.DepEnum;
 import cn.scauaie.dao.ResultMapper;
+import cn.scauaie.manager.ResultManager;
 import cn.scauaie.model.ao.ResultAO;
+import cn.scauaie.model.ao.ResultQrcodeAO;
 import cn.scauaie.model.dao.ResultDO;
 import cn.scauaie.model.query.ResultQuery;
 import cn.scauaie.result.ErrorCode;
@@ -16,7 +19,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +38,9 @@ public class ResultServiceImpl implements ResultService {
     private final static Logger logger = LoggerFactory.getLogger(ResultServiceImpl.class);
 
     @Autowired
+    private ResultManager resultManager;
+
+    @Autowired
     private ResultMapper resultMapper;
 
     @Autowired
@@ -40,7 +49,18 @@ public class ResultServiceImpl implements ResultService {
     /**
      * 结果模板集合的文件名
      */
-    private final static String RESULT_SET_FILE_NAME = "result-set.properties";
+    private final static String RESULT_SET_FILE_NAME = "resultSet.properties";
+
+    /**
+     * 二维码前缀
+     */
+    private final static String QRCODE_PREFIX =
+            PropertiesUtils.getProperty("qrcode.prefix", RESULT_SET_FILE_NAME);
+
+    /**
+     * 二维码后缀
+     */
+    private final static String QRCODE_SUFFIX = PropertiesUtils.getProperty("qrcode.suffix", RESULT_SET_FILE_NAME);
 
     /**
      * 发送面试结果
@@ -48,45 +68,68 @@ public class ResultServiceImpl implements ResultService {
      * @param id 报名表编号
      * @param firstDep 报名表编号
      * @param secondDep 报名表编号
+     * @param pass 是否通过
      * @return Result<ResultAO>
      */
-    public Result<ResultAO> sendInterviewResults(Integer id, String firstDep, String secondDep) {
+    public Result<ResultAO> sendInterviewResult(Integer id, String firstDep, String secondDep, Boolean pass) {
         ResultAO resultAO = new ResultAO();
         resultAO.setFid(id);
-        resultAO.setResult(PropertiesUtils.getProperty(firstDep, RESULT_SET_FILE_NAME));
-        Result<ResultAO> result = saveResult(resultAO);
-        if (!result.isSuccess()) {
-            return result;
+
+        // 未通过
+        if (!pass) {
+            resultAO.setResult(PropertiesUtils.getProperty("not.pass", RESULT_SET_FILE_NAME));
+            return saveResult(resultAO);
         }
 
+        // 下面的情况都需要设置第一志愿部门
+        ResultQrcodeAO qrcode1 = new ResultQrcodeAO();
+        qrcode1.setDep(firstDep);
+        qrcode1.setQrcode(QRCODE_PREFIX + firstDep + QRCODE_SUFFIX);
+
+        // 第一志愿部门是自科或者宣传部，只发第一志愿部门的通知和二维码
         if (firstDep.equals(DepEnum.ZKB.name()) || firstDep.equals(DepEnum.XCB.name())) {
-
-            return result;
+            resultAO.setResult(PropertiesUtils.getProperty(firstDep, RESULT_SET_FILE_NAME));
+            resultAO.setQrcodes(Collections.singletonList(qrcode1));
+            return saveResult(resultAO);
         }
 
-        if (!firstDep.equals(secondDep)) {
-            resultAO.setResult(PropertiesUtils.getProperty(secondDep, RESULT_SET_FILE_NAME));
-            result = saveResult(resultAO);
+        // 下面的情况都是群面
+        resultAO.setResult(PropertiesUtils.getProperty(AieConsts.AIE, RESULT_SET_FILE_NAME));
+
+        // 第一志愿部门等于第二志愿部门
+        if (firstDep.equals(secondDep)) {
+            resultAO.setQrcodes(Collections.singletonList(qrcode1));
+            return saveResult(resultAO);
         }
-        return result;
+
+        // 第一志愿部门不等于第二志愿部门，要设置两个二维码
+        ResultQrcodeAO qrcode2 = new ResultQrcodeAO();
+        qrcode2.setDep(secondDep);
+        qrcode2.setQrcode(QRCODE_PREFIX + secondDep + QRCODE_SUFFIX);
+        List<ResultQrcodeAO> resultQrcodeAOList = new ArrayList<>(2);
+        resultQrcodeAOList.add(qrcode1);
+        resultQrcodeAOList.add(qrcode2);
+        resultAO.setQrcodes(resultQrcodeAOList);
+
+        return saveResult(resultAO);
     }
 
     // TODO: 2019/8/20 这里要检查面试官权限
+    // TODO: 2019/8/28 在某些日期前不可以发布结果
+    /**
+     * 保存面试结果
+     *
+     * @param resultAO ResultAO
+     * @return Result<ResultAO>
+     */
     @Override
     public Result<ResultAO> saveResult(ResultAO resultAO) {
-        ResultDO resultDO = mapper.map(resultAO, ResultDO.class);
-        int count = resultMapper.insertSelective(resultDO);
-        if (count < 1) {
-            logger.error("Insert result failed.");
-            return Result.fail(ErrorCode.INTERNAL_ERROR, "Insert result failed.");
-        }
-
-        resultAO.setId(resultDO.getId());
-        return Result.success(resultAO);
+        return resultManager.saveResult(resultAO);
     }
 
     /**
      * 查询结果列表
+     * 不附带二维码
      *
      * @param pageNum 页码
      * @param pageSize 页条数
@@ -99,45 +142,23 @@ public class ResultServiceImpl implements ResultService {
         if (resultDOList.size() < 1) {
             return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
         }
-        return Result.success(
-                resultDOList.stream()
-                        .map(resultDO -> mapper.map(resultDO, ResultAO.class))
-                        .collect(Collectors.toList()));
+        return Result.success(resultDOList.stream()
+                .map(resultDO -> mapper.map(resultDO, ResultAO.class))
+                .collect(Collectors.toList()));
     }
 
     /**
      * 查询结果列表
+     * 附带二维码
      *
-     * @param pageNum 页码
-     * @param pageSize 页条数
-     * @param formId 报名表编号
+     * @param query 查询参数
      * @return Result<List<ResultAO>>
      */
     @Override
-    public Result<List<ResultAO>> listResults(Integer pageNum, Integer pageSize, Integer formId) {
-        ResultQuery query = new ResultQuery(pageNum, pageSize, formId);
-        List<ResultAO> resultAOList = listResults(query);
-        if (resultAOList == null) {
-            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
-        }
-        return Result.success(resultAOList);
+    public Result<List<ResultAO>> listResults(ResultQuery query) {
+        Optional<List<ResultAO>> resultAOList = resultManager.listResults(query);
+        return resultAOList.map(Result::success)
+                .orElseGet(() -> Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found."));
     }
 
-    /**
-     * 查询结果列表
-     *
-     * @param query 搜索参数
-     * @return List<ResultAO>
-     */
-    private List<ResultAO> listResults(ResultQuery query) {
-        PageHelper.startPage(query.getPageNum(), query.getPageSize());
-        List<ResultDO> resultDOList = resultMapper.listByFormId(query.getFid());
-        if (resultDOList.size() < 1) {
-            return null;
-        }
-
-        return resultDOList.stream()
-                .map(resultDO -> mapper.map(resultDO, ResultAO.class))
-                .collect(Collectors.toList());
-    }
 }

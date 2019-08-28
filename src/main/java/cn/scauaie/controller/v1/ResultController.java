@@ -5,6 +5,7 @@ import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.ResultAO;
 import cn.scauaie.model.ao.TokenAO;
+import cn.scauaie.model.query.ResultQuery;
 import cn.scauaie.model.vo.ResultVO;
 import cn.scauaie.result.Result;
 import cn.scauaie.service.ResultService;
@@ -86,7 +87,8 @@ public class ResultController {
     public Object get(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "10") Integer pageSize) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-        Result<List<ResultAO>> result = resultService.listResults(pageNum, pageSize, tokenAO.getId());
+        ResultQuery query = new ResultQuery(pageNum, pageSize, tokenAO.getId());
+        Result<List<ResultAO>> result = resultService.listResults(query);
         if (!result.isSuccess()) {
             return result;
         }

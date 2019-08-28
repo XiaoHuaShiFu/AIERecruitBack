@@ -11,11 +11,14 @@
       <w>llen</w>
       <w>lpop</w>
       <w>lpush</w>
+      <w>qrcode</w>
+      <w>qrcodes</w>
       <w>queuer</w>
       <w>queuers</w>
       <w>rpop</w>
       <w>rpush</w>
       <w>scau</w>
+      <w>scauaie</w>
       <w>zset</w>
     </words>
   </dictionary>

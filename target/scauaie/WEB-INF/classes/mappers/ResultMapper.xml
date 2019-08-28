@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.scauaie.dao.ResultMapper" >
   <resultMap id="BaseResultMap" type="cn.scauaie.model.dao.ResultDO" >
-    <constructor >
+    <constructor>
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="fid" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="result" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -69,7 +69,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="listByFormId" parameterType="integer" resultMap="BaseResultMap">
+  <select id="listResultsByFormId" parameterType="integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from result
@@ -80,5 +80,12 @@
     select
     <include refid="Base_Column_List"/>
     from result
+  </select>
+
+  <select id="">
+    select
+    r.id, r.fid, r.result, q.id, q.rid, q.dep, q.qrcode
+    from result r left join result_qrcode q on r.id = q.rid
+
   </select>
 </mapper>

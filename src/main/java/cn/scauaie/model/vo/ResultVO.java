@@ -1,5 +1,7 @@
 package cn.scauaie.model.vo;
 
+import java.util.List;
+
 public class ResultVO {
     private Integer id;
 
@@ -7,13 +9,16 @@ public class ResultVO {
 
     private String result;
 
+    private List<ResultQrcodeVO> qrcodes;
+
     public ResultVO() {
     }
 
-    public ResultVO(Integer id, Integer fid, String result) {
+    public ResultVO(Integer id, Integer fid, String result, List<ResultQrcodeVO> qrcodes) {
         this.id = id;
         this.fid = fid;
         this.result = result;
+        this.qrcodes = qrcodes;
     }
 
     public Integer getId() {
@@ -40,12 +45,21 @@ public class ResultVO {
         this.result = result;
     }
 
+    public List<ResultQrcodeVO> getQrcodes() {
+        return qrcodes;
+    }
+
+    public void setQrcodes(List<ResultQrcodeVO> qrcodes) {
+        this.qrcodes = qrcodes;
+    }
+
     @Override
     public String toString() {
         return "ResultVO{" +
                 "id=" + id +
                 ", fid=" + fid +
                 ", result='" + result + '\'' +
+                ", qrcodes=" + qrcodes +
                 '}';
     }
 }

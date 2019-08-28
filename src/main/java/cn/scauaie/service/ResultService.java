@@ -1,6 +1,7 @@
 package cn.scauaie.service;
 
 import cn.scauaie.model.ao.ResultAO;
+import cn.scauaie.model.query.ResultQuery;
 import cn.scauaie.result.Result;
 
 import java.util.List;
@@ -14,12 +15,12 @@ import java.util.List;
  */
 public interface ResultService {
 
-    Result<ResultAO> sendInterviewResults(Integer id, String firstDep, String secondDep);
+    Result<ResultAO> sendInterviewResult(Integer id, String firstDep, String secondDep, Boolean pass);
 
     Result<ResultAO> saveResult(ResultAO resultAO);
 
     Result<List<ResultAO>> listResults(Integer pageNum, Integer pageSize);
 
-    Result<List<ResultAO>> listResults(Integer pageNum, Integer pageSize, Integer formId);
+    Result<List<ResultAO>> listResults(ResultQuery query);
 
 }

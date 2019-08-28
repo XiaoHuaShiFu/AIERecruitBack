@@ -83,8 +83,8 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         //发送面试结果
         FormAO formAO = result.getData().getForm();
-        Result<ResultAO> result1 = resultService.sendInterviewResults(
-                formAO.getId(), formAO.getFirstDep(), formAO.getSecondDep());
+        Result<ResultAO> result1 = resultService.sendInterviewResult(
+                formAO.getId(), formAO.getFirstDep(), formAO.getSecondDep(), evaluationAO.getPass());
         //发送失败
         if (!result1.isSuccess()) {
             logger.error("Send interview results fail. evaluationId: {}.", result.getData().getIid());
