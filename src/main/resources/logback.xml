@@ -15,9 +15,9 @@
     </appender>
 
     <appender name="scauaie" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${log.path}</File>
+        <File>/developer/logs</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/scauaie.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>/developer/logs/scauaie.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>15</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
@@ -27,9 +27,9 @@
     </appender>
 
     <appender name="warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${log.path}</File>
+        <File>/developer/logs</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/warn.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>/developer/logs/warn.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>15</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
@@ -39,9 +39,9 @@
     </appender>
 
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${log.path}/error.log</File>
+        <File>/developer/logs/error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>/developer/logs/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>15</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
