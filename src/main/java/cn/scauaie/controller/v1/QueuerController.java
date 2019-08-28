@@ -1,14 +1,17 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.ErrorHandler;
+import cn.scauaie.aspect.annotation.OutQueueLog;
 import cn.scauaie.aspect.annotation.TimeBlocker;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.TokenAO;
 import cn.scauaie.model.bo.QueuerBO;
+import cn.scauaie.model.query.LogQuery;
 import cn.scauaie.model.query.QueuerQuery;
 import cn.scauaie.model.vo.QueuerVO;
 import cn.scauaie.result.Result;
+import cn.scauaie.service.QueueLogService;
 import cn.scauaie.service.QueuerService;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +39,9 @@ public class QueuerController {
 
     @Autowired
     private QueuerService queuerService;
+
+    @Autowired
+    private QueueLogService queueLogService;
 
     @Autowired
     private Mapper mapper;
@@ -56,6 +63,7 @@ public class QueuerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @TimeBlocker(dateTime = "2019-09-07 08:00:00")
     @TokenAuth(tokenType = TokenType.FORM)
     @ErrorHandler
     public Object post(HttpServletRequest request) {
@@ -80,6 +88,7 @@ public class QueuerController {
     @ResponseStatus(value = HttpStatus.OK)
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
     @ErrorHandler
+    @OutQueueLog
     public Object delete(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         Result<QueuerBO> result = queuerService.checkGapAndDeleteQueuerByDep(tokenAO.getId(), tokenAO.getDep());
@@ -104,7 +113,7 @@ public class QueuerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    @TimeBlocker
+    @TimeBlocker(dateTime = "2019-09-07 08:00:00")
     @TokenAuth
     @ErrorHandler
     public Object get(HttpServletRequest request,
@@ -145,6 +154,34 @@ public class QueuerController {
     public Object getNumber(HttpServletRequest request) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         return queuerService.getCountByDep(tokenAO.getDep());
+    }
+
+    /**
+     * 获取日志
+     * @param request HttpServletRequest
+     * @return 日志列表
+     *
+     * @success:
+     * HttpStatus.OK
+     *
+     * @errors:
+     * INVALID_PARAMETER_NOT_FOUND: Not found.
+     *
+     */
+    @RequestMapping(value = "/logs",method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    @TokenAuth(tokenType = TokenType.INTERVIEWER)
+    @ErrorHandler
+    public Object getLog(HttpServletRequest request,
+                                 @RequestParam(defaultValue = "1") Integer pageNum,
+                                 @RequestParam(defaultValue = "10") Integer pageSize,
+                         @Pattern(regexp = "OUT_QUEUE") String logType) {
+        LogQuery query = new LogQuery(pageNum, pageSize, logType);
+        Result<List<String>> result = queueLogService.getLogs(query);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        return result.getData();
     }
 
 }

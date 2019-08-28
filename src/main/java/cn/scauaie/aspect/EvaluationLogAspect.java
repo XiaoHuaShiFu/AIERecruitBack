@@ -8,8 +8,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 描述: 对evaluation进行日志处理
@@ -28,10 +28,10 @@ public class EvaluationLogAspect {
     /**
      * 日期格式器
      */
-    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
-     * 对返回结果的错误进行解析
+     * 保存评价日志
      *
      * @param ret 返回结果
      */
@@ -46,7 +46,7 @@ public class EvaluationLogAspect {
         evaluationLogAO.setEid(evaluationVO.getId());
         evaluationLogAO.setFid(evaluationVO.getForm().getId());
         evaluationLogAO.setIid(evaluationVO.getInterviewer().getId());
-        evaluationLogAO.setMessage("你在" + format.format(new Date()) + "评价了"
+        evaluationLogAO.setMessage("你在" + formatter.format(LocalDateTime.now()) + "评价了"
                 + evaluationVO.getForm().getName() + "，报名表编号是：" + evaluationVO.getForm().getId() + "。");
 
         evaluationLogService.saveEvaluationLog(evaluationLogAO);

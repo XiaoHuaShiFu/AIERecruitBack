@@ -1,6 +1,7 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.ErrorHandler;
+import cn.scauaie.aspect.annotation.TimeBlocker;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.ResultAO;
@@ -57,6 +58,7 @@ public class ResultController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
+    @TimeBlocker(dateTime = "2019-09-09 00:00:00")
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
     @ErrorHandler
     public Object post(HttpServletRequest request, @Validated ResultAO resultAO) {

@@ -3,7 +3,7 @@ package cn.scauaie.aspect.annotation;
 import java.lang.annotation.*;
 
 /**
- * 描述: 时间阻拦器注解
+ * 描述: 出队日志注解
  *
  * @author xhsf
  * @email 827032783@qq.com
@@ -12,6 +12,5 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface TimeBlocker {
-     String dateTime();
+public @interface OutQueueLog {
 }
