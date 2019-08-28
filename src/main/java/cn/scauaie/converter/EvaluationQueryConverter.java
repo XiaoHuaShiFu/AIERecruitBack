@@ -1,6 +1,8 @@
 package cn.scauaie.converter;
 
+import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.query.EvaluationQuery;
+import cn.scauaie.result.ErrorCode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.core.convert.converter.Converter;
@@ -25,16 +27,25 @@ public class EvaluationQueryConverter implements Converter<String, EvaluationQue
         if (StringUtils.isBlank(source)) {
             return new EvaluationQuery();
         }
+        int count = 0;
         EvaluationQuery evaluationQuery = new EvaluationQuery();
         if (NumberUtils.isDigits(source)) {
             evaluationQuery.setFid(Integer.valueOf(source));
+            count++;
         }
         if (source.equals(PASS)) {
             evaluationQuery.setPass(true);
+            count++;
         } else if (source.equals(NOT_PASS)) {
             evaluationQuery.setPass(false);
+            count++;
         }
-        return new EvaluationQuery();
+        if (count > 0) {
+            return new EvaluationQuery();
+        }
+
+        //参数错误，抛出404
+        throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
     }
 
 }
