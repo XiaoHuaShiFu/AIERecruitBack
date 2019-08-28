@@ -28,7 +28,7 @@ public class EvaluationLogAspect {
     /**
      * 日期格式器
      */
-    private static final SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * 对返回结果的错误进行解析
@@ -46,7 +46,7 @@ public class EvaluationLogAspect {
         evaluationLogAO.setEid(evaluationVO.getId());
         evaluationLogAO.setFid(evaluationVO.getForm().getId());
         evaluationLogAO.setIid(evaluationVO.getInterviewer().getId());
-        evaluationLogAO.setMessage("你在" + formater.format(new Date()) + "评价了"
+        evaluationLogAO.setMessage("你在" + format.format(new Date()) + "评价了"
                 + evaluationVO.getForm().getName() + "，报名表编号是：" + evaluationVO.getForm().getId() + "。");
 
         evaluationLogService.saveEvaluationLog(evaluationLogAO);

@@ -74,18 +74,12 @@
     <include refid="Base_Column_List"/>
     from result
     where fid = #{formId, jdbcType=INTEGER}
+    order by update_time desc
   </select>
 
   <select id="listResults" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from result
-  </select>
-
-  <select id="">
-    select
-    r.id, r.fid, r.result, q.id, q.rid, q.dep, q.qrcode
-    from result r left join result_qrcode q on r.id = q.rid
-
   </select>
 </mapper>

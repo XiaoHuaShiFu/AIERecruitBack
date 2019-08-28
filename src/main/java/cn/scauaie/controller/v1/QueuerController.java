@@ -1,6 +1,7 @@
 package cn.scauaie.controller.v1;
 
 import cn.scauaie.aspect.annotation.ErrorHandler;
+import cn.scauaie.aspect.annotation.TimeBlocker;
 import cn.scauaie.aspect.annotation.TokenAuth;
 import cn.scauaie.constant.TokenType;
 import cn.scauaie.model.ao.TokenAO;
@@ -103,6 +104,7 @@ public class QueuerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
+    @TimeBlocker
     @TokenAuth
     @ErrorHandler
     public Object get(HttpServletRequest request,
