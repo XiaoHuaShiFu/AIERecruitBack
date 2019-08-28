@@ -58,7 +58,7 @@ public class BackupTask extends TimerTask {
     /**
      * 暂存文件的文件夹
      */
-    private static final String DIRECTORY_PREFIX = "D:\\buf_file\\";
+    private static final String DIRECTORY_PREFIX = PropertiesUtils.getProperty("directory.prefix", "email.properties");
 
     /**
      * 日期格式器
