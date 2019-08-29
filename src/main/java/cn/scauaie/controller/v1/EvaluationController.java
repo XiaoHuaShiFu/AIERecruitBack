@@ -96,9 +96,7 @@ public class EvaluationController {
     public Object get(HttpServletRequest request,
                       @Min(message = "INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.", value = 0)
                       @PathVariable Integer id) {
-        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
-
-        Result<EvaluationAO> result = evaluationService.getEvaluation(id, tokenAO.getId());
+        Result<EvaluationAO> result = evaluationService.getEvaluation(id);
         if (!result.isSuccess()) {
             return result;
         }
