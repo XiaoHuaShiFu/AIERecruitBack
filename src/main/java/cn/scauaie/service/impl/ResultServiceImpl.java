@@ -14,11 +14,10 @@ import cn.scauaie.service.ResultService;
 import cn.scauaie.util.PropertiesUtils;
 import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,8 +33,6 @@ import java.util.stream.Collectors;
  */
 @Service("resultService")
 public class ResultServiceImpl implements ResultService {
-
-    private final static Logger logger = LoggerFactory.getLogger(ResultServiceImpl.class);
 
     @Autowired
     private ResultManager resultManager;
@@ -62,6 +59,8 @@ public class ResultServiceImpl implements ResultService {
      */
     private final static String QRCODE_SUFFIX = PropertiesUtils.getProperty("qrcode.suffix", RESULT_SET_FILE_NAME);
 
+    String string = "如群人数已满，请联系微信{dep}：{dep.wx}，{dep}：{dep.wx}";
+
     /**
      * 发送面试结果
      *
@@ -77,7 +76,11 @@ public class ResultServiceImpl implements ResultService {
 
         // 未通过
         if (!pass) {
-            resultAO.setResult(PropertiesUtils.getProperty("not.pass", RESULT_SET_FILE_NAME));
+            if (firstDep.equals(DepEnum.ZKB.name()) || firstDep.equals(DepEnum.XCB.name())) {
+                resultAO.setResult(PropertiesUtils.getProperty(firstDep+".not.pass", RESULT_SET_FILE_NAME));
+                return saveResult(resultAO);
+            }
+            resultAO.setResult(PropertiesUtils.getProperty("AIE.not.pass", RESULT_SET_FILE_NAME));
             return saveResult(resultAO);
         }
 
@@ -88,16 +91,23 @@ public class ResultServiceImpl implements ResultService {
 
         // 第一志愿部门是自科或者宣传部，只发第一志愿部门的通知和二维码
         if (firstDep.equals(DepEnum.ZKB.name()) || firstDep.equals(DepEnum.XCB.name())) {
-            resultAO.setResult(PropertiesUtils.getProperty(firstDep, RESULT_SET_FILE_NAME));
+            resultAO.setResult(PropertiesUtils.getProperty(firstDep, RESULT_SET_FILE_NAME)
+                            + MessageFormat.format("（如群人数已满，请联系微信{0}：{1}。）",
+                    DepEnum.valueOf(firstDep).getCn(),
+                    PropertiesUtils.getProperty(firstDep + ".wx", RESULT_SET_FILE_NAME)));
+
             resultAO.setQrcodes(Collections.singletonList(qrcode1));
             return saveResult(resultAO);
         }
 
         // 下面的情况都是群面
-        resultAO.setResult(PropertiesUtils.getProperty(AieConsts.AIE, RESULT_SET_FILE_NAME));
 
         // 第一志愿部门等于第二志愿部门
         if (firstDep.equals(secondDep)) {
+            resultAO.setResult(PropertiesUtils.getProperty(AieConsts.AIE, RESULT_SET_FILE_NAME)
+                    + MessageFormat.format("（如群人数已满，请联系微信{0}：{1}。）",
+                    DepEnum.valueOf(firstDep).getCn(),
+                    PropertiesUtils.getProperty(firstDep + ".wx", RESULT_SET_FILE_NAME)));
             resultAO.setQrcodes(Collections.singletonList(qrcode1));
             return saveResult(resultAO);
         }
@@ -110,6 +120,12 @@ public class ResultServiceImpl implements ResultService {
         resultQrcodeAOList.add(qrcode1);
         resultQrcodeAOList.add(qrcode2);
         resultAO.setQrcodes(resultQrcodeAOList);
+        resultAO.setResult(PropertiesUtils.getProperty(AieConsts.AIE, RESULT_SET_FILE_NAME)
+                + MessageFormat.format("（如群人数已满，请联系微信{0}：{1}，{2}：{3}。）",
+                DepEnum.valueOf(firstDep).getCn(),
+                PropertiesUtils.getProperty(firstDep + ".wx", RESULT_SET_FILE_NAME),
+                DepEnum.valueOf(secondDep).getCn(),
+                PropertiesUtils.getProperty(secondDep + ".wx", RESULT_SET_FILE_NAME)));
 
         return saveResult(resultAO);
     }

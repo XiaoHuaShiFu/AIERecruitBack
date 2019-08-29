@@ -41,7 +41,7 @@ public class EvaluationQueryConverter implements Converter<String, EvaluationQue
             count++;
         }
         if (count > 0) {
-            return new EvaluationQuery();
+            return evaluationQuery;
         }
 
         //参数错误，抛出404

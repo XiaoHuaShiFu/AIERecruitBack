@@ -192,6 +192,7 @@ public class EvaluationServiceImpl implements EvaluationService {
      */
     public Result<List<EvaluationAO>> listEvaluations(EvaluationQuery query) {
         PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        System.out.println(query);
         List<EvaluationDO> evaluationDOList = evaluationMapper.listEvaluationsByQuery(query);
         if (evaluationDOList.size() < 1) {
             return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");

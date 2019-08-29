@@ -8,6 +8,7 @@ import cn.scauaie.converter.EvaluationQueryConverter;
 import cn.scauaie.model.ao.EvaluationAO;
 import cn.scauaie.model.ao.EvaluationLogAO;
 import cn.scauaie.model.ao.TokenAO;
+import cn.scauaie.model.ao.group.GroupEvaluationAOPOST;
 import cn.scauaie.model.query.EvaluationQuery;
 import cn.scauaie.model.vo.EvaluationLogVO;
 import cn.scauaie.model.vo.EvaluationVO;
@@ -68,7 +69,7 @@ public class EvaluationController {
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
     @ErrorHandler
     @EvaluationLog
-    public Object post(HttpServletRequest request, @Validated EvaluationAO evaluationAO) {
+    public Object post(HttpServletRequest request, @Validated(GroupEvaluationAOPOST.class) EvaluationAO evaluationAO) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         evaluationAO.setIid(tokenAO.getId());
         Result<EvaluationAO> result = evaluationService.checkDepAndSaveEvaluationAndSendInterviewResults(evaluationAO);

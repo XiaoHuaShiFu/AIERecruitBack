@@ -7,6 +7,6 @@
   </insert>
 
   <select id="listOutQueueLogs" resultType="string">
-    select message from out_queue_log
+    select message from out_queue_log order by update_time desc
   </select>
 </mapper>
