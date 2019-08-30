@@ -1,9 +1,10 @@
 package cn.scauaie.controller.v1;
 
+import cn.scauaie.manager.impl.WeChatMpManagerImpl;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,13 +22,16 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("v1/wechats")
-@Validated
 public class WeChatController {
 
     /**
      * 微信公众号认证TOKEN
      */
     private final static String TOKEN = "scauaie";
+
+    @Autowired
+    private WeChatMpManagerImpl weChatMpManager;
+
 
     /**
      * 获取日志
@@ -54,5 +58,17 @@ public class WeChatController {
         }
         return StringUtils.EMPTY;
     }
+
+    /**
+     * 获取access-token
+     *
+     * @return AccessTokenDTO
+     */
+    @RequestMapping(value = "/access/tokens", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Object getAccessToken() {
+        return weChatMpManager.getAccessToken();
+    }
+
 
 }
