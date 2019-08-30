@@ -8,11 +8,11 @@ package cn.scauaie.model.query;
  * @create 2019-08-14 16:38
  */
 public class LogQuery {
-    Integer pageNum;
+    private Integer pageNum;
 
-    Integer pageSize;
+    private Integer pageSize;
 
-    String logType;
+    private String logType;
 
     public LogQuery() {
     }

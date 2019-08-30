@@ -8,11 +8,11 @@ package cn.scauaie.model.query;
  * @create 2019-08-14 16:38
  */
 public class QueuerQuery {
-    Integer pageNum;
+    private Integer pageNum;
 
-    Integer pageSize;
+    private Integer pageSize;
 
-    String dep;
+    private String dep;
 
     public QueuerQuery() {
     }

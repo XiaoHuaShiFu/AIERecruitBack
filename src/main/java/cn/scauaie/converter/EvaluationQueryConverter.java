@@ -1,8 +1,6 @@
 package cn.scauaie.converter;
 
-import cn.scauaie.exception.ProcessingException;
 import cn.scauaie.model.query.EvaluationQuery;
-import cn.scauaie.result.ErrorCode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.core.convert.converter.Converter;
@@ -21,31 +19,29 @@ public class EvaluationQueryConverter implements Converter<String, EvaluationQue
 
     private final static String PASS = "通过";
     private final static String NOT_PASS = "未通过";
+    private final static String DELIMITER = " ";
 
     @Override
     public EvaluationQuery convert(String source) {
         if (StringUtils.isBlank(source)) {
             return new EvaluationQuery();
         }
-        int count = 0;
+
+        String[] keyWords = source.split(DELIMITER);
         EvaluationQuery evaluationQuery = new EvaluationQuery();
-        if (NumberUtils.isDigits(source)) {
-            evaluationQuery.setFid(Integer.valueOf(source));
-            count++;
-        }
-        if (source.equals(PASS)) {
-            evaluationQuery.setPass(true);
-            count++;
-        } else if (source.equals(NOT_PASS)) {
-            evaluationQuery.setPass(false);
-            count++;
-        }
-        if (count > 0) {
-            return evaluationQuery;
+        for (String keyWord : keyWords) {
+            if (NumberUtils.isDigits(keyWord)) {
+                evaluationQuery.setFid(Integer.valueOf(keyWord));
+            } else if (keyWord.equals(PASS)) {
+                evaluationQuery.setPass(true);
+            } else if (keyWord.equals(NOT_PASS)) {
+                evaluationQuery.setPass(false);
+            } else {
+                evaluationQuery.setName(keyWord);
+            }
         }
 
-        //参数错误，抛出404
-        throw new ProcessingException(ErrorCode.INVALID_PARAMETER_NOT_FOUND, "Not found.");
+        return evaluationQuery;
     }
 
 }

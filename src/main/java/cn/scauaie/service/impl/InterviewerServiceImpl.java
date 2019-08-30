@@ -157,4 +157,15 @@ public class InterviewerServiceImpl implements InterviewerService {
         return interviewerMapper.getDep(id);
     }
 
+    /**
+     * 获取面试官名字
+     *
+     * @param id 面试官编号
+     * @return 面试官名字
+     */
+    @Override
+    public String getName(Integer id) {
+        return interviewerMapper.getName(id);
+    }
+
 }

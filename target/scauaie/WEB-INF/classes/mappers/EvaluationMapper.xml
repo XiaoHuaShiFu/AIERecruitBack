@@ -112,6 +112,9 @@
             <if test="pass != null">
                 and e.is_pass = #{pass, jdbcType=BIT}
             </if>
+            <if test="name != null">
+                and f.name = #{name, jdbcType=BIT}
+            </if>
             <if test="true">
                 and f.id = e.fid
             </if>

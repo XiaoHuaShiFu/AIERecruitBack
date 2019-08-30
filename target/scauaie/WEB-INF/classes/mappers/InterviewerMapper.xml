@@ -107,4 +107,11 @@
     <include refid="Base_Column_List"/>
     from interviewer
   </select>
+
+  <select id="getName"  parameterType="integer" resultType="string">
+    select
+    name
+    from interviewer
+    where id = #{id, jdbcType=INTEGER}
+  </select>
 </mapper>

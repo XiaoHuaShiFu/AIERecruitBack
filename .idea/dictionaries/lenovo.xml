@@ -5,6 +5,7 @@
       <w>authcodes</w>
       <w>consts</w>
       <w>dozer</w>
+      <w>echostr</w>
       <w>hdel</w>
       <w>hget</w>
       <w>hset</w>
@@ -19,6 +20,7 @@
       <w>rpush</w>
       <w>scau</w>
       <w>scauaie</w>
+      <w>wechats</w>
       <w>zset</w>
     </words>
   </dictionary>

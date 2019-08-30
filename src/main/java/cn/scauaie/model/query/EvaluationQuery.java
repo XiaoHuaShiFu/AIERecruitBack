@@ -8,25 +8,28 @@ package cn.scauaie.model.query;
  * @create 2019-08-14 16:38
  */
 public class EvaluationQuery {
-    Integer pageNum;
+    private Integer pageNum;
 
-    Integer pageSize;
+    private Integer pageSize;
 
-    Boolean pass;
+    private Boolean pass;
 
-    Integer fid;
+    private Integer fid;
 
-    String interviewerDep;
+    private String interviewerDep;
+
+    private String name;
 
     public EvaluationQuery() {
     }
 
-    public EvaluationQuery(Integer pageNum, Integer pageSize, Boolean pass, Integer fid, String interviewerDep) {
+    public EvaluationQuery(Integer pageNum, Integer pageSize, Boolean pass, Integer fid, String interviewerDep, String name) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.pass = pass;
         this.fid = fid;
         this.interviewerDep = interviewerDep;
+        this.name = name;
     }
 
     public Integer getPageNum() {
@@ -69,6 +72,14 @@ public class EvaluationQuery {
         this.interviewerDep = interviewerDep;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "EvaluationQuery{" +
@@ -77,6 +88,7 @@ public class EvaluationQuery {
                 ", pass=" + pass +
                 ", fid=" + fid +
                 ", interviewerDep='" + interviewerDep + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

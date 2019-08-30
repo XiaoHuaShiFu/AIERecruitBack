@@ -24,4 +24,6 @@ public interface InterviewerMapper {
     String getDep(Integer id);
 
     List<InterviewerDO> listInterviewers();
+
+    String getName(Integer id);
 }

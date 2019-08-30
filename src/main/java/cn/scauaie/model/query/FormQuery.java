@@ -8,17 +8,17 @@ package cn.scauaie.model.query;
  * @create 2019-08-14 16:38
  */
 public class FormQuery {
-    Integer pageNum;
+    private Integer pageNum;
 
-    Integer pageSize;
+    private Integer pageSize;
 
-    Integer id;
+    private Integer id;
 
-    String dep;
+    private String dep;
 
-    String gender;
+    private String gender;
 
-    String name;
+    private String name;
 
     public FormQuery() {
     }

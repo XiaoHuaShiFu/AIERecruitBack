@@ -22,4 +22,6 @@ public interface InterviewerService {
     Result<List<InterviewerAO>> listInterviewers(Integer pageNum, Integer pageSize);
 
     String getDep(Integer id);
+
+    String getName(Integer id);
 }
