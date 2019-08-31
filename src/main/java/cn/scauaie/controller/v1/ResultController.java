@@ -58,7 +58,7 @@ public class ResultController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    @TimeBlocker(dateTime = "2019-09-09 00:00:00")
+    @TimeBlocker(dateTime = "2019-09-10 00:00:00")
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
     @ErrorHandler
     public Object post(HttpServletRequest request, @Validated ResultAO resultAO) {

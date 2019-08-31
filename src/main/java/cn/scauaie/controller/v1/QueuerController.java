@@ -63,7 +63,7 @@ public class QueuerController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-//    @TimeBlocker(dateTime = "2019-09-07 08:00:00")
+    @TimeBlocker(dateTime = "2019-09-07 08:00:00")
     @TokenAuth(tokenType = TokenType.FORM)
     @ErrorHandler
     public Object post(HttpServletRequest request) {
@@ -113,7 +113,7 @@ public class QueuerController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-//    @TimeBlocker(dateTime = "2019-09-07 08:00:00")
+    @TimeBlocker(dateTime = "2019-09-07 08:00:00")
     @TokenAuth
     @ErrorHandler
     public Object get(HttpServletRequest request,
