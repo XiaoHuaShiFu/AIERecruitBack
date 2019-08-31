@@ -67,7 +67,7 @@ public class WeChatController {
     @RequestMapping(value = "/access/tokens", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public Object getAccessToken() {
-        return weChatMpManager.getAccessToken();
+        return weChatMpManager.getNewAccessToken();
     }
 
 

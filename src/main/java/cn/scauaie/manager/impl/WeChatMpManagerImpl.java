@@ -45,7 +45,23 @@ public class WeChatMpManagerImpl implements WeChatMpManager {
      *
      * @return AccessTokenDTO
      */
-    public Optional<AccessTokenDTO> getAccessToken() {
+    public Optional<String> getAccessToken() {
+        String accessToken = cacheService.get(REDIS_KEY);
+        if (!accessToken.equals(RedisStatus.OK.name())) {
+            logger.warn("Get access token fail.");
+            return Optional.empty();
+        }
+
+        return Optional.of(accessToken);
+    }
+
+
+    /**
+     * 获取新的access-token
+     *
+     * @return AccessTokenDTO
+     */
+    public Optional<AccessTokenDTO> getNewAccessToken() {
         // 获取access-token
         String url = WeChatMpConsts.ACCESS_TOKEN_URL + "?grant_type=" + WeChatGrantTypeEnum.CLIENT_CREDENTIAL.getValue() +
                 "&appid=" + WeChatMp.AIE_RECRUIT.getAppId() + "&secret=" + WeChatMp.AIE_RECRUIT.getSecret();

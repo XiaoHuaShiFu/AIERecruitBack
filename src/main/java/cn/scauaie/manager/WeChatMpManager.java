@@ -14,7 +14,9 @@ import java.util.Optional;
  */
 public interface WeChatMpManager {
 
-    Optional<AccessTokenDTO> getAccessToken();
+    Optional<String> getAccessToken();
+
+    Optional<AccessTokenDTO> getNewAccessToken();
 
     String getOpenid(String code, String mpName);
 
