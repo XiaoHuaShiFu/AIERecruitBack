@@ -22,13 +22,18 @@ public final class WeChatMpConsts {
     public static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
 
     /**
-     * 授权类型
+     * 发送模板消息的url
      */
-    public static final String GRANT_TYPE = "authorization_code";
+    public static final String TEMPLATE_MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send";
 
     /**
      * 面试结果通知模板id
      */
     public static final String INTERVIEW_RESULT_NOTIFACATION_TEMPLATE_ID =
             "ZiNM38LGvpZMWVlAR13WDJVNBzV2sZ6ry4-Sv9XxsCY";
+
+    /**
+     * 微信小程序首页路径
+     */
+    public static final String INDEX_PAGE_PATH = "pages/index/index";
 }

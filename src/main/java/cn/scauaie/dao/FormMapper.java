@@ -40,6 +40,8 @@ public interface FormMapper {
 
     String getName(Integer id);
 
+    String getOpenid(Integer id);
+
     String getFirstDep(Integer id);
 
 }

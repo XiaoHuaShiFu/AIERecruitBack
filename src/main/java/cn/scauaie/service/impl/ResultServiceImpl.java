@@ -59,8 +59,6 @@ public class ResultServiceImpl implements ResultService {
      */
     private final static String QRCODE_SUFFIX = PropertiesUtils.getProperty("qrcode.suffix", RESULT_SET_FILE_NAME);
 
-    String string = "如群人数已满，请联系微信{dep}：{dep.wx}，{dep}：{dep.wx}";
-
     /**
      * 发送面试结果
      *

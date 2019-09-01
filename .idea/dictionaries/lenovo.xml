@@ -8,6 +8,8 @@
       <w>consts</w>
       <w>dozer</w>
       <w>echostr</w>
+      <w>errcode</w>
+      <w>errmsg</w>
       <w>hdel</w>
       <w>hget</w>
       <w>hset</w>
@@ -22,6 +24,7 @@
       <w>rpush</w>
       <w>scau</w>
       <w>scauaie</w>
+      <w>touser</w>
       <w>wechat</w>
       <w>wechats</w>
       <w>zset</w>

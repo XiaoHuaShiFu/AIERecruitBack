@@ -1,8 +1,12 @@
 package cn.scauaie.controller.v1;
 
-import cn.scauaie.manager.impl.WeChatMpManagerImpl;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
+import cn.scauaie.aspect.annotation.ErrorHandler;
+import cn.scauaie.aspect.annotation.TokenAuth;
+import cn.scauaie.constant.TokenType;
+import cn.scauaie.model.ao.TokenAO;
+import cn.scauaie.result.Result;
+import cn.scauaie.service.WeChatMpService;
+import cn.scauaie.service.WeChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -21,54 +25,56 @@ import java.util.Arrays;
  * @create 2019-08-30 21:10
  */
 @RestController
-@RequestMapping("v1/wechats")
+@RequestMapping("v1/wechat")
 public class WeChatController {
 
-    /**
-     * 微信公众号认证TOKEN
-     */
-    private final static String TOKEN = "scauaie";
+    @Autowired
+    private WeChatService weChatService;
 
     @Autowired
-    private WeChatMpManagerImpl weChatMpManager;
-
+    private WeChatMpService weChatMpService;
 
     /**
-     * 获取日志
+     * 微信公共平台认证接口
      * @param signature 微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
      * @param timestamp 时间戳
      * @param nonce 随机数
      * @param echostr 随机字符串
-     * @return 微信认证接口
+     * @return echostr
      *
      * @success:
      * HttpStatus.OK
      *
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/echo", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public String get(String signature, String timestamp, String nonce, String echostr) {
-        String[] tmpArr = {TOKEN, timestamp, nonce};
-        Arrays.sort(tmpArr);
-        String tmpStr = tmpArr[0] + tmpArr[1] + tmpArr[2];
-        tmpStr = DigestUtils.sha1Hex(tmpStr);
-
-        if (tmpStr.equals(signature)) {
-            return echostr;
-        }
-        return StringUtils.EMPTY;
+    public String getEcho(String signature, String timestamp, String nonce, String echostr) {
+        return weChatService.checkAndGetEcho(signature, timestamp, nonce, echostr);
     }
 
     /**
-     * 获取access-token
+     * 表单事件获取到的formId
+     * @param formId 表单事件获取到的formId
+     * @return echostr
      *
-     * @return AccessTokenDTO
+     * @success:
+     * HttpStatus.CREATED
+     *
+     * @errors:
+     * INTERNAL_ERROR: Insert formId fail.
+     *
      */
-    @RequestMapping(value = "/access/tokens", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
-    public Object getAccessToken() {
-        return weChatMpManager.getNewAccessToken();
+    @RequestMapping(value = "/mp/form-ids", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @TokenAuth(tokenType = TokenType.FORM)
+    @ErrorHandler
+    public Object postFormId(HttpServletRequest request, String formId) {
+        TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
+        Result<String> result = weChatMpService.saveFormId(formId, tokenAO.getId());
+        if (!result.isSuccess()) {
+            return result;
+        }
+        return result.getData();
     }
-
 
 }

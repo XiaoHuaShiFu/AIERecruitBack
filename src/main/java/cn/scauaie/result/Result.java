@@ -55,10 +55,10 @@ public class Result<T> implements Serializable {
     /**
      * 成功调用时的构造方法
      *
-     * @return Result<T>
+     * @return Result
      */
-    public static <T> Result<T> success() {
-        return new Result<>(true);
+    public static Result success() {
+        return new Result<>(true, "OK");
     }
 
     /**

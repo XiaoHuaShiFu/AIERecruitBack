@@ -12,6 +12,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,14 +52,18 @@ public class TokenAuthAspect {
         String token = request.getHeader("authorization");
         //token不在头部
         if (token == null) {
-            return new ErrorResponse(ErrorCode.UNAUTHORIZED_TOKEN_IS_NULL.getError(),
+            ErrorResponse errorResponse = new ErrorResponse(ErrorCode.UNAUTHORIZED_TOKEN_IS_NULL.getError(),
                     ErrorCode.UNAUTHORIZED_TOKEN_IS_NULL.getMessage());
+            return new ResponseEntity<>(errorResponse, ErrorCode.UNAUTHORIZED_TOKEN_IS_NULL.getHttpStatus());
         }
 
         TokenType[] tokenTypes = tokenAuth.tokenType();
-        Result<TokenAO> result = tokenService.getTokenAndAuthTokenTypeAndUpdateExpire(token, tokenTypes, TokenExpire.NORMAL.getExpire());
+        Result<TokenAO> result = tokenService.getTokenAndAuthTokenTypeAndUpdateExpire(token, tokenTypes,
+                TokenExpire.NORMAL.getExpire());
         if (!result.isSuccess()) {
-            return new ErrorResponse(result.getErrorCode().getError(), result.getErrorCode().getMessage());
+            ErrorResponse errorResponse = new ErrorResponse(result.getErrorCode().getError(),
+                    result.getErrorCode().getMessage());
+            return new ResponseEntity<>(errorResponse, result.getErrorCode().getHttpStatus());
         }
 
         //把此id传递给控制器

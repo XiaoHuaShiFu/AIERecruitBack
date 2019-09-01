@@ -2,6 +2,7 @@ package cn.scauaie.manager;
 
 import cn.scauaie.manager.constant.WeChatMp;
 import cn.scauaie.model.dto.AccessTokenDTO;
+import cn.scauaie.model.dto.MessageTemplateDTO;
 
 import java.util.Optional;
 
@@ -22,4 +23,5 @@ public interface WeChatMpManager {
 
     String getOpenid(String code, WeChatMp weChatMp);
 
+    boolean sendTemplateMessage(MessageTemplateDTO messageTemplate);
 }

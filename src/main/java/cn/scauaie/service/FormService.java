@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 描述:
@@ -30,6 +31,8 @@ public interface FormService {
     Result<FormAO> updateForm(FormAO formAO);
 
     String getName(Integer id);
+
+    Result<String> getOpenid(Integer id);
 
     String getFirstDep(Integer id);
 

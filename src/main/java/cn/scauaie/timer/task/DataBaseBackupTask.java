@@ -27,16 +27,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * 描述: 自动备份招新信息任务
+ * 描述: 备份招新信息任务
  *
  * @author xhsf
  * @email 827032783@qq.com
  * @create 2019-08-27 9:16
  */
 @Component
-public class BackupTask extends TimerTask {
+public class DataBaseBackupTask implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(BackupTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataBaseBackupTask.class);
 
     @Autowired
     private FormService formService;

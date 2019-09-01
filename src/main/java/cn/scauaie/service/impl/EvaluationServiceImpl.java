@@ -1,11 +1,13 @@
 package cn.scauaie.service.impl;
 
 import cn.scauaie.dao.EvaluationMapper;
+import cn.scauaie.manager.constant.WeChatMpConsts;
 import cn.scauaie.model.ao.EvaluationAO;
 import cn.scauaie.model.ao.FormAO;
 import cn.scauaie.model.ao.InterviewerAO;
 import cn.scauaie.model.ao.ResultAO;
 import cn.scauaie.model.dao.EvaluationDO;
+import cn.scauaie.model.dto.MessageTemplateDataDTO;
 import cn.scauaie.model.query.EvaluationQuery;
 import cn.scauaie.result.ErrorCode;
 import cn.scauaie.result.Result;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +49,9 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Autowired
     private ResultService resultService;
+
+    @Autowired
+    private WeChatMpService weChatMpService;
 
     @Autowired
     private Mapper mapper;
@@ -83,11 +89,24 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         //发送面试结果
         FormAO formAO = result.getData().getForm();
-        Result<ResultAO> result1 = resultService.sendInterviewResult(
+        Result<ResultAO> sendInterviewResultResult = resultService.sendInterviewResult(
                 formAO.getId(), formAO.getFirstDep(), formAO.getSecondDep(), evaluationAO.getPass());
         //发送失败
-        if (!result1.isSuccess()) {
+        if (!sendInterviewResultResult.isSuccess()) {
             logger.error("Send interview results fail. evaluationId: {}.", result.getData().getIid());
+        }
+
+        //发送面试结果模板消息
+        HashMap<String, MessageTemplateDataDTO> data = new HashMap<>(7);
+        data.put("keyword1", new MessageTemplateDataDTO(formAO.getName()));
+        data.put("keyword2", new MessageTemplateDataDTO("第一轮面试"));
+        data.put("keyword3", new MessageTemplateDataDTO(evaluationAO.getPass() ? "通过" : "未通过"));
+        data.put("keyword4", new MessageTemplateDataDTO(sendInterviewResultResult.getData().getResult()));
+        Result sendTemplateMessageResult = weChatMpService.sendTemplateMessage(formAO.getId(),
+                WeChatMpConsts.INTERVIEW_RESULT_NOTIFACATION_TEMPLATE_ID, WeChatMpConsts.INDEX_PAGE_PATH, data,
+                null);
+        if (!sendTemplateMessageResult.isSuccess()) {
+            logger.error("Send template message fail. evaluationId: {}.", result.getData().getIid());
         }
 
         return result;

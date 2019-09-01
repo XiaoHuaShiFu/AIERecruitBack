@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -220,6 +221,21 @@ public class FormServiceImpl implements FormService {
     @Override
     public String getName(Integer id) {
         return formMapper.getName(id);
+    }
+
+    /**
+     * 获取openid通过报名表编号
+     *
+     * @param id 报名表编号
+     * @return openid
+     */
+    @Override
+    public Result<String> getOpenid(Integer id) {
+        String openid = formMapper.getOpenid(id);
+        if (openid == null) {
+            return Result.fail(ErrorCode.INVALID_PARAMETER_NOT_FOUND);
+        }
+        return Result.success(openid);
     }
 
     /**

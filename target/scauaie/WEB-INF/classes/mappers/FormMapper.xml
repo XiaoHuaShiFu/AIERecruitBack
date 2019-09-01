@@ -181,6 +181,11 @@
         where id = #{id, jdbcType=INTEGER}
     </select>
 
+    <select id="getOpenid" parameterType="integer" resultType="string">
+        select openid from form
+        where id = #{id, jdbcType=INTEGER}
+    </select>
+
     <select id="getFirstDep" parameterType="integer" resultType="string">
         select
         first_dep

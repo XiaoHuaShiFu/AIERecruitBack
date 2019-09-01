@@ -54,15 +54,20 @@ public class EvaluationController {
      * 创建Evaluation并返回Evaluation
      *
      * @param evaluationAO 评价表信息
+     *
      * @return EvaluationVO
+     *
      * @success: HttpStatus.CREATED
+     *
      * @errors: FORBIDDEN_SUB_USER: The specified action is not available for you.
      * INVALID_PARAMETER_NOT_FOUND: The form does not exist.
      * INTERNAL_ERROR: Insert evaluation failed.
+     *
      * @bindErrors INVALID_PARAMETER_IS_NULL
      * INVALID_PARAMETER_IS_BLANK
      * INVALID_PARAMETER_SIZE
      * INVALID_PARAMETER_VALUE_BELOW
+     *
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -85,9 +90,13 @@ public class EvaluationController {
      * 获取Evaluation
      *
      * @param id 评价表编号
+     *
      * @return EvaluationVO
+     *
      * @success: HttpStatus.OK
+     *
      * @errors: FORBIDDEN_SUB_USER
+     *
      * @bindErrors INVALID_PARAMETER_VALUE_BELOW: The name of id below, min: 0.
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -112,8 +121,11 @@ public class EvaluationController {
      * @param pageNum  页码
      * @param pageSize 页条数
      * @param q        查询参数
+     *
      * @return EvaluationVOList
+     *
      * @success: HttpStatus.OK
+     *
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -142,9 +154,13 @@ public class EvaluationController {
      * @param request  HttpServletRequest
      * @param pageNum  页码
      * @param pageSize 页条数
+     *
      * @return EvaluationLogVOList
+     *
      * @success: HttpStatus.OK
+     *
      * @errors: INVALID_PARAMETER_NOT_FOUND: Not found.
+     *
      */
     @RequestMapping(value = "/logs", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
