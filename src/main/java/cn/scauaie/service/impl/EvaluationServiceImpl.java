@@ -101,7 +101,14 @@ public class EvaluationServiceImpl implements EvaluationService {
         data.put("keyword1", new MessageTemplateDataDTO(formAO.getName()));
         data.put("keyword2", new MessageTemplateDataDTO("第一轮面试"));
         data.put("keyword3", new MessageTemplateDataDTO(evaluationAO.getPass() ? "通过" : "未通过"));
-        data.put("keyword4", new MessageTemplateDataDTO(sendInterviewResultResult.getData().getResult()));
+        int idx = sendInterviewResultResult.getData().getResult().indexOf("（");
+        String message;
+        if (idx != -1) {
+            message = sendInterviewResultResult.getData().getResult().substring(0, idx) + "【点击进入小程序查看】";
+        } else {
+            message = sendInterviewResultResult.getData().getResult();
+        }
+        data.put("keyword4", new MessageTemplateDataDTO(message));
         Result sendTemplateMessageResult = weChatMpService.sendTemplateMessage(formAO.getId(),
                 WeChatMpConsts.INTERVIEW_RESULT_NOTIFACATION_TEMPLATE_ID, WeChatMpConsts.INDEX_PAGE_PATH, data,
                 null);

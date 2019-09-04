@@ -17,6 +17,7 @@ import cn.scauaie.service.WorkService;
 import cn.scauaie.util.BeanUtils;
 import com.github.dozermapper.core.Mapper;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -290,7 +291,7 @@ public class FormServiceImpl implements FormService {
         String oldAvatarUrl = formMapper.getAvatar(formId);
 
         //旧头像已经存在
-        if (oldAvatarUrl != null) {
+        if (!StringUtils.isBlank(oldAvatarUrl)) {
             return Result.fail(ErrorCode.OPERATION_CONFLICT, "The specified avatar already exist.");
         }
 
@@ -309,6 +310,12 @@ public class FormServiceImpl implements FormService {
     public Result<String> updateAvatar(Integer formId, MultipartFile avatar) {
         //获取旧文件Url
         String oldAvatarUrl = formMapper.getAvatar(formId);
+
+        //若旧头像为空则直接保存新头像
+        if (StringUtils.isBlank(oldAvatarUrl)) {
+            return saveAvatar(formId, avatar);
+        }
+
         //更新文件
         return updateAvatarByOldAvatarUrl(formId, oldAvatarUrl, avatar);
     }
