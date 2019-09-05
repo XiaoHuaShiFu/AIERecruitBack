@@ -17,7 +17,8 @@ public interface EvaluationService {
 
     Result<EvaluationAO> saveEvaluation(EvaluationAO evaluationAO);
 
-    Result<EvaluationAO> checkDepAndSaveEvaluationAndSendInterviewResults(EvaluationAO evaluationAO);
+    Result<EvaluationAO> checkDepAndSaveEvaluationAndSendInterviewResults(
+            EvaluationAO evaluationAO, Boolean onlyPassSecondDep);
 
     Result<EvaluationAO> getEvaluation(Integer id);
 

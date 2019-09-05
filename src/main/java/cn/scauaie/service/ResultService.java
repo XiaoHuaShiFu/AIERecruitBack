@@ -15,7 +15,8 @@ import java.util.List;
  */
 public interface ResultService {
 
-    Result<ResultAO> sendInterviewResult(Integer id, String firstDep, String secondDep, Boolean pass);
+    Result<ResultAO> sendInterviewResult(Integer id, String firstDep, String secondDep,
+                                         Boolean pass, Boolean onlyPassSecondDep);
 
     Result<ResultAO> saveResult(ResultAO resultAO);
 

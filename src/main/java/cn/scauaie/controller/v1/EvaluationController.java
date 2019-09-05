@@ -54,7 +54,7 @@ public class EvaluationController {
      * 创建Evaluation并返回Evaluation
      *
      * @param evaluationAO 评价表信息
-     *
+     * @param onlyPassSecondDep 只通过第二志愿部门
      * @return EvaluationVO
      *
      * @success: HttpStatus.CREATED
@@ -74,10 +74,12 @@ public class EvaluationController {
     @TokenAuth(tokenType = TokenType.INTERVIEWER)
     @ErrorHandler
     @EvaluationLog
-    public Object post(HttpServletRequest request, @Validated(GroupEvaluationAOPOST.class) EvaluationAO evaluationAO) {
+    public Object post(HttpServletRequest request, @Validated(GroupEvaluationAOPOST.class) EvaluationAO evaluationAO,
+                       @RequestParam(defaultValue = "false") Boolean onlyPassSecondDep) {
         TokenAO tokenAO = (TokenAO) request.getAttribute("tokenAO");
         evaluationAO.setIid(tokenAO.getId());
-        Result<EvaluationAO> result = evaluationService.checkDepAndSaveEvaluationAndSendInterviewResults(evaluationAO);
+        Result<EvaluationAO> result = evaluationService.checkDepAndSaveEvaluationAndSendInterviewResults(
+                evaluationAO, onlyPassSecondDep);
 
         if (!result.isSuccess()) {
             return result;

@@ -62,10 +62,12 @@ public class EvaluationServiceImpl implements EvaluationService {
      * 并发送面试结果
      *
      * @param evaluationAO 评价
+     * @param onlyPassSecondDep 只通过第二志愿部门
      * @return EvaluationAO
      */
     @Override
-    public Result<EvaluationAO> checkDepAndSaveEvaluationAndSendInterviewResults(EvaluationAO evaluationAO) {
+    public Result<EvaluationAO> checkDepAndSaveEvaluationAndSendInterviewResults(
+            EvaluationAO evaluationAO, Boolean onlyPassSecondDep) {
         String formDep = formService.getFirstDep(evaluationAO.getFid());
         //此编号的报名表不存在
         if (formDep == null) {
@@ -88,9 +90,11 @@ public class EvaluationServiceImpl implements EvaluationService {
         }
 
         //发送面试结果
+        // TODO: 2019/9/5 这里没有做面试官部门限制
         FormAO formAO = result.getData().getForm();
-        Result<ResultAO> sendInterviewResultResult = resultService.sendInterviewResult(
-                formAO.getId(), formAO.getFirstDep(), formAO.getSecondDep(), evaluationAO.getPass());
+        Result<ResultAO> sendInterviewResultResult = resultService.sendInterviewResult(formAO.getId(),
+                formAO.getFirstDep(), formAO.getSecondDep(), evaluationAO.getPass(), onlyPassSecondDep);
+
         //发送失败
         if (!sendInterviewResultResult.isSuccess()) {
             logger.error("Send interview results fail. evaluationId: {}.", result.getData().getIid());

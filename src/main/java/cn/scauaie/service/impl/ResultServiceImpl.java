@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,9 +63,11 @@ public class ResultServiceImpl implements ResultService {
      * @param firstDep 报名表编号
      * @param secondDep 报名表编号
      * @param pass 是否通过
+     * @param onlyPassSecondDep 只通过第二志愿部门
      * @return Result<ResultAO>
      */
-    public Result<ResultAO> sendInterviewResult(Integer id, String firstDep, String secondDep, Boolean pass) {
+    public Result<ResultAO> sendInterviewResult(Integer id, String firstDep, String secondDep,
+                                                Boolean pass, Boolean onlyPassSecondDep) {
         ResultAO resultAO = new ResultAO();
         resultAO.setFid(id);
 
@@ -81,6 +80,24 @@ public class ResultServiceImpl implements ResultService {
             resultAO.setResult(PropertiesUtils.getProperty("AIE.not.pass", RESULT_SET_FILE_NAME));
             return saveResult(resultAO);
         }
+
+
+        // 只通过第二志愿部门的，发第二志愿部门二维码
+        if (onlyPassSecondDep) {
+            String result = MessageFormat.format(Objects.requireNonNull(PropertiesUtils.getProperty(
+                    "only.pass.second.dep", RESULT_SET_FILE_NAME)), DepEnum.valueOf(secondDep).getCn());
+            resultAO.setResult(result
+                    + MessageFormat.format("（如群人数已满，请联系微信{0}：{1}。）",
+                    DepEnum.valueOf(secondDep).getCn(),
+                    PropertiesUtils.getProperty(secondDep + ".wx", RESULT_SET_FILE_NAME)));
+
+            ResultQrcodeAO qrcode1 = new ResultQrcodeAO();
+            qrcode1.setDep(secondDep);
+            qrcode1.setQrcode(QRCODE_PREFIX + secondDep + QRCODE_SUFFIX);
+            resultAO.setQrcodes(Collections.singletonList(qrcode1));
+            return saveResult(resultAO);
+        }
+
 
         // 下面的情况都需要设置第一志愿部门
         ResultQrcodeAO qrcode1 = new ResultQrcodeAO();
