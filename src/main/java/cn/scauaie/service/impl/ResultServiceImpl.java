@@ -117,6 +117,16 @@ public class ResultServiceImpl implements ResultService {
 
         // 下面的情况都是群面
 
+        // 第一不是自科，第二是自科的，只发第一志愿部门
+        if ((!firstDep.equals(DepEnum.ZKB.name())) && secondDep.equals(DepEnum.ZKB.name())) {
+            resultAO.setResult(PropertiesUtils.getProperty(AieConsts.AIE, RESULT_SET_FILE_NAME)
+                    + MessageFormat.format("（如群人数已满，请联系微信{0}：{1}。）",
+                    DepEnum.valueOf(firstDep).getCn(),
+                    PropertiesUtils.getProperty(firstDep + ".wx", RESULT_SET_FILE_NAME)));
+            resultAO.setQrcodes(Collections.singletonList(qrcode1));
+            return saveResult(resultAO);
+        }
+
         // 第一志愿部门等于第二志愿部门
         if (firstDep.equals(secondDep)) {
             resultAO.setResult(PropertiesUtils.getProperty(AieConsts.AIE, RESULT_SET_FILE_NAME)
